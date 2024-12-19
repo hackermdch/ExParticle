@@ -1,0 +1,9 @@
+{
+  "argument.color4f.incomplete": "Incomplete (RGBA required)",
+  "argument.range3d.incomplete": "Incomplete (requires 3 range parameters)",
+  "argument.speed3d.incomplete": "Incomplete (requires 3 velocity components)",
+  "argument.rotate.invalid": "Invalid rotation angle (requires an integer multiple of 90)",
+  "argument.flip.invalid": "Invalid flip parameter",
+  "argument.group.change.type.invalid": "Invalid group transformation option",
+  "command.video.unavailable": "JavaCV is not available. If you want use video command, please install %s first"
+}

@@ -1,0 +1,9 @@
+{
+  "argument.color4f.incomplete": "不完整(需要RGBA)",
+  "argument.range3d.incomplete": "不完整(需要3个范围参数)",
+  "argument.speed3d.incomplete": "不完整(需要3个值速度分量)",
+  "argument.rotate.invalid": "无效的旋转角度(需要90的整倍数)",
+  "argument.flip.invalid": "无效的翻转参数",
+  "argument.group.change.type.invalid": "无效的组变换选项",
+  "command.video.unavailable": "JavaCV不可用，如果想使用video命令，请先安装%s"
+}

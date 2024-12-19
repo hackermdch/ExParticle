@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.hackermdch.exparticle.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "refmap": "exparticle.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+    "ParticleEngineMixin",
+    "ParticleMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

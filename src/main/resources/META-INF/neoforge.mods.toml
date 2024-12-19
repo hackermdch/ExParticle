@@ -1,0 +1,28 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "LGPL 3.0"
+
+[[mods]]
+modId = "exparticle"
+version = "${version}"
+displayName = "ExParticle"
+displayURL = "https://github.com/hackermdch/ExParticle"
+authors = "hackermdch"
+description = "A particle effect extension"
+
+[[mixins]]
+config = "exparticle.mixins.json"
+
+[[dependencies.exparticle]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1.90,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.exparticle]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1,)"
+ordering = "NONE"
+side = "BOTH"

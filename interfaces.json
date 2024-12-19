@@ -1,0 +1,5 @@
+{
+  "net/minecraft/client/particle/Particle": [
+    "net/hackermdch/exparticle/inject/ParticleInj"
+  ]
+}
