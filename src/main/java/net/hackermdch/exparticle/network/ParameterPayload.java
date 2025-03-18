@@ -49,7 +49,7 @@ public class ParameterPayload implements CustomPacketPayload {
     private final ParticleOptions effect;
 
     public ParameterPayload(boolean polar, boolean tick, boolean rgba, ParticleOptions effect, Vec3 pos, Vector4f color, Vec3 speed, double begin, double end, String expression, double step, int cpt, int age, String speedExpression, double speedStep, String group) {
-        if (!rgba) color = new Vector4f();
+        if (rgba) color = new Vector4f();
         this.polar = polar;
         this.tick = tick;
         this.rgba = rgba;
