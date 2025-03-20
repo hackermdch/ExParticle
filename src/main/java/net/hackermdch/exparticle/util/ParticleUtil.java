@@ -114,14 +114,14 @@ public class ParticleUtil {
     }
 
     private static int[][] getRotateFlipMat(int xRotate, int yRotate, int zRotate, boolean flip, int rows, int cols) {
-        int[][] flipmat = new int[][]{{flip ? -1 : 1, 0, 0, flip ? cols - 1 : 0}, {0, -1, 0, rows - 1}, {0, 0, 1, 0}, {0, 0, 0, 1}};
-        int[][] zmat = new int[][]{{dcos(zRotate), -dsin(zRotate), 0, xmove(zRotate, rows, cols)}, {dsin(zRotate), dcos(zRotate), 0, ymove(zRotate, rows, cols)}, {0, 0, 1, 0}, {0, 0, 0, 1}};
-        int[][] ymat = new int[][]{{dcos(yRotate), 0, dsin(yRotate), 0}, {0, 1, 0, 0}, {-dsin(yRotate), 0, dcos(yRotate), 0}, {0, 0, 0, 1}};
-        int[][] xmat = new int[][]{{1, 0, 0, 0}, {0, dcos(xRotate), dsin(xRotate), 0}, {0, -dsin(xRotate), dcos(xRotate), 0}, {0, 0, 0, 1}};
-        return MatrixUtil.matMul(xmat, MatrixUtil.matMul(ymat, MatrixUtil.matMul(zmat, flipmat)));
+        var flipMat = new int[][]{{flip ? -1 : 1, 0, 0, flip ? cols - 1 : 0}, {0, -1, 0, rows - 1}, {0, 0, 1, 0}, {0, 0, 0, 1}};
+        var zMat = new int[][]{{dCos(zRotate), -dSin(zRotate), 0, xMove(zRotate, rows, cols)}, {dSin(zRotate), dCos(zRotate), 0, yMove(zRotate, rows, cols)}, {0, 0, 1, 0}, {0, 0, 0, 1}};
+        var yMat = new int[][]{{dCos(yRotate), 0, dSin(yRotate), 0}, {0, 1, 0, 0}, {-dSin(yRotate), 0, dCos(yRotate), 0}, {0, 0, 0, 1}};
+        var xMat = new int[][]{{1, 0, 0, 0}, {0, dCos(xRotate), dSin(xRotate), 0}, {0, -dSin(xRotate), dCos(xRotate), 0}, {0, 0, 0, 1}};
+        return MatrixUtil.matMul(xMat, MatrixUtil.matMul(yMat, MatrixUtil.matMul(zMat, flipMat)));
     }
 
-    private static int dsin(int n) {
+    private static int dSin(int n) {
         return switch (n % 4) {
             case 0, 2 -> 0;
             case 1 -> 1;
@@ -130,7 +130,7 @@ public class ParticleUtil {
         };
     }
 
-    private static int dcos(int n) {
+    private static int dCos(int n) {
         return switch (n % 4) {
             case 0 -> 1;
             case 1, 3 -> 0;
@@ -139,7 +139,7 @@ public class ParticleUtil {
         };
     }
 
-    private static int xmove(int rotate, int rows, int cols) {
+    private static int xMove(int rotate, int rows, int cols) {
         return switch (rotate % 4) {
             case 0, 3 -> 0;
             case 1 -> rows - 1;
@@ -148,7 +148,7 @@ public class ParticleUtil {
         };
     }
 
-    private static int ymove(int rotate, int rows, int cols) {
+    private static int yMove(int rotate, int rows, int cols) {
         return switch (rotate % 4) {
             case 0, 1 -> 0;
             case 2 -> rows - 1;
@@ -169,7 +169,7 @@ public class ParticleUtil {
         }
     }
 
-    public static void onStartClientTick(ClientTickEvent.Pre event) {
+    public static void onStartClientTick(ClientTickEvent.Pre ignore) {
         synchronized (TICK_START_TASKS) {
             while (!TICK_START_TASKS.isEmpty()) {
                 TICK_START_TASKS.poll().run();
@@ -177,7 +177,7 @@ public class ParticleUtil {
         }
     }
 
-    public static void onEndClientTick(ClientTickEvent.Post post) {
+    public static void onEndClientTick(ClientTickEvent.Post ignore) {
         synchronized (TICK_END_TASKS) {
             while (!TICK_END_TASKS.isEmpty()) {
                 TICK_END_TASKS.poll().run();
@@ -194,9 +194,9 @@ public class ParticleUtil {
         private float green;
         private float blue;
         private float alpha;
-        private double vx;
-        private double vy;
-        private double vz;
+        private final double vx;
+        private final double vy;
+        private final double vz;
         private final IExecutable exe;
         private final double step;
         private final int cpt;
@@ -216,6 +216,9 @@ public class ParticleUtil {
             this.x = x;
             this.y = y;
             this.z = z;
+            this.vx = vx;
+            this.vy = vy;
+            this.vz = vz;
             this.t = begin;
             this.end = end;
             this.exe = ExpressionUtil.parse(expression);
@@ -230,21 +233,18 @@ public class ParticleUtil {
                 this.green = green;
                 this.blue = blue;
                 this.alpha = alpha;
-                this.vx = vx;
-                this.vy = vy;
-                this.vz = vz;
             }
         }
 
         public void run() {
             var data = exe.getData();
-            for (int i = 0; i < this.cpt && this.t <= this.end; this.t += this.step) {
-                data.t = this.t;
+            for (int i = 0; i < cpt && t <= end; t += step) {
+                data.t = t;
                 exe.invoke();
                 double dx;
                 double dy;
                 double dz;
-                if (this.polar) {
+                if (polar) {
                     dx = data.dis * Math.cos(data.s2) * Math.cos(data.s1);
                     dy = data.dis * Math.sin(data.s2);
                     dz = data.dis * Math.cos(data.s2) * Math.sin(data.s1);
@@ -253,22 +253,14 @@ public class ParticleUtil {
                     dy = data.y;
                     dz = data.z;
                 }
-
-                if (this.rgba) {
-                    double vx = data.vx;
-                    double vy = data.vy;
-                    double vz = data.vz;
-                    ParticleUtil.spawnParticle(this.particleType, this.x + dx, this.y + dy, this.z + dz, this.x, this.y, this.z, (float) data.cr, (float) data.cg, (float) data.cb, (float) data.alpha, vx, vy, vz, this.age, this.speedExpression, this.speedStep, this.group);
+                if (rgba) {
+                    ParticleUtil.spawnParticle(particleType, x + dx, y + dy, z + dz, x, y, z, (float) data.cr, (float) data.cg, (float) data.cb, (float) data.alpha, vx, vy, vz, age, speedExpression, speedStep, group);
                 } else {
-                    ParticleUtil.spawnParticle(this.particleType, this.x + dx, this.y + dy, this.z + dz, this.x, this.y, this.z, this.red, this.green, this.blue, this.alpha, this.vx, this.vy, this.vz, this.age, this.speedExpression, this.speedStep, this.group);
+                    ParticleUtil.spawnParticle(particleType, x + dx, y + dy, z + dz, x, y, z, red, green, blue, alpha, vx, vy, vz, age, speedExpression, speedStep, group);
                 }
-
                 ++i;
             }
-
-            if (this.t <= this.end) {
-                ParticleUtil.addTask(new TickEndTask(this), false);
-            }
+            if (t <= end) ParticleUtil.addTask(new TickEndTask(this), false);
         }
     }
 
@@ -332,53 +324,50 @@ public class ParticleUtil {
             int height = image.getHeight();
             int dw = (int) ((double) width * this.scaling);
             int dh = (int) ((double) height * this.scaling);
-            BufferedImage resultImage = new BufferedImage(dw, dh, image.getType());
-            Graphics2D graphics = resultImage.createGraphics();
+            var result = new BufferedImage(dw, dh, image.getType());
+            var graphics = result.createGraphics();
             graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             graphics.drawImage(image, 0, 0, dw, dh, 0, 0, width, height, null);
             graphics.dispose();
-            int[][] rotateFlipMat = ParticleUtil.getRotateFlipMat(this.xRotate, this.yRotate, this.zRotate, this.flip, dh, dw);
-            if (this.init == 0) {
-                this.init = 1;
-                this.particles = new Particle[dh][dw];
+            var rotateFlipMat = ParticleUtil.getRotateFlipMat(this.xRotate, this.yRotate, this.zRotate, this.flip, dh, dw);
+            if (init == 0) {
+                init = 1;
+                particles = new Particle[dh][dw];
                 ParticleUtil.CLIENT.execute(() -> {
                     for (int row = 0; row < dh; ++row) {
                         for (int col = 0; col < dw; ++col) {
-                            int pixel = resultImage.getRGB(col, row);
+                            int pixel = result.getRGB(col, row);
                             float red = (float) ((pixel & 0xff0000) >>> 16) / 255.0F;
                             float green = (float) ((pixel & 0xff00) >>> 8) / 255.0F;
                             float blue = (float) (pixel & 0xff) / 255.0F;
-                            double[][] pos = MatrixUtil.matDiv(MatrixUtil.matMul(rotateFlipMat, new int[][]{{col}, {row}, {0}, {1}}), this.dpb);
-                            if (this.matrix != null) {
-                                pos = MatrixUtil.matMul(this.matrix, pos);
-                            }
-
+                            var pos = MatrixUtil.matDiv(MatrixUtil.matMul(rotateFlipMat, new int[][]{{col}, {row}, {0}, {1}}), dpb);
+                            if (matrix != null) pos = MatrixUtil.matMul(matrix, pos);
                             double dx = pos[0][0];
                             double dy = pos[1][0];
                             double dz = pos[2][0];
-                            this.particles[row][col] = ParticleUtil.spawnParticle(this.effect, this.x + dx, this.y + dy, this.z + dz, this.x, this.y, this.z, red, green, blue, 1.0F, this.vx, this.vy, this.vz, this.age, this.speedExpression, this.speedStep, this.group);
+                            particles[row][col] = ParticleUtil.spawnParticle(effect, x + dx, y + dy, z + dz, x, y, z, red, green, blue, 1.0F, vx, vy, vz, age, speedExpression, speedStep, group);
                         }
                     }
-                    this.init = 2;
+                    init = 2;
                 });
                 return true;
             } else {
-                while (this.init != 2) {
+                while (init != 2) {
                     try {
                         Thread.sleep(10L);
                     } catch (InterruptedException e) {
                         ExParticle.LOGGER.error(e.getMessage(), e);
                     }
                 }
-                boolean alive = false;
+                var alive = false;
                 for (int row = 0; row < dh; ++row) {
                     for (int col = 0; col < dw; ++col) {
-                        if (this.particles[row][col].isAlive()) {
-                            int pixel = resultImage.getRGB(col, row);
+                        if (particles[row][col].isAlive()) {
+                            int pixel = result.getRGB(col, row);
                             float red = (float) ((pixel & 0xff0000) >>> 16) / 255.0F;
                             float green = (float) ((pixel & 0xff00) >>> 8) / 255.0F;
                             float blue = (float) (pixel & 0xff) / 255.0F;
-                            this.particles[row][col].setColor(red, green, blue);
+                            particles[row][col].setColor(red, green, blue);
                             alive = true;
                         }
                     }
