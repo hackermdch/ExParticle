@@ -22,7 +22,7 @@ import org.joml.Vector4f;
 public class ParameterCommand {
     public static void register(LiteralArgumentBuilder<CommandSourceStack> parent, CommandBuildContext ctx) {
         parent.then(Commands.literal("parameter")
-                .then(getStart(getColor(getMid(new String[]{"null", "\"x,y=t,sin(t)\"", "\"x=t;y=t^2\""},
+                .then(getStart(getColor(getMid(new String[]{"null", "\"x,y=t,sin(t)\"", "\"x=t;y=t^2\"", "\"x,y,z=t,sin(t),0;(x,y,z)=(x,y,z,1)*rotateDeg(0,60,0)*translate(5,0,0)\""},
                         (context) -> execute(
                                 context,
                                 false, false, false,
@@ -200,7 +200,7 @@ public class ParameterCommand {
                         ))), ctx)
                 )
         ).then(Commands.literal("tick-parameter")
-                .then(getStart(getColor(getMid(new String[]{"null", "\"x,y=t,sin(t)\"", "\"x=t;y=t^2\""},
+                .then(getStart(getColor(getMid(new String[]{"null", "\"x,y=t,sin(t)\"", "\"x=t;y=t^2\"", "\"x,y,z=t,sin(t),0;(x,y,z)=(x,y,z,1)*rotateDeg(0,60,0)*translate(5,0,0)\""},
                         (context) -> execute(
                                 context,
                                 false, true, false,
@@ -406,7 +406,7 @@ public class ParameterCommand {
                                 )))), ctx)
                 )
         ).then(Commands.literal("rgba-parameter")
-                .then(getStart(getMid(new String[]{"null", "\"x,y,cr,cg,cb=t,sin(t),sin(t/7)/4+0.75,sin(t/5)/4+0.75,sin(t/3)/4+0.75\""},
+                .then(getStart(getMid(new String[]{"null", "\"x,y,cr,cg,cb=t,sin(t),sin(t/7)/4+0.75,sin(t/5)/4+0.75,sin(t/3)/4+0.75\"", "\"x,y,z=t,sin(t),0;(x,y,z)=(x,y,z,1)*rotateDeg(0,60,0)*translate(5,0,0)\""},
                         (context) -> execute(
                                 context,
                                 false, false, true,
@@ -583,7 +583,7 @@ public class ParameterCommand {
                         )), ctx)
                 )
         ).then(Commands.literal("rgba-tick-parameter")
-                .then(getStart(getMid(new String[]{"null", "\"x,y,cr,cg,cb=t,sin(t),sin(t/7)/4+0.75,sin(t/5)/4+0.75,sin(t/3)/4+0.75\""},
+                .then(getStart(getMid(new String[]{"null", "\"x,y,cr,cg,cb=t,sin(t),sin(t/7)/4+0.75,sin(t/5)/4+0.75,sin(t/3)/4+0.75\"", "\"x,y,z=t,sin(t),0;(x,y,z)=(x,y,z,1)*rotateDeg(0,60,0)*translate(5,0,0)\""},
                         (context) -> execute(
                                 context,
                                 false, true, true,

@@ -1,7 +1,6 @@
 plugins {
     id 'java-library'
-    id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.61-beta'
+    id 'net.neoforged.moddev' version '2.0.82'
 }
 
 version = mod_version
@@ -64,6 +63,10 @@ neoForge {
 
 dependencies {
     compileOnly "org.bytedeco:javacv:1.5.11"
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += "-parameters"
 }
 
 processResources {

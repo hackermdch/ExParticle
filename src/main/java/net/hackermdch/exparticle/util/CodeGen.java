@@ -1,15 +1,17 @@
 package net.hackermdch.exparticle.util;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Type;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static org.objectweb.asm.ClassWriter.COMPUTE_FRAMES;
 import static org.objectweb.asm.Opcodes.*;
@@ -22,8 +24,8 @@ public class CodeGen {
     private static final Object2IntMap<EnumToken> IOP2OOP = new Object2IntOpenHashMap<>();
     private static final Object2IntMap<EnumToken> DOP2OOP = new Object2IntOpenHashMap<>();
     private static final Object2IntMap<EnumToken> DIOP2OOP = new Object2IntOpenHashMap<>();
-    private static final List<String> FIELDS = Lists.newArrayList();
-    private static final Method[] METHODS = Math.class.getMethods();
+    private static final List<String> FIELDS;
+    private static final Method[] METHODS = Stream.concat(Arrays.stream(Math.class.getMethods()), Arrays.stream(ExFunctions.class.getMethods())).toArray(Method[]::new);
     private final Expression[] block;
     private final ClassWriter cw = new ClassWriter(COMPUTE_FRAMES);
     private MethodVisitor mv;
@@ -100,7 +102,7 @@ public class CodeGen {
 
     private int codeGenLoadInteger(int n) {
         if (n >= T_UNKNOW && n < 6) {
-            mv.visitInsn(3 + n);
+            mv.visitInsn(ICONST_0 + n);
         } else if (n >= Byte.MIN_VALUE && n <= Byte.MAX_VALUE) {
             mv.visitIntInsn(BIPUSH, n);
         } else if (n >= Short.MIN_VALUE && n <= Short.MAX_VALUE) {
@@ -499,6 +501,10 @@ public class CodeGen {
                                         }
                                         break;
                                     case T_INTMAT:
+                                        if (parameterTypes[j] == int[][].class) {
+                                            similarity += 6;
+                                            break label;
+                                        }
                                         if (parameterTypes[j] == int.class) {
                                             similarity += 3;
                                             break label;
@@ -509,6 +515,10 @@ public class CodeGen {
                                         }
                                         break;
                                     case T_DOUBLEMAT:
+                                        if (parameterTypes[j] == double[][].class) {
+                                            similarity += 6;
+                                            break label;
+                                        }
                                         if (parameterTypes[j] == int.class) {
                                             ++similarity;
                                             break label;
@@ -544,19 +554,36 @@ public class CodeGen {
                 var sb = new StringBuilder();
                 sb.append("(");
                 for (int i = 0; i < args.length; ++i) {
-                    codeGenExp(args[i], parameterTypes[i] == int.class ? T_INT : T_DOUBLE);
-                    sb.append(parameterTypes[i] == int.class ? "I" : "D");
+                    if (parameterTypes[i].isArray()) {
+                        codeGenExp(args[i], parameterTypes[i] == int[][].class ? T_INTMAT : T_DOUBLEMAT);
+                        sb.append(parameterTypes[i] == int[][].class ? "[[I" : "[[D");
+                    } else {
+                        codeGenExp(args[i], parameterTypes[i] == int.class ? T_INT : T_DOUBLE);
+                        sb.append(parameterTypes[i] == int.class ? "I" : "D");
+                    }
                 }
                 sb.append(")");
-                if (returnType == long.class) {
-                    sb.append("J");
-                    mv.visitMethodInsn(INVOKESTATIC, "java/lang/Math", name, sb.toString(), false);
-                    mv.visitInsn(L2I);
-                    return T_INT;
+                if (returnType.isArray()) {
+                    if (returnType == int[][].class) {
+                        sb.append("[[I");
+                        mv.visitMethodInsn(INVOKESTATIC, Type.getInternalName(method.getDeclaringClass()), name, sb.toString(), false);
+                        return T_INTMAT;
+                    } else {
+                        sb.append("[[D");
+                        mv.visitMethodInsn(INVOKESTATIC, Type.getInternalName(method.getDeclaringClass()), name, sb.toString(), false);
+                        return T_DOUBLEMAT;
+                    }
                 } else {
-                    sb.append(returnType == int.class ? "I" : "D");
-                    mv.visitMethodInsn(INVOKESTATIC, "java/lang/Math", name, sb.toString(), false);
-                    return returnType == int.class ? T_INT : T_DOUBLE;
+                    if (returnType == long.class) {
+                        sb.append("J");
+                        mv.visitMethodInsn(INVOKESTATIC, Type.getInternalName(method.getDeclaringClass()), name, sb.toString(), false);
+                        mv.visitInsn(L2I);
+                        return T_INT;
+                    } else {
+                        sb.append(returnType == int.class ? "I" : "D");
+                        mv.visitMethodInsn(INVOKESTATIC, Type.getInternalName(method.getDeclaringClass()), name, sb.toString(), false);
+                        return returnType == int.class ? T_INT : T_DOUBLE;
+                    }
                 }
             }
         }
@@ -766,12 +793,12 @@ public class CodeGen {
         DIOP2OOP.put(EnumToken.GE, IFLT);
         DIOP2OOP.put(EnumToken.EQ, IFNE);
         DIOP2OOP.put(EnumToken.NEQ, IFEQ);
+        var builder = ImmutableList.<String>builder();
         for (var field : ParticleStruct.class.getFields()) {
             int modifiers = field.getModifiers();
-            if (Modifier.isPublic(modifiers) && !Modifier.isStatic(modifiers)) {
-                FIELDS.add(field.getName());
-            }
+            if (Modifier.isPublic(modifiers) && !Modifier.isStatic(modifiers)) builder.add(field.getName());
         }
+        FIELDS = builder.build();
     }
 
     private record LocalVarInfo(int type, int index) {

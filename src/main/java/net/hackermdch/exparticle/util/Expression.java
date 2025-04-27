@@ -1,5 +1,8 @@
 package net.hackermdch.exparticle.util;
 
+import static net.hackermdch.exparticle.util.CodeGen.*;
+import static org.objectweb.asm.Opcodes.*;
+
 public class Expression {
     public final int line;
     public int returnType;
@@ -13,7 +16,7 @@ public class Expression {
         public final int val;
 
         public IntegerExp(int line, int val) {
-            super(line, 10);
+            super(line, T_INT);
             this.val = val;
         }
 
@@ -26,7 +29,7 @@ public class Expression {
         public final double val;
 
         public FloatExp(int line, double val) {
-            super(line, 7);
+            super(line, T_DOUBLE);
             this.val = val;
         }
 
@@ -40,7 +43,7 @@ public class Expression {
         public final int[][] val;
 
         public IntegerMatrixExp(int line, int lastLine, int[][] val) {
-            super(line, 12);
+            super(line, T_INTMAT);
             this.lastLine = lastLine;
             this.val = val;
         }
@@ -64,7 +67,7 @@ public class Expression {
         public final double[][] val;
 
         public FloatMatrixExp(int line, int lastLine, double[][] val) {
-            super(line, 13);
+            super(line, T_DOUBLEMAT);
             this.lastLine = lastLine;
             this.val = val;
         }
@@ -88,7 +91,7 @@ public class Expression {
         public final Expression[][] exps;
 
         public MatrixExp(int line, int lastLine, Expression[][] exps) {
-            super(line, 13);
+            super(line, T_DOUBLEMAT);
             this.lastLine = lastLine;
             this.exps = exps;
         }
@@ -112,7 +115,7 @@ public class Expression {
         public final NameExp[][] names;
 
         public NameMatrixExp(int line, int lastLine, NameExp[][] names) {
-            super(line, 0);
+            super(line, T_VOID);
             this.lastLine = lastLine;
             this.names = names;
         }
@@ -135,7 +138,7 @@ public class Expression {
         public final String name;
 
         public NameExp(int line, String name) {
-            super(line, -1);
+            super(line, T_UNKNOW);
             this.name = name;
         }
 
@@ -150,16 +153,13 @@ public class Expression {
 
         public UnopExp(int line, EnumToken op, Expression exp) {
             super(line, exp.returnType);
-            if (op == EnumToken.MINUS || op == EnumToken.SUB) {
-                op = EnumToken.NEG;
-            }
-
+            if (op == EnumToken.MINUS || op == EnumToken.SUB) op = EnumToken.NEG;
             this.op = op;
             this.exp = exp;
         }
 
         public String toString() {
-            return this.op.token + this.exp.toString();
+            return op.token + exp.toString();
         }
     }
 
@@ -169,33 +169,25 @@ public class Expression {
         public final Expression rexp;
 
         public BinopExp(int line, EnumToken op, Expression lexp, Expression rexp) {
-            super(line, -1);
-            if (op == EnumToken.MINUS || op == EnumToken.NEG) {
-                op = EnumToken.SUB;
-            }
+            super(line, T_UNKNOW);
+            if (op == EnumToken.MINUS || op == EnumToken.NEG) op = EnumToken.SUB;
             this.op = op;
             this.lexp = lexp;
             this.rexp = rexp;
-            if (op == EnumToken.AND || op == EnumToken.OR) {
-                this.returnType = 10;
-            }
-            if (lexp.returnType != -1 && rexp.returnType != -1) {
-                if (lexp.returnType == 10 && rexp.returnType == 10) {
-                    this.returnType = op == EnumToken.POW ? 7 : 10;
-                } else if ((lexp.returnType != 10 || rexp.returnType != 7) && (lexp.returnType != 7 || rexp.returnType != 10) && (lexp.returnType != 7 || rexp.returnType != 7)) {
-                    if (lexp.returnType != 12 || rexp.returnType != 10 && rexp.returnType != 12) {
-                        this.returnType = 13;
-                    } else {
-                        this.returnType = 12;
-                    }
-                } else {
-                    this.returnType = 7;
-                }
+            if (op == EnumToken.AND || op == EnumToken.OR) returnType = T_INT;
+            if (lexp.returnType != T_UNKNOW && rexp.returnType != T_UNKNOW) {
+                if (lexp.returnType == T_INT && rexp.returnType == T_INT) {
+                    returnType = op == EnumToken.POW ? T_DOUBLE : T_INT;
+                } else if ((lexp.returnType != T_INT || rexp.returnType != T_DOUBLE) && (lexp.returnType != T_DOUBLE || rexp.returnType != T_INT) && (lexp.returnType != T_DOUBLE || rexp.returnType != T_DOUBLE)) {
+                    if (lexp.returnType != T_INTMAT || rexp.returnType != T_INT && rexp.returnType != T_INTMAT)
+                        returnType = T_DOUBLEMAT;
+                    else returnType = T_INTMAT;
+                } else returnType = T_DOUBLE;
             }
         }
 
         public String toString() {
-            return this.lexp.toString() + this.op.token + this.rexp.toString();
+            return lexp.toString() + op.token + rexp.toString();
         }
     }
 
@@ -205,7 +197,7 @@ public class Expression {
         public final Expression[] args;
 
         public FunctionCallExp(int line, int lastLine, String name, Expression[] args) {
-            super(line, -1);
+            super(line, T_UNKNOW);
             this.lastLine = lastLine;
             this.name = name;
             this.args = args;
