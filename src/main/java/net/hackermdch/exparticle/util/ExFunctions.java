@@ -91,29 +91,44 @@ public class ExFunctions {
     }
 
     public static double[][] rotate(double pitch, double yaw, double roll) {
-        var cosP = Math.cos(pitch);
-        var sinP = Math.sin(pitch);
-        var cosY = Math.cos(yaw);
-        var sinY = Math.sin(yaw);
-        var cosR = Math.cos(roll);
-        var sinR = Math.sin(roll);
+        var cy = Math.cos(yaw * 0.5);
+        var sy = Math.sin(yaw * 0.5);
+        var cp = Math.cos(pitch * 0.5);
+        var sp = Math.sin(pitch * 0.5);
+        var cr = Math.cos(roll * 0.5);
+        var sr = Math.sin(roll * 0.5);
+        var crcp = cr * cp;
+        var srcp = sr * cp;
+        var crsp = cr * sp;
+        var srsp = sr * sp;
+        var w = crcp * cy;
+        var x = crsp * cy - srcp * sy;
+        var y = crcp * sy;
+        var z = srcp * cy + crsp * sy;
+        var xx = x * x;
+        var yy = y * y;
+        var zz = z * z;
+        var xy = x * y;
+        var xz = x * z;
+        var yz = y * z;
+        var wx = w * x;
+        var wy = w * y;
+        var wz = w * z;
         var mat = new double[4][4];
-        mat[0][0] = cosY * cosR + sinP * sinY * sinR;
-        mat[0][1] = -cosY * sinR + sinP * sinY * cosR;
-        mat[0][2] = cosP * sinY;
-        mat[0][3] = 0;
-        mat[1][0] = cosP * sinR;
-        mat[1][1] = cosP * cosR;
-        mat[1][2] = -sinP;
-        mat[1][3] = 0;
-        mat[2][0] = -sinY * cosR + sinP * cosY * sinR;
-        mat[2][1] = sinY * sinR + sinP * cosY * cosR;
-        mat[2][2] = cosP * cosY;
-        mat[2][3] = 0;
-        mat[3][0] = 0;
-        mat[3][1] = 0;
-        mat[3][2] = 0;
-        mat[3][3] = 1;
+        mat[0][0] = 1.0 - 2.0 * (yy + zz);
+        mat[1][0] = 2.0 * (xy + wz);
+        mat[2][0] = 2.0 * (xz - wy);
+        mat[3][0] = 0.0;
+        mat[0][1] = 2.0 * (xy - wz);
+        mat[1][1] = 1.0 - 2.0 * (xx + zz);
+        mat[2][1] = 2.0 * (yz + wx);
+        mat[3][1] = 0.0;
+        mat[0][2] = 2.0 * (xz + wy);
+        mat[1][2] = 2.0 * (yz - wx);
+        mat[2][2] = 1.0 - 2.0 * (xx + yy);
+        mat[3][2] = 0.0;
+        mat[0][3] = mat[1][3] = mat[2][3] = 0.0;
+        mat[3][3] = 1.0;
         return mat;
     }
 
