@@ -119,7 +119,7 @@ public abstract class ParticleMixin implements IParticle {
                 remove();
                 return;
             }
-            if (data.destory != 0.0) {
+            if (data.destroy != 0.0) {
                 remove();
                 return;
             }
@@ -155,17 +155,17 @@ public abstract class ParticleMixin implements IParticle {
     public abstract void setPos(double var1, double var3, double var5);
 
     @Shadow
-    protected double x;
+    public double x;
     @Shadow
-    protected double y;
+    public double y;
     @Shadow
-    protected double z;
+    public double z;
     @Shadow
-    protected float rCol = 1.0F;
+    public float rCol = 1.0F;
     @Shadow
-    protected float gCol = 1.0F;
+    public float gCol = 1.0F;
     @Shadow
-    protected float bCol = 1.0F;
+    public float bCol = 1.0F;
     @Shadow
-    protected float alpha = 1.0F;
+    public float alpha = 1.0F;
 }

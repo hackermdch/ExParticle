@@ -27,5 +27,5 @@ public class ParticleStruct {
     public double ds2;
     public double ddis;
     public double age;
-    public double destory;
+    public double destroy;
 }
