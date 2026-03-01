@@ -22,4 +22,7 @@ public interface IParticle {
     void setStop(boolean var1);
 
     void customTick();
+
+    void setManualControl(boolean manual);
+    boolean isManualControl();
 }
