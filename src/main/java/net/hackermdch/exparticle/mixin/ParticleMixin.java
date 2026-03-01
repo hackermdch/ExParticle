@@ -168,4 +168,17 @@ public abstract class ParticleMixin implements IParticle {
     public float bCol = 1.0F;
     @Shadow
     public float alpha = 1.0F;
+
+    @Unique
+    private boolean exparticle$manualControl;
+
+    @Override
+    public void setManualControl(boolean manual) {
+        this.exparticle$manualControl = manual;
+    }
+
+    @Override
+    public boolean isManualControl() {
+        return this.exparticle$manualControl;
+    }
 }
