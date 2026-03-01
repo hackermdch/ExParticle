@@ -23,6 +23,7 @@ public class ParticleUtil {
         try {
             var particle = CLIENT.particleEngine.createParticle(effect, x, y, z, vx, vy, vz);
             if (particle != null) {
+                ((IParticle) particle).setManualControl(true);
                 particle.setColor(red, green, blue);
                 particle.alpha = alpha;
                 if (vx == (double) 0.0F && vy == (double) 0.0F && vz == (double) 0.0F) {
