@@ -4,6 +4,9 @@ import static net.minecraft.util.Mth.floor;
 
 @SuppressWarnings("unused")
 public class ExFunctions {
+    private static final double[][] E3 = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
+    private static final double[][] E4 = {{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}};
+
     public static int lerpInt(double delta, int start, int end) {
         return start + floor(delta * (double) (end - start));
     }
@@ -138,6 +141,15 @@ public class ExFunctions {
         mat[1][1] = y;
         mat[2][2] = z;
         mat[3][3] = 1;
+        return mat;
+    }
+
+    public static double[][] identity(int n) {
+        if (n <= 0) throw new IllegalArgumentException();
+        if (n == 3) return E3;
+        if (n == 4) return E4;
+        var mat = new double[n][n];
+        for (int i = 0; i < n; ++i) mat[i][i] = 1;
         return mat;
     }
 }

@@ -7,6 +7,7 @@ import net.hackermdch.exparticle.network.Networking;
 import net.hackermdch.exparticle.util.ParticleUtil;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,11 +48,16 @@ public class ExParticle {
         Networking.register(modBus);
         CustomArgumentTypes.register(modBus);
         EVENT_BUS.addListener(ExParticle::registerCommands);
+        EVENT_BUS.addListener(ExParticle::registerClientCommands);
         EVENT_BUS.addListener(ParticleUtil::onStartClientTick);
         EVENT_BUS.addListener(ParticleUtil::onEndClientTick);
     }
 
     private static void registerCommands(RegisterCommandsEvent event) {
         ParticleExCommand.register(event.getDispatcher(), event.getBuildContext());
+    }
+
+    private static void registerClientCommands(RegisterClientCommandsEvent event) {
+        ParticleExCommand.registerClient(event.getDispatcher(), event.getBuildContext());
     }
 }
