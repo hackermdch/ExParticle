@@ -8,6 +8,9 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -33,6 +36,11 @@ public class CodeGen {
     private int simulationCount;
     private int maxLocal;
     private final Map<String, LocalVarInfo> localVars = new HashMap<>();
+    private static MethodHandle defineClass;
+
+    public static void init(MethodHandles.Lookup lookup) throws Throwable {
+        defineClass = lookup.findSpecial(ClassLoader.class, "defineClass", MethodType.methodType(Class.class, String.class, byte[].class, int.class, int.class), ClassLoader.class);
+    }
 
     public CodeGen(Expression[] block) {
         this.block = Arrays.copyOf(block, block.length);
@@ -44,30 +52,16 @@ public class CodeGen {
         mv = cw.visitMethod(ACC_PUBLIC | ACC_STATIC, "invoke", "(Lnet/hackermdch/exparticle/util/ParticleStruct;)I", null, null);
         addLocalVar("this", T_UNKNOW);
         mv.visitCode();
-        for (int i = 0; i < block.length - 1; ++i) {
-            codeGenExp(block[i], T_VOID);
-        }
+        for (int i = 0; i < block.length - 1; ++i) codeGenExp(block[i], T_VOID);
         codeGenReturn(block[block.length - 1]);
         mv.visitMaxs(0, 0);
         mv.visitEnd();
         cw.visitEnd();
         var cl = Thread.currentThread().getContextClassLoader();
-        Class<?> clazz = cl.getClass();
-        Method method = null;
-        while (clazz != null) {
-            try {
-                method = clazz.getDeclaredMethod("defineClass", String.class, byte[].class, int.class, int.class);
-                method.setAccessible(true);
-                break;
-            } catch (NoSuchMethodException ignore) {
-            }
-            clazz = clazz.getSuperclass();
-        }
         var bytes = cw.toByteArray();
         try {
-            assert method != null;
-            return (Class<?>) method.invoke(cl, "net.hackermdch.exparticle.util.CodeGen$" + name, bytes, 0, bytes.length);
-        } catch (Exception e) {
+            return (Class<?>) defineClass.invoke(cl, "net.hackermdch.exparticle.util.CodeGen$" + name, bytes, 0, bytes.length);
+        } catch (Throwable e) {
             throw new RuntimeException(e);
         }
     }

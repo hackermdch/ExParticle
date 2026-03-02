@@ -4,6 +4,7 @@ import cpw.mods.cl.ModuleClassLoader;
 import net.hackermdch.exparticle.command.ParticleExCommand;
 import net.hackermdch.exparticle.command.argument.CustomArgumentTypes;
 import net.hackermdch.exparticle.network.Networking;
+import net.hackermdch.exparticle.util.CodeGen;
 import net.hackermdch.exparticle.util.ParticleUtil;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -41,6 +42,7 @@ public class ExParticle {
             addOpens.invoke(lang, "java.lang", ExParticle.class.getModule());
             packageLookup = lookup.findVarHandle(ModuleClassLoader.class, "packageLookup", Map.class);
             parentLoaders = lookup.findVarHandle(ModuleClassLoader.class, "parentLoaders", Map.class);
+            CodeGen.init(lookup);
             ExParticleConfig.init();
         } catch (Throwable e) {
             throw new RuntimeException(e);
