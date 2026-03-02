@@ -23,6 +23,7 @@ public interface IParticle {
 
     void customTick();
 
-    void setManualControl(boolean manual);
-    boolean isManualControl();
+    void setManaged(boolean val);
+
+    boolean isManaged();
 }

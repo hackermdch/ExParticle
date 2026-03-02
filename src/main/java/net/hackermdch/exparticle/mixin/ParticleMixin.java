@@ -32,6 +32,8 @@ public abstract class ParticleMixin implements IParticle {
     private double preY;
     @Unique
     private double preZ;
+    @Unique
+    private boolean managed;
 
     public void setExe(IExecutable exe) {
         this.exe = exe;
@@ -137,6 +139,16 @@ public abstract class ParticleMixin implements IParticle {
         }
     }
 
+    @Override
+    public void setManaged(boolean val) {
+        managed = val;
+    }
+
+    @Override
+    public boolean isManaged() {
+        return managed;
+    }
+
     @Unique
     private double nanToZero(double num) {
         return !Double.isNaN(num) ? num : (double) 0.0F;
@@ -168,17 +180,4 @@ public abstract class ParticleMixin implements IParticle {
     public float bCol = 1.0F;
     @Shadow
     public float alpha = 1.0F;
-
-    @Unique
-    private boolean exparticle$manualControl;
-
-    @Override
-    public void setManualControl(boolean manual) {
-        this.exparticle$manualControl = manual;
-    }
-
-    @Override
-    public boolean isManualControl() {
-        return this.exparticle$manualControl;
-    }
 }
