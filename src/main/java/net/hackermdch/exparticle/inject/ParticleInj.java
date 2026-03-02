@@ -48,4 +48,12 @@ public interface ParticleInj extends IParticle {
     default void customTick() {
         throw new NotImplementedException();
     }
+
+    default void setManaged(boolean val) {
+        throw new NotImplementedException();
+    }
+
+    default boolean isManaged() {
+        throw new NotImplementedException();
+    }
 }

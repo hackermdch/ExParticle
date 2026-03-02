@@ -32,6 +32,8 @@ public abstract class ParticleMixin implements IParticle {
     private double preY;
     @Unique
     private double preZ;
+    @Unique
+    private boolean managed;
 
     public void setExe(IExecutable exe) {
         this.exe = exe;
@@ -135,6 +137,16 @@ public abstract class ParticleMixin implements IParticle {
             bCol = (float) data.cb;
             alpha = (float) data.alpha;
         }
+    }
+
+    @Override
+    public void setManaged(boolean val) {
+        managed = val;
+    }
+
+    @Override
+    public boolean isManaged() {
+        return managed;
     }
 
     @Unique

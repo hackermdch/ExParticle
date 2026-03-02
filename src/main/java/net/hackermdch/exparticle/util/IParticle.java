@@ -22,4 +22,8 @@ public interface IParticle {
     void setStop(boolean var1);
 
     void customTick();
+
+    void setManaged(boolean val);
+
+    boolean isManaged();
 }
