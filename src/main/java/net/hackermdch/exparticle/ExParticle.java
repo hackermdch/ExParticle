@@ -4,9 +4,11 @@ import cpw.mods.cl.ModuleClassLoader;
 import net.hackermdch.exparticle.command.ParticleExCommand;
 import net.hackermdch.exparticle.command.argument.CustomArgumentTypes;
 import net.hackermdch.exparticle.network.Networking;
+import net.hackermdch.exparticle.util.CodeGen;
 import net.hackermdch.exparticle.util.ParticleUtil;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,6 +42,7 @@ public class ExParticle {
             addOpens.invoke(lang, "java.lang", ExParticle.class.getModule());
             packageLookup = lookup.findVarHandle(ModuleClassLoader.class, "packageLookup", Map.class);
             parentLoaders = lookup.findVarHandle(ModuleClassLoader.class, "parentLoaders", Map.class);
+            CodeGen.init(lookup);
             ExParticleConfig.init();
         } catch (Throwable e) {
             throw new RuntimeException(e);
@@ -47,11 +50,16 @@ public class ExParticle {
         Networking.register(modBus);
         CustomArgumentTypes.register(modBus);
         EVENT_BUS.addListener(ExParticle::registerCommands);
+        EVENT_BUS.addListener(ExParticle::registerClientCommands);
         EVENT_BUS.addListener(ParticleUtil::onStartClientTick);
         EVENT_BUS.addListener(ParticleUtil::onEndClientTick);
     }
 
     private static void registerCommands(RegisterCommandsEvent event) {
         ParticleExCommand.register(event.getDispatcher(), event.getBuildContext());
+    }
+
+    private static void registerClientCommands(RegisterClientCommandsEvent event) {
+        ParticleExCommand.registerClient(event.getDispatcher(), event.getBuildContext());
     }
 }

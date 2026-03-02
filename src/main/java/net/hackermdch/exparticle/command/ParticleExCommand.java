@@ -5,6 +5,8 @@ import net.hackermdch.exparticle.command.particleex.*;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public class ParticleExCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
@@ -20,6 +22,14 @@ public class ParticleExCommand {
         VideoCommand.register(root, context);
         VideoMatrixCommand.register(root, context);
         GroupCommand.register(root);
+        GlobalVariableCommand.register(root);
+        dispatcher.register(root);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void registerClient(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
+        var root = Commands.literal("particlex");
+        GlobalVariableCommand.Client.register(root);
         dispatcher.register(root);
     }
 }

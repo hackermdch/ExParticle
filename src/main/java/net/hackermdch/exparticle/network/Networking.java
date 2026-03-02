@@ -19,6 +19,7 @@ public class Networking {
         VideoMatrixPayload.register(registrar);
         GroupRemovePayload.register(registrar);
         GroupChangePayload.register(registrar);
+        GlobalVariablePayload.register(registrar);
     }
 
     public static void register(IEventBus bus) {
