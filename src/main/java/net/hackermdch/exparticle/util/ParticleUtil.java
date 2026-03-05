@@ -5,11 +5,18 @@ import net.hackermdch.exparticle.ExParticle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.contents.PlainTextContents;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 import java.util.TimerTask;
 import java.util.function.Predicate;
@@ -184,6 +191,154 @@ public class ParticleUtil {
                 TICK_END_TASKS.poll().run();
             }
         }
+    }
+
+    // 文本粒子生成方法
+    public static void spawnTextParticle(ParticleOptions effect, double x, double y, double z, Component text,
+                                         double scaling, int xRotate, int yRotate, int zRotate, boolean flip,
+                                         double dpb, double vx, double vy, double vz, int age,
+                                         String speedExpression, double speedStep, String group) {
+        spawnTextParticle(effect, x, y, z, text, scaling, xRotate, yRotate, zRotate, flip, null, dpb,
+                vx, vy, vz, age, speedExpression, speedStep, group);
+    }
+
+    public static void spawnTextParticle(ParticleOptions effect, double x, double y, double z, Component text,
+                                         double scaling, double[][] matrix, double dpb,
+                                         double vx, double vy, double vz, int age,
+                                         String speedExpression, double speedStep, String group) {
+        spawnTextParticle(effect, x, y, z, text, scaling, 0, 0, 0, false, matrix, dpb,
+                vx, vy, vz, age, speedExpression, speedStep, group);
+    }
+
+    private static void spawnTextParticle(ParticleOptions effect, double x, double y, double z, Component text,
+                                          double scaling, int xRotate, int yRotate, int zRotate, boolean flip,
+                                          double[][] matrix, double dpb,
+                                          double vx, double vy, double vz, int age,
+                                          String speedExpression, double speedStep, String group) {
+        try {
+            BufferedImage image = renderComponentToImage(text, scaling);
+            int rows = image.getHeight();
+            int cols = image.getWidth();
+            var rotateFlipMat = ParticleUtil.getRotateFlipMat(xRotate, yRotate, zRotate, flip, rows, cols);
+            for (int row = 0; row < rows; ++row) {
+                for (int col = 0; col < cols; ++col) {
+                    int pixel = image.getRGB(col, row);
+                    int a = (pixel >> 24) & 0xFF;
+                    if (a == 0) continue;
+                    float red = ((pixel >> 16) & 0xFF) / 255.0F;
+                    float green = ((pixel >> 8) & 0xFF) / 255.0F;
+                    float blue = (pixel & 0xFF) / 255.0F;
+                    float alpha = a / 255.0F;
+                    double[][] pos = MatrixUtil.matDiv(MatrixUtil.matMul(rotateFlipMat, new int[][]{{col}, {row}, {0}, {1}}), dpb);
+                    if (matrix != null) {
+                        pos = MatrixUtil.matMul(matrix, pos);
+                    }
+                    double dx = pos[0][0];
+                    double dy = pos[1][0];
+                    double dz = pos[2][0];
+                    spawnParticle(effect, x + dx, y + dy, z + dz, x, y, z,
+                            red, green, blue, alpha, vx, vy, vz, age, speedExpression, speedStep, group);
+                }
+            }
+        } catch (Exception e) {
+            ClientMessageUtil.addChatMessage(e);
+        }
+    }
+
+    // 将文本组件渲染为 BufferedImage（使用 AWT，样式映射）
+    private static BufferedImage renderComponentToImage(Component component, double scaling) {
+        // 实际使用的缩放因子
+        double textScale = scaling * 2.5; // 用于字体大小的缩放
+        double lineScale = scaling;       // 用于线条宽度的缩放
+
+        List<StyledString> fragments = new ArrayList<>();
+        collectFragments(component, Style.EMPTY, fragments);
+
+        int totalWidth = 0;
+        int lineHeight = 0;
+        for (StyledString frag : fragments) {
+            Font awtFont = createAwtFont(frag.style, textScale);
+            java.awt.font.FontRenderContext awtFrc = new java.awt.font.FontRenderContext(null, true, true);
+            Rectangle2D bounds = awtFont.getStringBounds(frag.text, awtFrc);
+            frag.width = (int) Math.ceil(bounds.getWidth());
+            frag.height = (int) Math.ceil(bounds.getHeight());
+            totalWidth += frag.width;
+            lineHeight = Math.max(lineHeight, frag.height);
+        }
+
+        if (totalWidth == 0) totalWidth = 1;
+        if (lineHeight == 0) lineHeight = 1;
+
+        BufferedImage image = new BufferedImage(totalWidth, lineHeight, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = image.createGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2d.setBackground(new Color(0, true));
+        g2d.clearRect(0, 0, totalWidth, lineHeight);
+
+        // 设置线条宽度（基于 lineScale）
+        float lineWidth = (float) Math.max(1.0, lineScale);
+        g2d.setStroke(new BasicStroke(lineWidth));
+
+        int x = 0;
+        for (StyledString frag : fragments) {
+            Font awtFont = createAwtFont(frag.style, textScale);
+            g2d.setFont(awtFont);
+            Color awtColor = getAwtColor(frag.style.getColor());
+            g2d.setColor(awtColor);
+
+            int y = g2d.getFontMetrics().getAscent();
+            g2d.drawString(frag.text, x, y);
+
+            // 下划线
+            if (frag.style.isUnderlined()) {
+                int underlineY = y + 2 + (int)(lineWidth / 2);
+                g2d.drawLine(x, underlineY, x + frag.width - 1, underlineY);
+            }
+
+            // 删除线
+            if (frag.style.isStrikethrough()) {
+                int strikeY = y - (int)(g2d.getFontMetrics().getAscent() * 0.3);
+                g2d.drawLine(x, strikeY, x + frag.width - 1, strikeY);
+            }
+
+            x += frag.width;
+        }
+        g2d.dispose();
+        return image;
+    }
+
+    // 辅助类：带样式的文本片段
+    private static class StyledString {
+        String text;
+        Style style;
+        int width, height;
+        StyledString(String text, Style style) { this.text = text; this.style = style; }
+    }
+
+    // 递归收集片段
+    private static void collectFragments(Component comp, Style parentStyle, List<StyledString> out) {
+        Style current = parentStyle.applyTo(comp.getStyle());
+        if (comp.getContents() instanceof PlainTextContents.LiteralContents(String text)) {
+            out.add(new StyledString(text, current));
+        }
+        for (Component sibling : comp.getSiblings()) {
+            collectFragments(sibling, current, out);
+        }
+    }
+
+    // 根据 Style 创建 AWT Font
+    private static Font createAwtFont(Style style, double textScale) {
+        int awtStyle = Font.PLAIN;
+        if (style.isBold()) awtStyle |= Font.BOLD;
+        if (style.isItalic()) awtStyle |= Font.ITALIC;
+        int fontSize = (int) Math.max(1, 12 * textScale);
+        return new Font(Font.SANS_SERIF, awtStyle, fontSize);
+    }
+
+    // 获取 AWT Color
+    private static Color getAwtColor(TextColor color) {
+        if (color == null) return Color.WHITE;
+        return new Color(color.getValue());
     }
 
     private static class TickParticleTask extends TimerTask {
