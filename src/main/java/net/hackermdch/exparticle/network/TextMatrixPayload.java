@@ -21,13 +21,16 @@ import static net.hackermdch.exparticle.network.NetworkUtils.*;
 public class TextMatrixPayload implements CustomPacketPayload {
     private static final Type<TextMatrixPayload> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(MOD_ID, "text_matrix"));
     private static final StreamCodec<RegistryFriendlyByteBuf, TextMatrixPayload> CODEC = StreamCodec.ofMember(TextMatrixPayload::write, TextMatrixPayload::new);
-
-    private final double x, y, z;
+    private final double x;
+    private final double y;
+    private final double z;
     private final Component text;
     private final double scaling;
     private final double[][] matrix;
     private final double dpb;
-    private final double vx, vy, vz;
+    private final double vx;
+    private final double vy;
+    private final double vz;
     private final int age;
     private final boolean hasSpeedExpression;
     private final String speedExpression;
@@ -35,9 +38,7 @@ public class TextMatrixPayload implements CustomPacketPayload {
     private final String group;
     private final ParticleOptions effect;
 
-    public TextMatrixPayload(ParticleOptions effect, Vec3 pos, Component text, double scaling,
-                             String matrixStr, double dpb, Vec3 speed,
-                             int age, String speedExpression, double speedStep, String group) {
+    public TextMatrixPayload(ParticleOptions effect, Vec3 pos, Component text, double scaling, String matrixStr, double dpb, Vec3 speed, int age, String speedExpression, double speedStep, String group) {
         this.effect = effect;
         this.x = pos.x;
         this.y = pos.y;
@@ -46,9 +47,10 @@ public class TextMatrixPayload implements CustomPacketPayload {
         this.scaling = scaling;
         this.matrix = MatrixUtil.toMat(matrixStr);
         this.dpb = dpb;
-        this.vx = speed == null ? 0 : speed.x;
-        this.vy = speed == null ? 0 : speed.y;
-        this.vz = speed == null ? 0 : speed.z;
+        if (speed == null) speed = Vec3.ZERO;
+        this.vx = speed.x;
+        this.vy = speed.y;
+        this.vz = speed.z;
         this.age = age;
         this.hasSpeedExpression = validString(speedExpression);
         this.speedExpression = speedExpression;
@@ -116,10 +118,7 @@ public class TextMatrixPayload implements CustomPacketPayload {
     }
 
     private void handle(IPayloadContext context) {
-        context.enqueueWork(() -> {
-            ParticleUtil.spawnTextParticle(effect, x, y, z, text, scaling,
-                    matrix, dpb, vx, vy, vz, age, speedExpression, speedStep, group);
-        });
+        context.enqueueWork(() -> ParticleUtil.spawnTextParticle(effect, x, y, z, text, scaling, matrix, dpb, vx, vy, vz, age, speedExpression, speedStep, group));
     }
 
     @Override

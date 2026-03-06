@@ -20,14 +20,19 @@ import static net.hackermdch.exparticle.network.NetworkUtils.*;
 public class TextPayload implements CustomPacketPayload {
     private static final Type<TextPayload> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(MOD_ID, "text"));
     private static final StreamCodec<RegistryFriendlyByteBuf, TextPayload> CODEC = StreamCodec.ofMember(TextPayload::write, TextPayload::new);
-
-    private final double x, y, z;
+    private final double x;
+    private final double y;
+    private final double z;
     private final Component text;
     private final double scaling;
-    private final int xRotate, yRotate, zRotate;
+    private final int xRotate;
+    private final int yRotate;
+    private final int zRotate;
     private final boolean flip;
     private final double dpb;
-    private final double vx, vy, vz;
+    private final double vx;
+    private final double vy;
+    private final double vz;
     private final int age;
     private final boolean hasSpeedExpression;
     private final String speedExpression;
@@ -35,9 +40,7 @@ public class TextPayload implements CustomPacketPayload {
     private final String group;
     private final ParticleOptions effect;
 
-    public TextPayload(ParticleOptions effect, Vec3 pos, Component text, double scaling,
-                       int xRotate, int yRotate, int zRotate, int flip, double dpb,
-                       Vec3 speed, int age, String speedExpression, double speedStep, String group) {
+    public TextPayload(ParticleOptions effect, Vec3 pos, Component text, double scaling, int xRotate, int yRotate, int zRotate, int flip, double dpb, Vec3 speed, int age, String speedExpression, double speedStep, String group) {
         this.effect = effect;
         this.x = pos.x;
         this.y = pos.y;
@@ -49,9 +52,10 @@ public class TextPayload implements CustomPacketPayload {
         this.zRotate = zRotate;
         this.flip = flip != 0;
         this.dpb = dpb;
-        this.vx = speed == null ? 0 : speed.x;
-        this.vy = speed == null ? 0 : speed.y;
-        this.vz = speed == null ? 0 : speed.z;
+        if (speed == null) speed = Vec3.ZERO;
+        vx = speed.x;
+        vy = speed.y;
+        vz = speed.z;
         this.age = age;
         this.hasSpeedExpression = validString(speedExpression);
         this.speedExpression = speedExpression;
@@ -112,12 +116,7 @@ public class TextPayload implements CustomPacketPayload {
     }
 
     private void handle(IPayloadContext context) {
-        context.enqueueWork(() -> {
-            // 将文本组件渲染为图像，然后生成粒子
-            ParticleUtil.spawnTextParticle(effect, x, y, z, text, scaling,
-                    xRotate, yRotate, zRotate, flip, dpb,
-                    vx, vy, vz, age, speedExpression, speedStep, group);
-        });
+        context.enqueueWork(() -> ParticleUtil.spawnTextParticle(effect, x, y, z, text, scaling, xRotate, yRotate, zRotate, flip, dpb, vx, vy, vz, age, speedExpression, speedStep, group));
     }
 
     @Override
