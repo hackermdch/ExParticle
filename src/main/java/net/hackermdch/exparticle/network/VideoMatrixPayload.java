@@ -25,6 +25,7 @@ public class VideoMatrixPayload implements CustomPacketPayload {
     private final double z;
     private final String path;
     private final double scaling;
+    private final double size;
     private final double[][] matrix;
     private final double dpb;
     private final double vx;
@@ -37,15 +38,16 @@ public class VideoMatrixPayload implements CustomPacketPayload {
     private final String group;
     private final ParticleOptions effect;
 
-    public VideoMatrixPayload(ParticleOptions effect, Vec3 pos, String path, double scaling, String matrixStr, double dpb, Vec3 speed, int age, String speedExpression, double speedStep, String group) {
-        if (speed == null) speed = Vec3.ZERO;
+    public VideoMatrixPayload(ParticleOptions effect, Vec3 pos, String path, double scaling, double size, String matrixStr, double dpb, Vec3 speed, int age, String speedExpression, double speedStep, String group) {
         this.x = pos.x;
         this.y = pos.y;
         this.z = pos.z;
         this.path = path;
         this.scaling = scaling;
+        this.size = size;
         this.matrix = MatrixUtil.toMat(matrixStr);
         this.dpb = dpb;
+        if (speed == null) speed = Vec3.ZERO;
         this.vx = speed.x;
         this.vy = speed.y;
         this.vz = speed.z;
@@ -64,6 +66,7 @@ public class VideoMatrixPayload implements CustomPacketPayload {
         z = buf.readDouble();
         path = buf.readUtf();
         scaling = buf.readDouble();
+        size = buf.readDouble();
         var rows = buf.readInt();
         var cols = buf.readInt();
         matrix = new double[rows][cols];
@@ -93,6 +96,7 @@ public class VideoMatrixPayload implements CustomPacketPayload {
         buf.writeDouble(z);
         buf.writeUtf(path);
         buf.writeDouble(scaling);
+        buf.writeDouble(size);
         buf.writeInt(matrix.length);
         buf.writeInt(matrix[0].length);
         for (var row : matrix) {
@@ -117,7 +121,7 @@ public class VideoMatrixPayload implements CustomPacketPayload {
     }
 
     private void handle(IPayloadContext context) {
-        context.enqueueWork(() -> ParticleUtil.spawnVideoParticle(effect, x, y, z, path, scaling, matrix, dpb, vx, vy, vz, age, speedExpression, speedStep, group));
+        context.enqueueWork(() -> ParticleUtil.spawnVideoParticle(effect, x, y, z, path, scaling, size, matrix, dpb, vx, vy, vz, age, speedExpression, speedStep, group));
     }
 
     @Override

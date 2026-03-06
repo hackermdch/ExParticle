@@ -26,7 +26,7 @@ public class ParticleUtil {
     private static final Queue<TimerTask> TICK_END_TASKS = Queues.newArrayDeque();
     private static final Minecraft CLIENT = Minecraft.getInstance();
 
-    public static Particle spawnParticle(ParticleOptions effect, double x, double y, double z, double cx, double cy, double cz, float red, float green, float blue, float alpha, double vx, double vy, double vz, int age, String expression, double step, String group) {
+    public static Particle spawnParticle(ParticleOptions effect, double x, double y, double z, double cx, double cy, double cz, double size, float red, float green, float blue, float alpha, double light, double vx, double vy, double vz, int age, String expression, double step, String group) {
         try {
             var particle = CLIENT.particleEngine.createParticle(effect, x, y, z, vx, vy, vz);
             if (particle != null) {
@@ -54,6 +54,12 @@ public class ParticleUtil {
                     particle.setStep(step);
                     particle.setCustomMove(true);
                 }
+                if (size != -1.0) {
+                    particle.setCustomSize(size);
+                }
+                if (light != -1.0) {
+                    particle.setCustomLight(light);
+                }
                 GroupUtil.add(group, particle);
             }
             return particle;
@@ -63,23 +69,23 @@ public class ParticleUtil {
         }
     }
 
-    public static void spawnTickParticle(ParticleOptions effect, double x, double y, double z, float red, float green, float blue, float alpha, double vx, double vy, double vz, double begin, double end, String expression, double step, int cpt, int age, String speedExpression, double speedStep, String group, boolean polar) {
-        new TickParticleTask(effect, x, y, z, red, green, blue, alpha, vx, vy, vz, begin, end, expression, step, cpt, age, speedExpression, speedStep, group, polar, false).run();
+    public static void spawnTickParticle(ParticleOptions effect, double x, double y, double z, double size, float red, float green, float blue, float alpha, double light, double vx, double vy, double vz, double begin, double end, String expression, double step, int cpt, int age, String speedExpression, double speedStep, String group, boolean polar) {
+        new TickParticleTask(effect, x, y, z, size, red, green, blue, alpha, light, vx, vy, vz, begin, end, expression, step, cpt, age, speedExpression, speedStep, group, polar, false).run();
     }
 
     public static void spawnTickParticle(ParticleOptions effect, double x, double y, double z, double vx, double vy, double vz, double begin, double end, String expression, double step, int cpt, int age, String speedExpression, double speedStep, String group, boolean polar) {
-        new TickParticleTask(effect, x, y, z, 1.0F, 1.0F, 1.0F, 1.0F, vx, vy, vz, begin, end, expression, step, cpt, age, speedExpression, speedStep, group, polar, true).run();
+        new TickParticleTask(effect, x, y, z, -1.0, 1.0F, 1.0F, 1.0F, 1.0F, -1.0, vx, vy, vz, begin, end, expression, step, cpt, age, speedExpression, speedStep, group, polar, true).run();
     }
 
-    public static void spawnImageParticle(ParticleOptions effect, double x, double y, double z, String path, double scaling, int xRotate, int yRotate, int zRotate, boolean flip, double dpb, double vx, double vy, double vz, int age, String speedExpression, double speedStep, String group) {
-        spawnImageParticle(effect, x, y, z, path, scaling, xRotate, yRotate, zRotate, flip, null, dpb, vx, vy, vz, age, speedExpression, speedStep, group);
+    public static void spawnImageParticle(ParticleOptions effect, double x, double y, double z, String path, double scaling, double size, int xRotate, int yRotate, int zRotate, boolean flip, double dpb, double vx, double vy, double vz, int age, String speedExpression, double speedStep, String group) {
+        spawnImageParticle(effect, x, y, z, path, scaling, size, xRotate, yRotate, zRotate, flip, null, dpb, vx, vy, vz, age, speedExpression, speedStep, group);
     }
 
-    public static void spawnImageParticle(ParticleOptions effect, double x, double y, double z, String path, double scaling, double[][] matrix, double dpb, double vx, double vy, double vz, int age, String speedExpression, double speedStep, String group) {
-        spawnImageParticle(effect, x, y, z, path, scaling, 0, 0, 0, false, matrix, dpb, vx, vy, vz, age, speedExpression, speedStep, group);
+    public static void spawnImageParticle(ParticleOptions effect, double x, double y, double z, String path, double scaling, double size, double[][] matrix, double dpb, double vx, double vy, double vz, int age, String speedExpression, double speedStep, String group) {
+        spawnImageParticle(effect, x, y, z, path, scaling, size, 0, 0, 0, false, matrix, dpb, vx, vy, vz, age, speedExpression, speedStep, group);
     }
 
-    public static void spawnImageParticle(ParticleOptions effect, double x, double y, double z, String path, double scaling, int xRotate, int yRotate, int zRotate, boolean flip, double[][] matrix, double dpb, double vx, double vy, double vz, int age, String speedExpression, double speedStep, String group) {
+    public static void spawnImageParticle(ParticleOptions effect, double x, double y, double z, String path, double scaling, double size, int xRotate, int yRotate, int zRotate, boolean flip, double[][] matrix, double dpb, double vx, double vy, double vz, int age, String speedExpression, double speedStep, String group) {
         try {
             var image = ImageUtil.readImage(path, scaling, true);
             int rows = image.getHeight();
@@ -100,7 +106,7 @@ public class ParticleUtil {
                     double dy = pos[1][0];
                     double dz = pos[2][0];
                     if (alpha != 0.0F) {
-                        spawnParticle(effect, x + dx, y + dy, z + dz, x, y, z, red, green, blue, alpha, vx, vy, vz, age, speedExpression, speedStep, group);
+                        spawnParticle(effect, x + dx, y + dy, z + dz, x, y, z, size, red, green, blue, alpha, -1.0, vx, vy, vz, age, speedExpression, speedStep, group);
                     }
                 }
             }
@@ -109,16 +115,16 @@ public class ParticleUtil {
         }
     }
 
-    public static void spawnVideoParticle(ParticleOptions effect, double x, double y, double z, String path, double scaling, int xRotate, int yRotate, int zRotate, boolean flip, double dpb, double vx, double vy, double vz, int age, String speedExpression, double speedStep, String group) {
-        spawnVideoParticle(effect, x, y, z, path, scaling, xRotate, yRotate, zRotate, flip, null, dpb, vx, vy, vz, age, speedExpression, speedStep, group);
+    public static void spawnVideoParticle(ParticleOptions effect, double x, double y, double z, String path, double scaling, double size, int xRotate, int yRotate, int zRotate, boolean flip, double dpb, double vx, double vy, double vz, int age, String speedExpression, double speedStep, String group) {
+        spawnVideoParticle(effect, x, y, z, path, scaling, size, xRotate, yRotate, zRotate, flip, null, dpb, vx, vy, vz, age, speedExpression, speedStep, group);
     }
 
-    public static void spawnVideoParticle(ParticleOptions effect, double x, double y, double z, String path, double scaling, double[][] matrix, double dpb, double vx, double vy, double vz, int age, String speedExpression, double speedStep, String group) {
-        spawnVideoParticle(effect, x, y, z, path, scaling, 0, 0, 0, false, matrix, dpb, vx, vy, vz, age, speedExpression, speedStep, group);
+    public static void spawnVideoParticle(ParticleOptions effect, double x, double y, double z, String path, double scaling, double size, double[][] matrix, double dpb, double vx, double vy, double vz, int age, String speedExpression, double speedStep, String group) {
+        spawnVideoParticle(effect, x, y, z, path, scaling, size, 0, 0, 0, false, matrix, dpb, vx, vy, vz, age, speedExpression, speedStep, group);
     }
 
-    public static void spawnVideoParticle(ParticleOptions effect, double x, double y, double z, String path, double scaling, int xRotate, int yRotate, int zRotate, boolean flip, double[][] matrix, double dpb, double vx, double vy, double vz, int age, String speedExpression, double speedStep, String group) {
-        VideoUtil.decoder(path, new VideoConsumer(effect, x, y, z, scaling, xRotate, yRotate, zRotate, flip, matrix, dpb, vx, vy, vz, age, speedExpression, speedStep, group));
+    public static void spawnVideoParticle(ParticleOptions effect, double x, double y, double z, String path, double scaling, double size, int xRotate, int yRotate, int zRotate, boolean flip, double[][] matrix, double dpb, double vx, double vy, double vz, int age, String speedExpression, double speedStep, String group) {
+        VideoUtil.decoder(path, new VideoConsumer(effect, x, y, z, scaling, size, xRotate, yRotate, zRotate, flip, matrix, dpb, vx, vy, vz, age, speedExpression, speedStep, group));
     }
 
     private static int[][] getRotateFlipMat(int xRotate, int yRotate, int zRotate, boolean flip, int rows, int cols) {
@@ -194,27 +200,15 @@ public class ParticleUtil {
     }
 
     // 文本粒子生成方法
-    public static void spawnTextParticle(ParticleOptions effect, double x, double y, double z, Component text,
-                                         double scaling, int xRotate, int yRotate, int zRotate, boolean flip,
-                                         double dpb, double vx, double vy, double vz, int age,
-                                         String speedExpression, double speedStep, String group) {
-        spawnTextParticle(effect, x, y, z, text, scaling, xRotate, yRotate, zRotate, flip, null, dpb,
-                vx, vy, vz, age, speedExpression, speedStep, group);
+    public static void spawnTextParticle(ParticleOptions effect, double x, double y, double z, Component text, double scaling, double size, int xRotate, int yRotate, int zRotate, boolean flip, double dpb, double vx, double vy, double vz, int age, String speedExpression, double speedStep, String group) {
+        spawnTextParticle(effect, x, y, z, text, scaling, size, xRotate, yRotate, zRotate, flip, null, dpb, vx, vy, vz, age, speedExpression, speedStep, group);
     }
 
-    public static void spawnTextParticle(ParticleOptions effect, double x, double y, double z, Component text,
-                                         double scaling, double[][] matrix, double dpb,
-                                         double vx, double vy, double vz, int age,
-                                         String speedExpression, double speedStep, String group) {
-        spawnTextParticle(effect, x, y, z, text, scaling, 0, 0, 0, false, matrix, dpb,
-                vx, vy, vz, age, speedExpression, speedStep, group);
+    public static void spawnTextParticle(ParticleOptions effect, double x, double y, double z, Component text, double scaling, double size, double[][] matrix, double dpb, double vx, double vy, double vz, int age, String speedExpression, double speedStep, String group) {
+        spawnTextParticle(effect, x, y, z, text, scaling, size, 0, 0, 0, false, matrix, dpb, vx, vy, vz, age, speedExpression, speedStep, group);
     }
 
-    private static void spawnTextParticle(ParticleOptions effect, double x, double y, double z, Component text,
-                                          double scaling, int xRotate, int yRotate, int zRotate, boolean flip,
-                                          double[][] matrix, double dpb,
-                                          double vx, double vy, double vz, int age,
-                                          String speedExpression, double speedStep, String group) {
+    private static void spawnTextParticle(ParticleOptions effect, double x, double y, double z, Component text, double scaling, double size, int xRotate, int yRotate, int zRotate, boolean flip, double[][] matrix, double dpb, double vx, double vy, double vz, int age, String speedExpression, double speedStep, String group) {
         try {
             BufferedImage image = renderComponentToImage(text, scaling);
             int rows = image.getHeight();
@@ -236,8 +230,7 @@ public class ParticleUtil {
                     double dx = pos[0][0];
                     double dy = pos[1][0];
                     double dz = pos[2][0];
-                    spawnParticle(effect, x + dx, y + dy, z + dz, x, y, z,
-                            red, green, blue, alpha, vx, vy, vz, age, speedExpression, speedStep, group);
+                    spawnParticle(effect, x + dx, y + dy, z + dz, x, y, z, size, red, green, blue, alpha,-1.0, vx, vy, vz, age, speedExpression, speedStep, group);
                 }
             }
         } catch (Exception e) {
@@ -346,10 +339,12 @@ public class ParticleUtil {
         private final double x;
         private final double y;
         private final double z;
+        private final double size;
         private float red;
         private float green;
         private float blue;
         private float alpha;
+        private final double light;
         private final double vx;
         private final double vy;
         private final double vz;
@@ -365,13 +360,15 @@ public class ParticleUtil {
         private final boolean polar;
         private final boolean rgba;
 
-        public TickParticleTask(ParticleOptions particleType, double x, double y, double z, float red, float green, float blue, float alpha, double vx, double vy, double vz, double begin, double end, String expression, double step, int cpt, int age, String speedExpression, double speedStep, String group, boolean polar, boolean rgba) {
+        public TickParticleTask(ParticleOptions particleType, double x, double y, double z, double size, float red, float green, float blue, float alpha, double light, double vx, double vy, double vz, double begin, double end, String expression, double step, int cpt, int age, String speedExpression, double speedStep, String group, boolean polar, boolean rgba) {
             this.polar = polar;
             this.rgba = rgba;
             this.particleType = particleType;
             this.x = x;
             this.y = y;
             this.z = z;
+            this.size = size;
+            this.light = light;
             this.vx = vx;
             this.vy = vy;
             this.vz = vz;
@@ -410,9 +407,9 @@ public class ParticleUtil {
                     dz = data.z;
                 }
                 if (rgba) {
-                    ParticleUtil.spawnParticle(particleType, x + dx, y + dy, z + dz, x, y, z, (float) data.cr, (float) data.cg, (float) data.cb, (float) data.alpha, vx, vy, vz, age, speedExpression, speedStep, group);
+                    ParticleUtil.spawnParticle(particleType, x + dx, y + dy, z + dz, x, y, z, data.size, (float) data.cr, (float) data.cg, (float) data.cb, (float) data.alpha, data.light, vx, vy, vz, age, speedExpression, speedStep, group);
                 } else {
-                    ParticleUtil.spawnParticle(particleType, x + dx, y + dy, z + dz, x, y, z, red, green, blue, alpha, vx, vy, vz, age, speedExpression, speedStep, group);
+                    ParticleUtil.spawnParticle(particleType, x + dx, y + dy, z + dz, x, y, z, size, red, green, blue, alpha, light, vx, vy, vz, age, speedExpression, speedStep, group);
                 }
                 ++i;
             }
@@ -438,6 +435,7 @@ public class ParticleUtil {
         private final double y;
         private final double z;
         private final double scaling;
+        private final double size;
         private final int xRotate;
         private final int yRotate;
         private final int zRotate;
@@ -454,12 +452,13 @@ public class ParticleUtil {
         private int init;
         private Particle[][] particles;
 
-        private VideoConsumer(ParticleOptions effect, double x, double y, double z, double scaling, int xRotate, int yRotate, int zRotate, boolean flip, double[][] matrix, double dpb, double vx, double vy, double vz, int age, String speedExpression, double speedStep, String group) {
+        private VideoConsumer(ParticleOptions effect, double x, double y, double z, double scaling, double size, int xRotate, int yRotate, int zRotate, boolean flip, double[][] matrix, double dpb, double vx, double vy, double vz, int age, String speedExpression, double speedStep, String group) {
             this.effect = effect;
             this.x = x;
             this.y = y;
             this.z = z;
             this.scaling = scaling;
+            this.size = size;
             this.xRotate = xRotate;
             this.yRotate = yRotate;
             this.zRotate = zRotate;
@@ -501,7 +500,7 @@ public class ParticleUtil {
                             double dx = pos[0][0];
                             double dy = pos[1][0];
                             double dz = pos[2][0];
-                            particles[row][col] = ParticleUtil.spawnParticle(effect, x + dx, y + dy, z + dz, x, y, z, red, green, blue, 1.0F, vx, vy, vz, age, speedExpression, speedStep, group);
+                            particles[row][col] = ParticleUtil.spawnParticle(effect, x + dx, y + dy, z + dz, x, y, z, size, red, green, blue, 1.0F, -1.0, vx, vy, vz, age, speedExpression, speedStep, group);
                         }
                     }
                     init = 2;

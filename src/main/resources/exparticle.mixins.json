@@ -9,7 +9,8 @@
   "client": [
     "ParticleEngineMixin",
     "ParticleMixin",
-    "SimpleAnimatedParticleMixin"
+    "SimpleAnimatedParticleMixin",
+    "SingleQuadParticleMixin"
   ],
   "injectors": {
     "defaultRequire": 1

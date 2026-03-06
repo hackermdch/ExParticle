@@ -25,6 +25,7 @@ public class TextPayload implements CustomPacketPayload {
     private final double z;
     private final Component text;
     private final double scaling;
+    private final double size;
     private final int xRotate;
     private final int yRotate;
     private final int zRotate;
@@ -40,13 +41,14 @@ public class TextPayload implements CustomPacketPayload {
     private final String group;
     private final ParticleOptions effect;
 
-    public TextPayload(ParticleOptions effect, Vec3 pos, Component text, double scaling, int xRotate, int yRotate, int zRotate, int flip, double dpb, Vec3 speed, int age, String speedExpression, double speedStep, String group) {
+    public TextPayload(ParticleOptions effect, Vec3 pos, Component text, double scaling, double size, int xRotate, int yRotate, int zRotate, int flip, double dpb, Vec3 speed, int age, String speedExpression, double speedStep, String group) {
         this.effect = effect;
         this.x = pos.x;
         this.y = pos.y;
         this.z = pos.z;
         this.text = text;
         this.scaling = scaling;
+        this.size = size;
         this.xRotate = xRotate;
         this.yRotate = yRotate;
         this.zRotate = zRotate;
@@ -70,6 +72,7 @@ public class TextPayload implements CustomPacketPayload {
         z = buf.readDouble();
         text = Component.Serializer.fromJson(buf.readUtf(), buf.registryAccess());
         scaling = buf.readDouble();
+        size = buf.readDouble();
         xRotate = buf.readInt();
         yRotate = buf.readInt();
         zRotate = buf.readInt();
@@ -95,6 +98,7 @@ public class TextPayload implements CustomPacketPayload {
         buf.writeDouble(z);
         buf.writeUtf(Component.Serializer.toJson(text, buf.registryAccess()));
         buf.writeDouble(scaling);
+        buf.writeDouble(size);
         buf.writeInt(xRotate);
         buf.writeInt(yRotate);
         buf.writeInt(zRotate);
@@ -116,7 +120,7 @@ public class TextPayload implements CustomPacketPayload {
     }
 
     private void handle(IPayloadContext context) {
-        context.enqueueWork(() -> ParticleUtil.spawnTextParticle(effect, x, y, z, text, scaling, xRotate, yRotate, zRotate, flip, dpb, vx, vy, vz, age, speedExpression, speedStep, group));
+        context.enqueueWork(() -> ParticleUtil.spawnTextParticle(effect, x, y, z, text, scaling, size, xRotate, yRotate, zRotate, flip, dpb, vx, vy, vz, age, speedExpression, speedStep, group));
     }
 
     @Override

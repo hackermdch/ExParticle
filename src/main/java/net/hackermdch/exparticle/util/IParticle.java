@@ -26,4 +26,12 @@ public interface IParticle {
     void setManaged(boolean val);
 
     boolean isManaged();
+
+    double getCustomSize();
+
+    void setCustomSize(double size);
+
+    double getCustomLight();
+
+    void setCustomLight(double light);
 }

@@ -26,6 +26,7 @@ public class TextMatrixPayload implements CustomPacketPayload {
     private final double z;
     private final Component text;
     private final double scaling;
+    private final double size;
     private final double[][] matrix;
     private final double dpb;
     private final double vx;
@@ -38,13 +39,14 @@ public class TextMatrixPayload implements CustomPacketPayload {
     private final String group;
     private final ParticleOptions effect;
 
-    public TextMatrixPayload(ParticleOptions effect, Vec3 pos, Component text, double scaling, String matrixStr, double dpb, Vec3 speed, int age, String speedExpression, double speedStep, String group) {
+    public TextMatrixPayload(ParticleOptions effect, Vec3 pos, Component text, double scaling, double size, String matrixStr, double dpb, Vec3 speed, int age, String speedExpression, double speedStep, String group) {
         this.effect = effect;
         this.x = pos.x;
         this.y = pos.y;
         this.z = pos.z;
         this.text = text;
         this.scaling = scaling;
+        this.size = size;
         this.matrix = MatrixUtil.toMat(matrixStr);
         this.dpb = dpb;
         if (speed == null) speed = Vec3.ZERO;
@@ -65,6 +67,7 @@ public class TextMatrixPayload implements CustomPacketPayload {
         z = buf.readDouble();
         text = Component.Serializer.fromJson(buf.readUtf(), buf.registryAccess());
         scaling = buf.readDouble();
+        size = buf.readDouble();
         int rows = buf.readInt();
         int cols = buf.readInt();
         matrix = new double[rows][cols];
@@ -94,6 +97,7 @@ public class TextMatrixPayload implements CustomPacketPayload {
         buf.writeDouble(z);
         buf.writeUtf(Component.Serializer.toJson(text, buf.registryAccess()));
         buf.writeDouble(scaling);
+        buf.writeDouble(size);
         buf.writeInt(matrix.length);
         buf.writeInt(matrix[0].length);
         for (double[] row : matrix) {
@@ -118,7 +122,7 @@ public class TextMatrixPayload implements CustomPacketPayload {
     }
 
     private void handle(IPayloadContext context) {
-        context.enqueueWork(() -> ParticleUtil.spawnTextParticle(effect, x, y, z, text, scaling, matrix, dpb, vx, vy, vz, age, speedExpression, speedStep, group));
+        context.enqueueWork(() -> ParticleUtil.spawnTextParticle(effect, x, y, z, text, scaling, size, matrix, dpb, vx, vy, vz, age, speedExpression, speedStep, group));
     }
 
     @Override

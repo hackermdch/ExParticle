@@ -24,6 +24,7 @@ public class ImagePayload implements CustomPacketPayload {
     private final double z;
     private final String path;
     private final double scaling;
+    private final double size;
     private final int xRotate;
     private final int yRotate;
     private final int zRotate;
@@ -39,13 +40,14 @@ public class ImagePayload implements CustomPacketPayload {
     private final String group;
     private final ParticleOptions effect;
 
-    public ImagePayload(ParticleOptions effect, Vec3 pos, String path, double scaling, int xRotate, int yRotate, int zRotate, int flip, double dpb, Vec3 speed, int age, String speedExpression, double speedStep, String group) {
+    public ImagePayload(ParticleOptions effect, Vec3 pos, String path, double scaling, double size, int xRotate, int yRotate, int zRotate, int flip, double dpb, Vec3 speed, int age, String speedExpression, double speedStep, String group) {
         this.effect = effect;
         this.x = pos.x;
         this.y = pos.y;
         this.z = pos.z;
         this.path = path;
         this.scaling = scaling;
+        this.size = size;
         this.xRotate = xRotate;
         this.yRotate = yRotate;
         this.zRotate = zRotate;
@@ -69,6 +71,7 @@ public class ImagePayload implements CustomPacketPayload {
         z = buf.readDouble();
         path = buf.readUtf();
         scaling = buf.readDouble();
+        size = buf.readDouble();
         xRotate = buf.readInt();
         yRotate = buf.readInt();
         zRotate = buf.readInt();
@@ -94,6 +97,7 @@ public class ImagePayload implements CustomPacketPayload {
         buf.writeDouble(z);
         buf.writeUtf(path);
         buf.writeDouble(scaling);
+        buf.writeDouble(size);
         buf.writeInt(xRotate);
         buf.writeInt(yRotate);
         buf.writeInt(zRotate);
@@ -115,7 +119,7 @@ public class ImagePayload implements CustomPacketPayload {
     }
 
     private void handle(IPayloadContext context) {
-        context.enqueueWork(() -> ParticleUtil.spawnImageParticle(effect, x, y, z, path, scaling, xRotate, yRotate, zRotate, flip, dpb, vx, vy, vz, age, speedExpression, speedStep, group));
+        context.enqueueWork(() -> ParticleUtil.spawnImageParticle(effect, x, y, z, path, scaling, size, xRotate, yRotate, zRotate, flip, dpb, vx, vy, vz, age, speedExpression, speedStep, group));
     }
 
     @Override

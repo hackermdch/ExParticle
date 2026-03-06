@@ -3,10 +3,14 @@ package net.hackermdch.exparticle.mixin;
 import net.hackermdch.exparticle.util.ClientMessageUtil;
 import net.hackermdch.exparticle.util.IExecutable;
 import net.hackermdch.exparticle.util.IParticle;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Particle.class)
 public abstract class ParticleMixin implements IParticle {
@@ -34,6 +38,10 @@ public abstract class ParticleMixin implements IParticle {
     private double preZ;
     @Unique
     private boolean managed;
+    @Unique
+    private double customSize = -1.0;
+    @Unique
+    private double customLight = -1.0;
 
     public void setExe(IExecutable exe) {
         this.exe = exe;
@@ -75,6 +83,26 @@ public abstract class ParticleMixin implements IParticle {
         this.stop = stop;
     }
 
+    public void setCustomSize(double size) {
+        this.customSize = size;
+    }
+
+    public double getCustomSize() {
+        return this.customSize;
+    }
+
+    public void setCustomLight(double light) {
+        if (light == -1.0) {
+            this.customLight = -1.0;
+        } else {
+            this.customLight = light - Math.ceil(light) + 1.0;
+        }
+    }
+
+    public double getCustomLight() {
+        return this.customLight;
+    }
+
     public void customTick() {
         preX = x;
         preY = y;
@@ -105,10 +133,12 @@ public abstract class ParticleMixin implements IParticle {
             data.x = x - centerX;
             data.y = y - centerY;
             data.z = z - centerZ;
+            data.size = customSize;
             data.cr = rCol;
             data.cg = gCol;
             data.cb = bCol;
             data.alpha = alpha;
+            data.light = customLight;
             data.dis = Math.sqrt((x - centerX) * (x - centerX) + (y - centerY) * (y - centerY) + (z - centerZ) * (z - centerZ));
             data.s1 = Math.atan2(z - centerZ, x - centerX);
             data.s2 = Math.atan2(y - centerY, Math.hypot(x - centerX, z - centerZ));
@@ -125,6 +155,12 @@ public abstract class ParticleMixin implements IParticle {
                 remove();
                 return;
             }
+            if (!Double.isNaN(data.size) && data.size != customSize) {
+                setCustomSize(data.size);
+            }
+            if (!Double.isNaN(data.light) && data.light != customLight) {
+                setCustomLight(data.light);
+            }
             if (!Double.isNaN(data.vx) || !Double.isNaN(data.vy) || !Double.isNaN(data.vz)) {
                 setPos(preX, preY, preZ);
                 data.vx = nanToZero(data.vx);
@@ -136,6 +172,16 @@ public abstract class ParticleMixin implements IParticle {
             gCol = (float) data.cg;
             bCol = (float) data.cb;
             alpha = (float) data.alpha;
+        }
+    }
+
+    @Inject(method = "getLightColor", at = @At("HEAD"), cancellable = true)
+    protected void onGetLightColor(float partialTick, CallbackInfoReturnable<Integer> cir) {
+        double custom = this.getCustomLight();
+        if (custom != -1.0) {
+            int block = (int) (custom * 15);
+            int sky = (int) (custom * 15);
+            cir.setReturnValue((sky << 20) | (block << 4));
         }
     }
 
@@ -180,4 +226,6 @@ public abstract class ParticleMixin implements IParticle {
     public float bCol = 1.0F;
     @Shadow
     public float alpha = 1.0F;
+    @Shadow
+    protected ClientLevel level;
 }

@@ -26,10 +26,12 @@ public class NormalPayload implements CustomPacketPayload {
     private final double x;
     private final double y;
     private final double z;
+    private final double size;
     private final float red;
     private final float green;
     private final float blue;
     private final float alpha;
+    private final double light;
     private final double vx;
     private final double vy;
     private final double vz;
@@ -44,14 +46,16 @@ public class NormalPayload implements CustomPacketPayload {
     private final String group;
     private final ParticleOptions effect;
 
-    public NormalPayload(ParticleOptions effect, Vec3 pos, Vector4f color, Vec3 speed, Vec3 range, int count, int age, String expression, double step, String group) {
+    public NormalPayload(ParticleOptions effect, Vec3 pos, double size, Vector4f color, double light, Vec3 speed, Vec3 range, int count, int age, String expression, double step, String group) {
         this.x = pos.x;
         this.y = pos.y;
         this.z = pos.z;
+        this.size = size;
         this.red = color.x;
         this.green = color.y;
         this.blue = color.z;
         this.alpha = color.w;
+        this.light = light;
         this.vx = speed.x;
         this.vy = speed.y;
         this.vz = speed.z;
@@ -72,10 +76,12 @@ public class NormalPayload implements CustomPacketPayload {
         x = buf.readDouble();
         y = buf.readDouble();
         z = buf.readDouble();
+        size = buf.readDouble();
         red = buf.readFloat();
         green = buf.readFloat();
         blue = buf.readFloat();
         alpha = buf.readFloat();
+        light = buf.readDouble();
         vx = buf.readDouble();
         vy = buf.readDouble();
         vz = buf.readDouble();
@@ -98,10 +104,12 @@ public class NormalPayload implements CustomPacketPayload {
         buf.writeDouble(x);
         buf.writeDouble(y);
         buf.writeDouble(z);
+        buf.writeDouble(size);
         buf.writeFloat(red);
         buf.writeFloat(green);
         buf.writeFloat(blue);
         buf.writeFloat(alpha);
+        buf.writeDouble(light);
         buf.writeDouble(vx);
         buf.writeDouble(vy);
         buf.writeDouble(vz);
@@ -127,7 +135,7 @@ public class NormalPayload implements CustomPacketPayload {
                 double rx = RANDOM.nextGaussian() * dx;
                 double ry = RANDOM.nextGaussian() * dy;
                 double rz = RANDOM.nextGaussian() * dz;
-                ParticleUtil.spawnParticle(effect, x + rx, y + ry, z + rz, x, y, z, red, green, blue, alpha, vx, vy, vz, age, speedExpression, speedStep, group);
+                ParticleUtil.spawnParticle(effect, x + rx, y + ry, z + rz, x, y, z, size, red, green, blue, alpha, light, vx, vy, vz, age, speedExpression, speedStep, group);
             }
         });
     }

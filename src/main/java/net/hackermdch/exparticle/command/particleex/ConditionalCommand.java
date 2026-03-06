@@ -22,7 +22,9 @@ public class ConditionalCommand {
         parent.then(Commands.literal("conditional")
                 .then(Commands.argument("name", ParticleArgument.particle(ctx)
                 ).then(Commands.argument("pos", Vec3Argument.vec3()
+                ).then(Commands.argument("size", SuggestDoubleArgumentType.doubleArg(-1.0, 1.0, -1.0)
                 ).then(Commands.argument("color", Color4ArgumentType.color4()
+                ).then(Commands.argument("light", SuggestDoubleArgumentType.doubleArg(-1.0, 1.0, -1.0)
                 ).then(Commands.argument("speed", Speed3ArgumentType.speed3()
                 ).then(Commands.argument("range", Range3ArgumentType.range3()
                 ).then(Commands.argument("expression", SuggestStringArgumentType.argument("null", "\"y>0.25|y<-0.25\"", "\"dis>0.5&dis<1\"", "\"s1>0&s1<0.5&s2>0&dis<1\"")).executes(
@@ -30,7 +32,9 @@ public class ConditionalCommand {
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
+                                DoubleArgumentType.getDouble(context, "size"),
                                 Color4ArgumentType.getColor4(context, "color"),
+                                DoubleArgumentType.getDouble(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
                                 Range3ArgumentType.getRange3(context, "range"),
                                 StringArgumentType.getString(context, "expression"),
@@ -40,7 +44,9 @@ public class ConditionalCommand {
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
+                                DoubleArgumentType.getDouble(context, "size"),
                                 Color4ArgumentType.getColor4(context, "color"),
+                                DoubleArgumentType.getDouble(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
                                 Range3ArgumentType.getRange3(context, "range"),
                                 StringArgumentType.getString(context, "expression"),
@@ -51,7 +57,9 @@ public class ConditionalCommand {
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
+                                DoubleArgumentType.getDouble(context, "size"),
                                 Color4ArgumentType.getColor4(context, "color"),
+                                DoubleArgumentType.getDouble(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
                                 Range3ArgumentType.getRange3(context, "range"),
                                 StringArgumentType.getString(context, "expression"),
@@ -63,7 +71,9 @@ public class ConditionalCommand {
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
+                                DoubleArgumentType.getDouble(context, "size"),
                                 Color4ArgumentType.getColor4(context, "color"),
+                                DoubleArgumentType.getDouble(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
                                 Range3ArgumentType.getRange3(context, "range"),
                                 StringArgumentType.getString(context, "expression"),
@@ -76,7 +86,9 @@ public class ConditionalCommand {
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
+                                DoubleArgumentType.getDouble(context, "size"),
                                 Color4ArgumentType.getColor4(context, "color"),
+                                DoubleArgumentType.getDouble(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
                                 Range3ArgumentType.getRange3(context, "range"),
                                 StringArgumentType.getString(context, "expression"),
@@ -90,7 +102,9 @@ public class ConditionalCommand {
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
+                                DoubleArgumentType.getDouble(context, "size"),
                                 Color4ArgumentType.getColor4(context, "color"),
+                                DoubleArgumentType.getDouble(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
                                 Range3ArgumentType.getRange3(context, "range"),
                                 StringArgumentType.getString(context, "expression"),
@@ -99,12 +113,12 @@ public class ConditionalCommand {
                                 StringArgumentType.getString(context, "speedExpression"),
                                 DoubleArgumentType.getDouble(context, "speedStep"),
                                 StringArgumentType.getString(context, "group"))
-                ))))))))))))
+                ))))))))))))))
         );
     }
 
-    private static int execute(CommandContext<CommandSourceStack> context, ParticleOptions effect, Vec3 pos, Vector4f color, Vec3 speed, Vec3 range, String expression, double step, int age, String speedExpression, double speedStep, String group) {
-        PacketDistributor.sendToPlayersInDimension(context.getSource().getLevel(), new ConditionalPayload(effect, pos, color, speed, range, expression, step, age, speedExpression, speedStep, group));
+    private static int execute(CommandContext<CommandSourceStack> context, ParticleOptions effect, Vec3 pos, double size, Vector4f color, double light, Vec3 speed, Vec3 range, String expression, double step, int age, String speedExpression, double speedStep, String group) {
+        PacketDistributor.sendToPlayersInDimension(context.getSource().getLevel(), new ConditionalPayload(effect, pos, size, color, light, speed, range, expression, step, age, speedExpression, speedStep, group));
         return 1;
     }
 }

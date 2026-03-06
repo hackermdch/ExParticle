@@ -29,7 +29,7 @@ public class TextMatrixCommand {
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
-                                1.0, "E3", 10.0, null, 0, null, 1.0, null)
+                                1.0, -1.0, "E3", 10.0, null, 0, null, 1.0, null)
                 ).then(Commands.argument("scaling", SuggestDoubleArgumentType.doubleArg(0.0, Double.MAX_VALUE, 1.0)).executes(
                         context -> execute(
                                 context,
@@ -37,6 +37,15 @@ public class TextMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
+                                -1.0,"E3", 10.0, null, 0, null, 1.0, null)
+                ).then(Commands.argument("size", SuggestDoubleArgumentType.doubleArg(-1.0, 1.0, -1)).executes(
+                        (context) -> execute(
+                                context,
+                                ParticleArgument.getParticle(context, "name"),
+                                Vec3Argument.getVec3(context, "pos"),
+                                ComponentArgument.getComponent(context, "text"),
+                                DoubleArgumentType.getDouble(context, "scaling"),
+                                DoubleArgumentType.getDouble(context, "size"),
                                 "E3", 10.0, null, 0, null, 1.0, null)
                 ).then(Commands.argument("matrix", SuggestStringArgumentType.argument("E3", "E4", "\"(1,0,0,0,,0,1,0,0,,0,0,1,-100,,0,0,0,1)\"", "\"(0.5,-0.5,0.7071,-0.7071,,0.1464466,0.8535534,0.5,-5,,-0.8535534,-0.1464466,0.5,-5,,0,0,0,1)\"")).executes(
                         context -> execute(
@@ -45,6 +54,7 @@ public class TextMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
+                                DoubleArgumentType.getDouble(context, "size"),
                                 StringArgumentType.getString(context, "matrix"),
                                 10.0, null, 0, null, 1.0, null)
                 ).then(Commands.argument("dpb", SuggestDoubleArgumentType.doubleArg(0.0, Double.MAX_VALUE, 10.0)).executes(
@@ -54,6 +64,7 @@ public class TextMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
+                                DoubleArgumentType.getDouble(context, "size"),
                                 StringArgumentType.getString(context, "matrix"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 null, 0, null, 1.0, null)
@@ -64,6 +75,7 @@ public class TextMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
+                                DoubleArgumentType.getDouble(context, "size"),
                                 StringArgumentType.getString(context, "matrix"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
@@ -75,6 +87,7 @@ public class TextMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
+                                DoubleArgumentType.getDouble(context, "size"),
                                 StringArgumentType.getString(context, "matrix"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
@@ -87,6 +100,7 @@ public class TextMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
+                                DoubleArgumentType.getDouble(context, "size"),
                                 StringArgumentType.getString(context, "matrix"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
@@ -100,6 +114,7 @@ public class TextMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
+                                DoubleArgumentType.getDouble(context, "size"),
                                 StringArgumentType.getString(context, "matrix"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
@@ -114,6 +129,7 @@ public class TextMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
+                                DoubleArgumentType.getDouble(context, "size"),
                                 StringArgumentType.getString(context, "matrix"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
@@ -121,12 +137,12 @@ public class TextMatrixCommand {
                                 StringArgumentType.getString(context, "speedExpression"),
                                 DoubleArgumentType.getDouble(context, "speedStep"),
                                 StringArgumentType.getString(context, "group")))
-                )))))))))))
+                ))))))))))))
         );
     }
 
-    private static int execute(CommandContext<CommandSourceStack> context, ParticleOptions effect, Vec3 pos, Component text, double scaling, String matrixStr, double dpb, Vec3 speed, int age, String speedExpression, double speedStep, String group) {
-        PacketDistributor.sendToPlayersInDimension(context.getSource().getLevel(), new TextMatrixPayload(effect, pos, text, scaling, matrixStr, dpb, speed, age, speedExpression, speedStep, group));
+    private static int execute(CommandContext<CommandSourceStack> context, ParticleOptions effect, Vec3 pos, Component text, double scaling, double size, String matrixStr, double dpb, Vec3 speed, int age, String speedExpression, double speedStep, String group) {
+        PacketDistributor.sendToPlayersInDimension(context.getSource().getLevel(), new TextMatrixPayload(effect, pos, text, scaling, size, matrixStr, dpb, speed, age, speedExpression, speedStep, group));
         return 1;
     }
 }
