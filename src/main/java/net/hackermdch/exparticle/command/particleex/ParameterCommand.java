@@ -848,7 +848,7 @@ public class ParameterCommand {
     }
 
     private static ArgumentBuilder<CommandSourceStack, ?> getColor(ArgumentBuilder<CommandSourceStack, ?> then) {
-        return Commands.argument("size", SuggestDoubleArgumentType.doubleArg(-1.0, 1.0, -1.0)
+        return Commands.argument("size", SuggestDoubleArgumentType.doubleArg(-1.0, Double.MAX_VALUE, -1.0)
         ).then(Commands.argument("color", Color4ArgumentType.color4()
         ).then(Commands.argument("light", SuggestDoubleArgumentType.doubleArg(-1.0, 1.0, -1.0)
         ).then(then)));

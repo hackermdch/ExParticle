@@ -37,7 +37,7 @@ public class ImageCommand {
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
                                 -1.0, 0, 0, 0, 0, 10.0, null, 0, null, 1.0, null)
-                ).then(Commands.argument("size", SuggestDoubleArgumentType.doubleArg(-1.0, 1.0, -1)).executes(
+                ).then(Commands.argument("size", SuggestDoubleArgumentType.doubleArg(-1.0, Double.MAX_VALUE, -1)).executes(
                         (context) -> execute(
                                 context,
                                 ParticleArgument.getParticle(context, "name"),

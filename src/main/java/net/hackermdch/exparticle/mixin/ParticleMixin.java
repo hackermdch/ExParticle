@@ -84,7 +84,7 @@ public abstract class ParticleMixin implements IParticle {
     }
 
     public void setCustomSize(double size) {
-        this.customSize = size;
+        this.customSize = size * 0.125;
     }
 
     public double getCustomSize() {

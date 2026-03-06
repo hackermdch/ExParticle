@@ -22,7 +22,7 @@ public class ConditionalCommand {
         parent.then(Commands.literal("conditional")
                 .then(Commands.argument("name", ParticleArgument.particle(ctx)
                 ).then(Commands.argument("pos", Vec3Argument.vec3()
-                ).then(Commands.argument("size", SuggestDoubleArgumentType.doubleArg(-1.0, 1.0, -1.0)
+                ).then(Commands.argument("size", SuggestDoubleArgumentType.doubleArg(-1.0, Double.MAX_VALUE, -1.0)
                 ).then(Commands.argument("color", Color4ArgumentType.color4()
                 ).then(Commands.argument("light", SuggestDoubleArgumentType.doubleArg(-1.0, 1.0, -1.0)
                 ).then(Commands.argument("speed", Speed3ArgumentType.speed3()
