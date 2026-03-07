@@ -7,35 +7,46 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 public class ClassExpression implements IExecutable {
-    private static final Map<String, Method> CACHE = Maps.newHashMap();
+    private static final Map<String, ClassExpression> CACHE = Maps.newHashMap();
     private static int index = 0;
     private final ParticleStruct struct = new ParticleStruct();
     private final Method method;
+    private boolean invalid;
 
     private ClassExpression(String expression) {
         var lexer = new Lexer(expression);
-        var exps = Parser.parseBlock(lexer);
-        var codeGen = new CodeGen(exps);
+        var es = Parser.parseBlock(lexer);
+        var codeGen = new CodeGen(es);
         try {
             var clazz = codeGen.codeGenBlock("EXP_" + index++);
             method = clazz.getMethod("invoke", ParticleStruct.class);
+            for (var r : codeGen.references()) GlobalVariableUtil.handle(r, this);
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
     }
 
-    private ClassExpression(Method method) {
-        this.method = method;
+    private ClassExpression(ClassExpression other) {
+        method = other.method;
+        invalid = other.invalid;
+    }
+
+    public void invalid() {
+        invalid = true;
+    }
+
+    private static ClassExpression create(String expression) {
+        var instance = new ClassExpression(expression);
+        CACHE.put(expression, instance);
+        return instance;
     }
 
     public static ClassExpression parse(String expression) {
         if (CACHE.containsKey(expression)) {
-            return new ClassExpression(CACHE.get(expression));
-        } else {
-            var instance = new ClassExpression(expression);
-            CACHE.put(expression, instance.method);
-            return instance;
-        }
+            var c = CACHE.get(expression);
+            if (c.invalid) return create(expression);
+            return new ClassExpression(c);
+        } else return create(expression);
     }
 
     public ParticleStruct getData() {

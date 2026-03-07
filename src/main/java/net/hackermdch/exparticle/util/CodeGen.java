@@ -37,6 +37,7 @@ public class CodeGen {
     private int maxLocal;
     private final Map<String, LocalVarInfo> localVars = new HashMap<>();
     private static MethodHandle defineClass;
+    private final Set<String> references = new HashSet<>();
 
     public static void init(MethodHandles.Lookup lookup) throws Throwable {
         defineClass = lookup.findSpecial(ClassLoader.class, "defineClass", MethodType.methodType(Class.class, String.class, byte[].class, int.class, int.class), ClassLoader.class);
@@ -59,6 +60,10 @@ public class CodeGen {
         cw.visitEnd();
         var bytes = cw.toByteArray();
         return (Class<?>) defineClass.invokeExact(Thread.currentThread().getContextClassLoader(), "net.hackermdch.exparticle.util.CodeGen$" + name, bytes, 0, bytes.length);
+    }
+
+    public List<String> references() {
+        return ImmutableList.copyOf(references);
     }
 
     private int codeGenExp(Expression exp, int targetType) {
@@ -432,6 +437,24 @@ public class CodeGen {
                 default -> throw new RuntimeException("bad type: " + info.type);
             };
         } else {
+            var type = GlobalVariableUtil.find(name);
+            if (type != GlobalVariableUtil.Type.Undefined) {
+                references.add(name);
+                switch (type) {
+                    case Integer -> {
+                        mv.visitLdcInsn(name);
+                        mv.visitMethodInsn(INVOKESTATIC, "net/hackermdch/exparticle/util/GlobalVariableUtil", "getInt", "(Ljava/lang/String;)I", false);
+                        return T_INT;
+                    }
+                    case Double -> {
+                        mv.visitLdcInsn(name);
+                        mv.visitMethodInsn(INVOKESTATIC, "net/hackermdch/exparticle/util/GlobalVariableUtil", "getDouble", "(Ljava/lang/String;)D", false);
+                        return T_DOUBLE;
+                    }
+                    case Quaternion -> {
+                    }
+                }
+            }
             throw new RuntimeException("undefine var: " + name);
         }
     }
