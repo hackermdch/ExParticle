@@ -16,10 +16,10 @@ public class ClassExpression implements IExecutable {
         var lexer = new Lexer(expression);
         var exps = Parser.parseBlock(lexer);
         var codeGen = new CodeGen(exps);
-        var clazz = codeGen.codeGenBlock("EXP_" + index++);
         try {
-            this.method = clazz.getMethod("invoke", ParticleStruct.class);
-        } catch (SecurityException | NoSuchMethodException e) {
+            var clazz = codeGen.codeGenBlock("EXP_" + index++);
+            method = clazz.getMethod("invoke", ParticleStruct.class);
+        } catch (Throwable e) {
             throw new RuntimeException(e);
         }
     }

@@ -46,7 +46,7 @@ public class CodeGen {
         this.block = Arrays.copyOf(block, block.length);
     }
 
-    public Class<?> codeGenBlock(String name) {
+    public Class<?> codeGenBlock(String name) throws Throwable {
         cw.visit(V21, ACC_PUBLIC | ACC_SUPER, "net/hackermdch/exparticle/util/CodeGen$" + name, null, "java/lang/Object", null);
         cw.visitInnerClass("net/hackermdch/exparticle/util/CodeGen$" + name, "net/hackermdch/exparticle/util/CodeGen", name, ACC_PUBLIC | ACC_STATIC);
         mv = cw.visitMethod(ACC_PUBLIC | ACC_STATIC, "invoke", "(Lnet/hackermdch/exparticle/util/ParticleStruct;)I", null, null);
@@ -57,13 +57,8 @@ public class CodeGen {
         mv.visitMaxs(0, 0);
         mv.visitEnd();
         cw.visitEnd();
-        var cl = Thread.currentThread().getContextClassLoader();
         var bytes = cw.toByteArray();
-        try {
-            return (Class<?>) defineClass.invoke(cl, "net.hackermdch.exparticle.util.CodeGen$" + name, bytes, 0, bytes.length);
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
-        }
+        return (Class<?>) defineClass.invokeExact(Thread.currentThread().getContextClassLoader(), "net.hackermdch.exparticle.util.CodeGen$" + name, bytes, 0, bytes.length);
     }
 
     private int codeGenExp(Expression exp, int targetType) {

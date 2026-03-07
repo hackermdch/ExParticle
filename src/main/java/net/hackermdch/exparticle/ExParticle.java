@@ -15,7 +15,6 @@ import org.apache.logging.log4j.Logger;
 import sun.misc.Unsafe;
 
 import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
 import java.lang.invoke.VarHandle;
 import java.util.Map;
 
@@ -37,9 +36,6 @@ public class ExParticle {
             MethodHandles.lookup().ensureInitialized(MethodHandles.Lookup.class);
             var field = MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP");
             var lookup = (MethodHandles.Lookup) unsafe.getObject(unsafe.staticFieldBase(field), unsafe.staticFieldOffset(field));
-            var addOpens = lookup.findVirtual(Module.class, "implAddOpens", MethodType.methodType(void.class, String.class, Module.class));
-            var lang = ModuleLayer.boot().findModule("java.base").orElseThrow();
-            addOpens.invoke(lang, "java.lang", ExParticle.class.getModule());
             packageLookup = lookup.findVarHandle(ModuleClassLoader.class, "packageLookup", Map.class);
             parentLoaders = lookup.findVarHandle(ModuleClassLoader.class, "parentLoaders", Map.class);
             CodeGen.init(lookup);
