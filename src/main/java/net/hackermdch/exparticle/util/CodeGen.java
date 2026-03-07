@@ -724,36 +724,63 @@ public class CodeGen {
         }
     }
 
+    private void codeGenLocal(String name, int targetType) {
+        var info = localVars.get(name);
+        switch (info.type) {
+            case T_DOUBLE:
+                codeGenTypeTransform(targetType, T_DOUBLE);
+                mv.visitVarInsn(DSTORE, info.index);
+                return;
+            case T_INT:
+                codeGenTypeTransform(targetType, T_INT);
+                mv.visitVarInsn(ISTORE, info.index);
+                return;
+            case T_INTMAT:
+                codeGenTypeTransform(targetType, T_INTMAT);
+                mv.visitVarInsn(ASTORE, info.index);
+                return;
+            case T_DOUBLEMAT:
+                codeGenTypeTransform(targetType, T_DOUBLEMAT);
+                mv.visitVarInsn(ASTORE, info.index);
+                return;
+            case T_BYTE:
+            case T_SHORT:
+            case T_LONG:
+            default:
+                throw new RuntimeException("bad type: " + info.type);
+        }
+    }
+
     private void codeGenStore(String name, int targetType) {
         if (FIELDS.contains(name)) {
             codeGenTypeTransform(targetType, T_DOUBLE);
             mv.visitFieldInsn(PUTFIELD, "net/hackermdch/exparticle/util/ParticleStruct", name, "D");
         } else {
-            if (!localVars.containsKey(name)) addLocalVar(name, targetType);
-            var info = localVars.get(name);
-            switch (info.type) {
-                case T_DOUBLE:
-                    codeGenTypeTransform(targetType, T_DOUBLE);
-                    mv.visitVarInsn(DSTORE, info.index);
-                    return;
-                case T_INT:
-                    codeGenTypeTransform(targetType, T_INT);
-                    mv.visitVarInsn(ISTORE, info.index);
-                    return;
-                case T_INTMAT:
-                    codeGenTypeTransform(targetType, T_INTMAT);
-                    mv.visitVarInsn(ASTORE, info.index);
-                    return;
-                case T_DOUBLEMAT:
-                    codeGenTypeTransform(targetType, T_DOUBLEMAT);
-                    mv.visitVarInsn(ASTORE, info.index);
-                    return;
-                case T_BYTE:
-                case T_SHORT:
-                case T_LONG:
-                default:
-                    throw new RuntimeException("bad type: " + info.type);
+            if (localVars.containsKey(name)) {
+                codeGenLocal(name, targetType);
+                return;
             }
+            var type = GlobalVariableUtil.find(name);
+            if (type != GlobalVariableUtil.Type.Undefined) {
+                references.add(name);
+                switch (type) {
+                    case Integer -> {
+                        codeGenTypeTransform(targetType, T_INT);
+                        mv.visitLdcInsn(name);
+                        mv.visitMethodInsn(INVOKESTATIC, "net/hackermdch/exparticle/util/GlobalVariableUtil", "setInt", "(ILjava/lang/String;)V", false);
+                    }
+                    case Double -> {
+                        codeGenTypeTransform(targetType, T_DOUBLE);
+                        mv.visitLdcInsn(name);
+                        mv.visitMethodInsn(INVOKESTATIC, "net/hackermdch/exparticle/util/GlobalVariableUtil", "setDouble", "(DLjava/lang/String;)V", false);
+                    }
+                    case Quaternion -> {
+                    }
+                }
+                return;
+            }
+            addLocalVar(name, targetType);
+            codeGenLocal(name, targetType);
         }
     }
 

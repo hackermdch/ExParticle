@@ -64,11 +64,11 @@ public class GlobalVariableUtil {
         return 0;
     }
 
-    public static void setInt(String name, int value) {
+    public static void setInt(int value, String name) {
         if (vars.get(name) instanceof Var v) v.intValue = value;
     }
 
-    public static void setDouble(String name, double value) {
+    public static void setDouble(double value, String name) {
         if (vars.get(name) instanceof Var v) v.doubleValue = value;
     }
 
