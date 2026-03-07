@@ -27,17 +27,24 @@ public class FunctionListCommand {
             if ((m.getModifiers() & (PUBLIC | STATIC)) != (PUBLIC | STATIC) || !allowTypes.contains(m.getReturnType()))
                 return;
             var length = m.getParameterTypes().length;
-            var sb = new StringBuilder();
+            var com = Component.empty();
+            com.append(Component.literal(m.getReturnType().getSimpleName()).withColor(0xc58c5f));
+            com.append(" ");
+            com.append(Component.literal(m.getName()).withColor(0x54a7cb));
+            com.append("(");
             for (int i = 0; i < length; i++) {
                 var p = m.getParameters()[i];
                 var pn = map.getOrDefault(p.getName(), p.getName());
                 var pt = p.getType();
                 if (!allowTypes.contains(pt)) return;
                 var ptn = pt.getSimpleName();
-                if (i == length - 1) sb.append(ptn).append(' ').append(pn);
-                else sb.append(ptn).append(' ').append(pn).append(", ");
+                com.append(Component.literal(ptn).withColor(0xc58c5f));
+                com.append(" ");
+                com.append(Component.literal(pn).withColor(0xc77dbb));
+                if (i != length - 1) com.append(", ");
             }
-            builder.add(Component.literal(m.getReturnType().getSimpleName() + " " + m.getName() + "(" + sb + ")"));
+            com.append(")");
+            builder.add(com);
         });
         functions = builder.build();
     }

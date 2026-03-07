@@ -37,6 +37,7 @@ public class CodeGen {
     private int maxLocal;
     private final Map<String, LocalVarInfo> localVars = new HashMap<>();
     private static MethodHandle defineClass;
+    private final Set<String> references = new HashSet<>();
 
     public static void init(MethodHandles.Lookup lookup) throws Throwable {
         defineClass = lookup.findSpecial(ClassLoader.class, "defineClass", MethodType.methodType(Class.class, String.class, byte[].class, int.class, int.class), ClassLoader.class);
@@ -46,7 +47,7 @@ public class CodeGen {
         this.block = Arrays.copyOf(block, block.length);
     }
 
-    public Class<?> codeGenBlock(String name) {
+    public Class<?> codeGenBlock(String name) throws Throwable {
         cw.visit(V21, ACC_PUBLIC | ACC_SUPER, "net/hackermdch/exparticle/util/CodeGen$" + name, null, "java/lang/Object", null);
         cw.visitInnerClass("net/hackermdch/exparticle/util/CodeGen$" + name, "net/hackermdch/exparticle/util/CodeGen", name, ACC_PUBLIC | ACC_STATIC);
         mv = cw.visitMethod(ACC_PUBLIC | ACC_STATIC, "invoke", "(Lnet/hackermdch/exparticle/util/ParticleStruct;)I", null, null);
@@ -57,13 +58,12 @@ public class CodeGen {
         mv.visitMaxs(0, 0);
         mv.visitEnd();
         cw.visitEnd();
-        var cl = Thread.currentThread().getContextClassLoader();
         var bytes = cw.toByteArray();
-        try {
-            return (Class<?>) defineClass.invoke(cl, "net.hackermdch.exparticle.util.CodeGen$" + name, bytes, 0, bytes.length);
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
-        }
+        return (Class<?>) defineClass.invokeExact(Thread.currentThread().getContextClassLoader(), "net.hackermdch.exparticle.util.CodeGen$" + name, bytes, 0, bytes.length);
+    }
+
+    public List<String> references() {
+        return ImmutableList.copyOf(references);
     }
 
     private int codeGenExp(Expression exp, int targetType) {
@@ -437,6 +437,24 @@ public class CodeGen {
                 default -> throw new RuntimeException("bad type: " + info.type);
             };
         } else {
+            var type = GlobalVariableUtil.find(name);
+            if (type != GlobalVariableUtil.Type.Undefined) {
+                references.add(name);
+                switch (type) {
+                    case Integer -> {
+                        mv.visitLdcInsn(name);
+                        mv.visitMethodInsn(INVOKESTATIC, "net/hackermdch/exparticle/util/GlobalVariableUtil", "getInt", "(Ljava/lang/String;)I", false);
+                        return T_INT;
+                    }
+                    case Double -> {
+                        mv.visitLdcInsn(name);
+                        mv.visitMethodInsn(INVOKESTATIC, "net/hackermdch/exparticle/util/GlobalVariableUtil", "getDouble", "(Ljava/lang/String;)D", false);
+                        return T_DOUBLE;
+                    }
+                    case Quaternion -> {
+                    }
+                }
+            }
             throw new RuntimeException("undefine var: " + name);
         }
     }
@@ -706,36 +724,63 @@ public class CodeGen {
         }
     }
 
+    private void codeGenLocal(String name, int targetType) {
+        var info = localVars.get(name);
+        switch (info.type) {
+            case T_DOUBLE:
+                codeGenTypeTransform(targetType, T_DOUBLE);
+                mv.visitVarInsn(DSTORE, info.index);
+                return;
+            case T_INT:
+                codeGenTypeTransform(targetType, T_INT);
+                mv.visitVarInsn(ISTORE, info.index);
+                return;
+            case T_INTMAT:
+                codeGenTypeTransform(targetType, T_INTMAT);
+                mv.visitVarInsn(ASTORE, info.index);
+                return;
+            case T_DOUBLEMAT:
+                codeGenTypeTransform(targetType, T_DOUBLEMAT);
+                mv.visitVarInsn(ASTORE, info.index);
+                return;
+            case T_BYTE:
+            case T_SHORT:
+            case T_LONG:
+            default:
+                throw new RuntimeException("bad type: " + info.type);
+        }
+    }
+
     private void codeGenStore(String name, int targetType) {
         if (FIELDS.contains(name)) {
             codeGenTypeTransform(targetType, T_DOUBLE);
             mv.visitFieldInsn(PUTFIELD, "net/hackermdch/exparticle/util/ParticleStruct", name, "D");
         } else {
-            if (!localVars.containsKey(name)) addLocalVar(name, targetType);
-            var info = localVars.get(name);
-            switch (info.type) {
-                case T_DOUBLE:
-                    codeGenTypeTransform(targetType, T_DOUBLE);
-                    mv.visitVarInsn(DSTORE, info.index);
-                    return;
-                case T_INT:
-                    codeGenTypeTransform(targetType, T_INT);
-                    mv.visitVarInsn(ISTORE, info.index);
-                    return;
-                case T_INTMAT:
-                    codeGenTypeTransform(targetType, T_INTMAT);
-                    mv.visitVarInsn(ASTORE, info.index);
-                    return;
-                case T_DOUBLEMAT:
-                    codeGenTypeTransform(targetType, T_DOUBLEMAT);
-                    mv.visitVarInsn(ASTORE, info.index);
-                    return;
-                case T_BYTE:
-                case T_SHORT:
-                case T_LONG:
-                default:
-                    throw new RuntimeException("bad type: " + info.type);
+            if (localVars.containsKey(name)) {
+                codeGenLocal(name, targetType);
+                return;
             }
+            var type = GlobalVariableUtil.find(name);
+            if (type != GlobalVariableUtil.Type.Undefined) {
+                references.add(name);
+                switch (type) {
+                    case Integer -> {
+                        codeGenTypeTransform(targetType, T_INT);
+                        mv.visitLdcInsn(name);
+                        mv.visitMethodInsn(INVOKESTATIC, "net/hackermdch/exparticle/util/GlobalVariableUtil", "setInt", "(ILjava/lang/String;)V", false);
+                    }
+                    case Double -> {
+                        codeGenTypeTransform(targetType, T_DOUBLE);
+                        mv.visitLdcInsn(name);
+                        mv.visitMethodInsn(INVOKESTATIC, "net/hackermdch/exparticle/util/GlobalVariableUtil", "setDouble", "(DLjava/lang/String;)V", false);
+                    }
+                    case Quaternion -> {
+                    }
+                }
+                return;
+            }
+            addLocalVar(name, targetType);
+            codeGenLocal(name, targetType);
         }
     }
 
