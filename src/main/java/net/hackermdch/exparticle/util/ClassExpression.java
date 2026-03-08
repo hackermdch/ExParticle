@@ -2,15 +2,16 @@ package net.hackermdch.exparticle.util;
 
 import com.google.common.collect.Maps;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.util.Map;
 
 public class ClassExpression implements IExecutable {
     private static final Map<String, ClassExpression> CACHE = Maps.newHashMap();
     private static int index = 0;
     private final ParticleStruct struct = new ParticleStruct();
-    private final Method method;
+    private final MethodHandle method;
     private boolean invalid;
 
     private ClassExpression(String expression) {
@@ -19,7 +20,7 @@ public class ClassExpression implements IExecutable {
         var codeGen = new CodeGen(es);
         try {
             var clazz = codeGen.codeGenBlock("EXP_" + index++);
-            method = clazz.getMethod("invoke", ParticleStruct.class);
+            method = MethodHandles.lookup().findStatic(clazz, "invoke", MethodType.methodType(int.class, ParticleStruct.class));
             for (var r : codeGen.references()) GlobalVariableUtil.handle(r, this);
         } catch (Throwable e) {
             throw new RuntimeException(e);
@@ -50,13 +51,13 @@ public class ClassExpression implements IExecutable {
     }
 
     public ParticleStruct getData() {
-        return this.struct;
+        return struct;
     }
 
     public int invoke() {
         try {
-            return (int) method.invoke(null, this.struct);
-        } catch (IllegalArgumentException | InvocationTargetException | IllegalAccessException e) {
+            return (int) method.invokeExact(struct);
+        } catch (Throwable e) {
             ClientMessageUtil.addChatMessage(e);
             throw new RuntimeException(e);
         }

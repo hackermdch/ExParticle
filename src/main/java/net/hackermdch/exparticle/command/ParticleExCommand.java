@@ -25,6 +25,7 @@ public class ParticleExCommand {
         TextMatrixCommand.register(root, context);
         GroupCommand.register(root);
         GlobalVariableCommand.register(root);
+        UserFunctionCommand.register(root);
         dispatcher.register(root);
     }
 
@@ -32,6 +33,7 @@ public class ParticleExCommand {
     public static void registerClient(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
         var root = Commands.literal("particlex");
         GlobalVariableCommand.Client.register(root);
+        UserFunctionCommand.Client.register(root);
         dispatcher.register(root);
     }
 }
