@@ -3,7 +3,6 @@ package net.hackermdch.exparticle.mixin;
 import net.hackermdch.exparticle.util.ClientMessageUtil;
 import net.hackermdch.exparticle.util.IExecutable;
 import net.hackermdch.exparticle.util.IParticle;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -39,9 +38,9 @@ public abstract class ParticleMixin implements IParticle {
     @Unique
     private boolean managed;
     @Unique
-    private double customSize = -1.0;
+    private double customSize;
     @Unique
-    private double customLight = -1.0;
+    private double customLight;
 
     public void setExe(IExecutable exe) {
         this.exe = exe;
@@ -92,10 +91,10 @@ public abstract class ParticleMixin implements IParticle {
     }
 
     public void setCustomLight(double light) {
-        if (light == -1.0) {
-            this.customLight = -1.0;
+        if (Double.isNaN(light)) {
+            this.customLight = Double.NaN;
         } else {
-            this.customLight = light - Math.ceil(light) + 1.0;
+            this.customLight = (((int)(light * 255.0)) & 0xFF) / 255.0;
         }
     }
 
@@ -178,7 +177,7 @@ public abstract class ParticleMixin implements IParticle {
     @Inject(method = "getLightColor", at = @At("HEAD"), cancellable = true)
     protected void onGetLightColor(float partialTick, CallbackInfoReturnable<Integer> cir) {
         double custom = this.getCustomLight();
-        if (custom != -1.0) {
+        if (!Double.isNaN(custom)) {
             int block = (int) (custom * 15);
             int sky = (int) (custom * 15);
             cir.setReturnValue((sky << 20) | (block << 4));
@@ -226,6 +225,4 @@ public abstract class ParticleMixin implements IParticle {
     public float bCol = 1.0F;
     @Shadow
     public float alpha = 1.0F;
-    @Shadow
-    protected ClientLevel level;
 }

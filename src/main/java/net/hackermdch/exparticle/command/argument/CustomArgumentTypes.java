@@ -25,6 +25,7 @@ public class CustomArgumentTypes {
     private static final Supplier<ArgumentTypeInfo<SuggestDoubleArgumentType, ?>> SUGGEST_DOUBLE = ARG_TYPES.register("suggest_double", SuggestDoubleArgumentType.Info::new);
     private static final Supplier<ArgumentTypeInfo<SuggestIntegerArgumentType, ?>> SUGGEST_INT = ARG_TYPES.register("suggest_int", SuggestIntegerArgumentType.Info::new);
     private static final Supplier<ArgumentTypeInfo<SuggestStringArgumentType, ?>> SUGGEST_STRING = ARG_TYPES.register("suggest_string", SuggestStringArgumentType.Info::new);
+    private static final Supplier<ArgumentTypeInfo<SizeArgumentType, ?>> SIZE = ARG_TYPES.register("size", () -> SingletonArgumentInfo.contextFree(SizeArgumentType::new));
 
     private static void register() {
         ArgumentTypeInfos.registerByClass(Color4ArgumentType.class, COLOR_RGB_A.get());
@@ -38,6 +39,7 @@ public class CustomArgumentTypes {
         ArgumentTypeInfos.registerByClass(SuggestDoubleArgumentType.class, SUGGEST_DOUBLE.get());
         ArgumentTypeInfos.registerByClass(SuggestIntegerArgumentType.class, SUGGEST_INT.get());
         ArgumentTypeInfos.registerByClass(SuggestStringArgumentType.class, SUGGEST_STRING.get());
+        ArgumentTypeInfos.registerByClass(SizeArgumentType.class, SIZE.get());
     }
 
     public static void register(IEventBus bus) {

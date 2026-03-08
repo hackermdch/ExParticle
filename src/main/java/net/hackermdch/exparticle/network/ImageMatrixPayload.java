@@ -121,7 +121,8 @@ public class ImageMatrixPayload implements CustomPacketPayload {
     }
 
     private void handle(IPayloadContext context) {
-        context.enqueueWork(() -> ParticleUtil.spawnImageParticle(effect, x, y, z, path, scaling, size, matrix, dpb, vx, vy, vz, age, speedExpression, speedStep, group));
+        double sizeVal = (size == -1.0) ? Double.NaN : size;
+        context.enqueueWork(() -> ParticleUtil.spawnImageParticle(effect, x, y, z, path, scaling, sizeVal, matrix, dpb, vx, vy, vz, age, speedExpression, speedStep, group));
     }
 
     @Override

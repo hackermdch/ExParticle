@@ -31,8 +31,10 @@ public class ParticleUtil {
             var particle = CLIENT.particleEngine.createParticle(effect, x, y, z, vx, vy, vz);
             if (particle != null) {
                 particle.setManaged(true);
+                particle.setCustomSize(size);
                 particle.setColor(red, green, blue);
                 particle.alpha = alpha;
+                particle.setCustomLight(light);
                 if (vx == (double) 0.0F && vy == (double) 0.0F && vz == (double) 0.0F) {
                     particle.setStop(true);
                 } else {
@@ -53,12 +55,6 @@ public class ParticleUtil {
                     particle.setExe(ExpressionUtil.parse(expression));
                     particle.setStep(step);
                     particle.setCustomMove(true);
-                }
-                if (size != -1.0) {
-                    particle.setCustomSize(size);
-                }
-                if (light != -1.0) {
-                    particle.setCustomLight(light);
                 }
                 GroupUtil.add(group, particle);
             }

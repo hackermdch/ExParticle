@@ -22,9 +22,9 @@ public class NormalCommand {
         parent.then(Commands.literal("normal")
                 .then(Commands.argument("name", ParticleArgument.particle(ctx)
                 ).then(Commands.argument("pos", Vec3Argument.vec3()
-                ).then(Commands.argument("size", SuggestDoubleArgumentType.doubleArg(-1.0, Double.MAX_VALUE, -1.0)
+                ).then(Commands.argument("size", SizeArgumentType.size()
                 ).then(Commands.argument("color", Color4ArgumentType.color4()
-                ).then(Commands.argument("light", SuggestDoubleArgumentType.doubleArg(-1.0, 1.0, -1.0)
+                ).then(Commands.argument("light", SuggestIntegerArgumentType.integer(-1, 15, 15)
                 ).then(Commands.argument("speed", Speed3ArgumentType.speed3()
                 ).then(Commands.argument("range", Range3ArgumentType.range3()
                 ).then(Commands.argument("count", SuggestIntegerArgumentType.integer(0, Integer.MAX_VALUE, 1)).executes(
@@ -32,9 +32,9 @@ public class NormalCommand {
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 Color4ArgumentType.getColor4(context, "color"),
-                                DoubleArgumentType.getDouble(context, "light"),
+                                IntegerArgumentType.getInteger(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
                                 Range3ArgumentType.getRange3(context, "range"),
                                 IntegerArgumentType.getInteger(context, "count"),
@@ -44,9 +44,9 @@ public class NormalCommand {
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 Color4ArgumentType.getColor4(context, "color"),
-                                DoubleArgumentType.getDouble(context, "light"),
+                                IntegerArgumentType.getInteger(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
                                 Range3ArgumentType.getRange3(context, "range"),
                                 IntegerArgumentType.getInteger(context, "count"),
@@ -57,9 +57,9 @@ public class NormalCommand {
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 Color4ArgumentType.getColor4(context, "color"),
-                                DoubleArgumentType.getDouble(context, "light"),
+                                IntegerArgumentType.getInteger(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
                                 Range3ArgumentType.getRange3(context, "range"),
                                 IntegerArgumentType.getInteger(context, "count"),
@@ -71,9 +71,9 @@ public class NormalCommand {
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 Color4ArgumentType.getColor4(context, "color"),
-                                DoubleArgumentType.getDouble(context, "light"),
+                                IntegerArgumentType.getInteger(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
                                 Range3ArgumentType.getRange3(context, "range"),
                                 IntegerArgumentType.getInteger(context, "count"),
@@ -85,9 +85,9 @@ public class NormalCommand {
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 Color4ArgumentType.getColor4(context, "color"),
-                                DoubleArgumentType.getDouble(context, "light"),
+                                IntegerArgumentType.getInteger(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
                                 Range3ArgumentType.getRange3(context, "range"),
                                 IntegerArgumentType.getInteger(context, "count"),
@@ -99,7 +99,7 @@ public class NormalCommand {
         );
     }
 
-    private static int execute(CommandContext<CommandSourceStack> context, ParticleOptions effect, Vec3 pos, double size, Vector4f color, double light, Vec3 speed, Vec3 range, int count, int age, String expression, double step, String group) {
+    private static int execute(CommandContext<CommandSourceStack> context, ParticleOptions effect, Vec3 pos, double size, Vector4f color, int light, Vec3 speed, Vec3 range, int count, int age, String expression, double step, String group) {
         PacketDistributor.sendToPlayersInDimension(context.getSource().getLevel(), new NormalPayload(effect, pos, size, color, light, speed, range, count, age, expression, step, group));
         return 1;
     }

@@ -31,7 +31,7 @@ public class NormalPayload implements CustomPacketPayload {
     private final float green;
     private final float blue;
     private final float alpha;
-    private final double light;
+    private final int light;
     private final double vx;
     private final double vy;
     private final double vz;
@@ -46,7 +46,7 @@ public class NormalPayload implements CustomPacketPayload {
     private final String group;
     private final ParticleOptions effect;
 
-    public NormalPayload(ParticleOptions effect, Vec3 pos, double size, Vector4f color, double light, Vec3 speed, Vec3 range, int count, int age, String expression, double step, String group) {
+    public NormalPayload(ParticleOptions effect, Vec3 pos, double size, Vector4f color, int light, Vec3 speed, Vec3 range, int count, int age, String expression, double step, String group) {
         this.x = pos.x;
         this.y = pos.y;
         this.z = pos.z;
@@ -81,7 +81,7 @@ public class NormalPayload implements CustomPacketPayload {
         green = buf.readFloat();
         blue = buf.readFloat();
         alpha = buf.readFloat();
-        light = buf.readDouble();
+        light = buf.readInt();
         vx = buf.readDouble();
         vy = buf.readDouble();
         vz = buf.readDouble();
@@ -109,7 +109,7 @@ public class NormalPayload implements CustomPacketPayload {
         buf.writeFloat(green);
         buf.writeFloat(blue);
         buf.writeFloat(alpha);
-        buf.writeDouble(light);
+        buf.writeInt(light);
         buf.writeDouble(vx);
         buf.writeDouble(vy);
         buf.writeDouble(vz);
@@ -135,7 +135,9 @@ public class NormalPayload implements CustomPacketPayload {
                 double rx = RANDOM.nextGaussian() * dx;
                 double ry = RANDOM.nextGaussian() * dy;
                 double rz = RANDOM.nextGaussian() * dz;
-                ParticleUtil.spawnParticle(effect, x + rx, y + ry, z + rz, x, y, z, size, red, green, blue, alpha, light, vx, vy, vz, age, speedExpression, speedStep, group);
+                double sizeVal = (size == -1.0) ? Double.NaN : size;
+                double lightVal = (light == -1) ? Double.NaN : light / 15.0;
+                ParticleUtil.spawnParticle(effect, x + rx, y + ry, z + rz, x, y, z, sizeVal, red, green, blue, alpha, lightVal, vx, vy, vz, age, speedExpression, speedStep, group);
             }
         });
     }

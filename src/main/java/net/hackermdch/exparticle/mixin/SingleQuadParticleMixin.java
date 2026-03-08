@@ -15,7 +15,7 @@ public abstract class SingleQuadParticleMixin implements IParticle {
     @Inject(method = "getQuadSize", at = @At("HEAD"), cancellable = true)
     private void onGetQuadSize(float scaleFactor, CallbackInfoReturnable<Float> cir) {
         double custom = this.getCustomSize();
-        if (custom != -1.0) {
+        if (!Double.isNaN(custom)) {
             cir.setReturnValue((float) custom);
         }
     }
