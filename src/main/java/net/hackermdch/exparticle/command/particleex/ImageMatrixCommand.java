@@ -37,14 +37,14 @@ public class ImageMatrixCommand {
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
                                 -1.0,"E3", 10.0, null, 0, null, 1.0, null)
-                ).then(Commands.argument("size", SuggestDoubleArgumentType.doubleArg(-1.0, Double.MAX_VALUE, -1)).executes(
+                ).then(Commands.argument("size", SizeArgumentType.size()).executes(
                         (context) -> execute(
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 "E3", 10.0, null, 0, null, 1.0, null)
                 ).then(Commands.argument("matrix", SuggestStringArgumentType.argument("E3", "E4", "\"(1,0,0,0,,0,1,0,0,,0,0,1,-100,,0,0,0,1)\"", "\"(0.5,-0.5,0.7071,-0.7071,,0.1464466,0.8535534,0.5,-5,,-0.8535534,-0.1464466,0.5,-5,,0,0,0,1)\"")).executes(
                         (context) -> execute(
@@ -53,7 +53,7 @@ public class ImageMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 StringArgumentType.getString(context, "matrix"),
                                 10.0, null, 0, null, 1.0, null)
                 ).then(Commands.argument("dpb", SuggestDoubleArgumentType.doubleArg(0.0, Double.MAX_VALUE, 10.0)).executes(
@@ -63,7 +63,7 @@ public class ImageMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 StringArgumentType.getString(context, "matrix"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 null, 0, null, 1.0, null)
@@ -74,7 +74,7 @@ public class ImageMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 StringArgumentType.getString(context, "matrix"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
@@ -86,7 +86,7 @@ public class ImageMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 StringArgumentType.getString(context, "matrix"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
@@ -99,7 +99,7 @@ public class ImageMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 StringArgumentType.getString(context, "matrix"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
@@ -113,7 +113,7 @@ public class ImageMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 StringArgumentType.getString(context, "matrix"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
@@ -128,7 +128,7 @@ public class ImageMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 StringArgumentType.getString(context, "matrix"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),

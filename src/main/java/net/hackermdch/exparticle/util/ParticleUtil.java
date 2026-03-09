@@ -102,7 +102,7 @@ public class ParticleUtil {
                     double dy = pos[1][0];
                     double dz = pos[2][0];
                     if (alpha != 0.0F) {
-                        spawnParticle(effect, x + dx, y + dy, z + dz, x, y, z, size, red, green, blue, alpha, -1.0, vx, vy, vz, age, speedExpression, speedStep, group);
+                        spawnParticle(effect, x + dx, y + dy, z + dz, x, y, z, size, red, green, blue, alpha, Double.NaN, vx, vy, vz, age, speedExpression, speedStep, group);
                     }
                 }
             }
@@ -226,7 +226,7 @@ public class ParticleUtil {
                     double dx = pos[0][0];
                     double dy = pos[1][0];
                     double dz = pos[2][0];
-                    spawnParticle(effect, x + dx, y + dy, z + dz, x, y, z, size, red, green, blue, alpha,-1.0, vx, vy, vz, age, speedExpression, speedStep, group);
+                    spawnParticle(effect, x + dx, y + dy, z + dz, x, y, z, size, red, green, blue, alpha,Double.NaN, vx, vy, vz, age, speedExpression, speedStep, group);
                 }
             }
         } catch (Exception e) {
@@ -496,7 +496,7 @@ public class ParticleUtil {
                             double dx = pos[0][0];
                             double dy = pos[1][0];
                             double dz = pos[2][0];
-                            particles[row][col] = ParticleUtil.spawnParticle(effect, x + dx, y + dy, z + dz, x, y, z, size, red, green, blue, 1.0F, -1.0, vx, vy, vz, age, speedExpression, speedStep, group);
+                            particles[row][col] = ParticleUtil.spawnParticle(effect, x + dx, y + dy, z + dz, x, y, z, size, red, green, blue, 1.0F, Double.NaN, vx, vy, vz, age, speedExpression, speedStep, group);
                         }
                     }
                     init = 2;

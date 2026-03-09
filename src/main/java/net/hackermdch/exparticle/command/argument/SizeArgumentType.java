@@ -37,7 +37,7 @@ public class SizeArgumentType implements ArgumentType<Double> {
             reader.setCursor(start);
             throw INVALID_SIZE_EXCEPTION.createWithContext(reader);
         }
-        return value;
+        return value == -1.0 ? Double.NaN : value;
     }
 
     @Override

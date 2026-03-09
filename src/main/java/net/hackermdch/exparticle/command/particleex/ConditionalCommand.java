@@ -22,7 +22,7 @@ public class ConditionalCommand {
         parent.then(Commands.literal("conditional")
                 .then(Commands.argument("name", ParticleArgument.particle(ctx)
                 ).then(Commands.argument("pos", Vec3Argument.vec3()
-                ).then(Commands.argument("size", SuggestDoubleArgumentType.doubleArg(-1.0, Double.MAX_VALUE, -1.0)
+                ).then(Commands.argument("size", SizeArgumentType.size()
                 ).then(Commands.argument("color", Color4ArgumentType.color4()
                 ).then(Commands.argument("light", SuggestDoubleArgumentType.doubleArg(-1.0, 1.0, -1.0)
                 ).then(Commands.argument("speed", Speed3ArgumentType.speed3()
@@ -32,7 +32,7 @@ public class ConditionalCommand {
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 Color4ArgumentType.getColor4(context, "color"),
                                 DoubleArgumentType.getDouble(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
@@ -44,7 +44,7 @@ public class ConditionalCommand {
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 Color4ArgumentType.getColor4(context, "color"),
                                 DoubleArgumentType.getDouble(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
@@ -57,7 +57,7 @@ public class ConditionalCommand {
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 Color4ArgumentType.getColor4(context, "color"),
                                 DoubleArgumentType.getDouble(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
@@ -71,7 +71,7 @@ public class ConditionalCommand {
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 Color4ArgumentType.getColor4(context, "color"),
                                 DoubleArgumentType.getDouble(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
@@ -86,7 +86,7 @@ public class ConditionalCommand {
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 Color4ArgumentType.getColor4(context, "color"),
                                 DoubleArgumentType.getDouble(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
@@ -102,7 +102,7 @@ public class ConditionalCommand {
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 Color4ArgumentType.getColor4(context, "color"),
                                 DoubleArgumentType.getDouble(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),

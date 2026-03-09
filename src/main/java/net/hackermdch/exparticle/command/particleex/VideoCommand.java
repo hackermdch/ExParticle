@@ -37,14 +37,14 @@ public class VideoCommand {
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
                                 -1.0, 0, 0, 0, 0, 10.0, null, 0, null, 1.0, null)
-                ).then(Commands.argument("size", SuggestDoubleArgumentType.doubleArg(-1.0, Double.MAX_VALUE, -1)).executes(
+                ).then(Commands.argument("size", SizeArgumentType.size()).executes(
                         (context) -> execute(
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 0, 0, 0, 0, 10.0, null, 0, null, 1.0, null)
                 ).then(Commands.argument("xRotate", RotateArgumentType.rotate()).executes(
                         (context) -> execute(
@@ -53,7 +53,7 @@ public class VideoCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 RotateArgumentType.getRotate(context, "xRotate"),
                                 0, 0, 0, 10.0, null, 0, null, 1.0, null)
                 ).then(Commands.argument("yRotate", RotateArgumentType.rotate()).executes(
@@ -63,7 +63,7 @@ public class VideoCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 RotateArgumentType.getRotate(context, "xRotate"),
                                 RotateArgumentType.getRotate(context, "yRotate"),
                                 0, 0, 10.0, null, 0, null, 1.0, null)
@@ -74,7 +74,7 @@ public class VideoCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 RotateArgumentType.getRotate(context, "xRotate"),
                                 RotateArgumentType.getRotate(context, "yRotate"),
                                 RotateArgumentType.getRotate(context, "zRotate"),
@@ -86,7 +86,7 @@ public class VideoCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 RotateArgumentType.getRotate(context, "xRotate"),
                                 RotateArgumentType.getRotate(context, "yRotate"),
                                 RotateArgumentType.getRotate(context, "zRotate"),
@@ -99,7 +99,7 @@ public class VideoCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 RotateArgumentType.getRotate(context, "xRotate"),
                                 RotateArgumentType.getRotate(context, "yRotate"),
                                 RotateArgumentType.getRotate(context, "zRotate"),
@@ -113,7 +113,7 @@ public class VideoCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 RotateArgumentType.getRotate(context, "xRotate"),
                                 RotateArgumentType.getRotate(context, "yRotate"),
                                 RotateArgumentType.getRotate(context, "zRotate"),
@@ -128,7 +128,7 @@ public class VideoCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 RotateArgumentType.getRotate(context, "xRotate"),
                                 RotateArgumentType.getRotate(context, "yRotate"),
                                 RotateArgumentType.getRotate(context, "zRotate"),
@@ -144,7 +144,7 @@ public class VideoCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 RotateArgumentType.getRotate(context, "xRotate"),
                                 RotateArgumentType.getRotate(context, "yRotate"),
                                 RotateArgumentType.getRotate(context, "zRotate"),
@@ -161,7 +161,7 @@ public class VideoCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 RotateArgumentType.getRotate(context, "xRotate"),
                                 RotateArgumentType.getRotate(context, "yRotate"),
                                 RotateArgumentType.getRotate(context, "zRotate"),
@@ -179,7 +179,7 @@ public class VideoCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 RotateArgumentType.getRotate(context, "xRotate"),
                                 RotateArgumentType.getRotate(context, "yRotate"),
                                 RotateArgumentType.getRotate(context, "zRotate"),

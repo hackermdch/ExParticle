@@ -135,9 +135,8 @@ public class NormalPayload implements CustomPacketPayload {
                 double rx = RANDOM.nextGaussian() * dx;
                 double ry = RANDOM.nextGaussian() * dy;
                 double rz = RANDOM.nextGaussian() * dz;
-                double sizeVal = (size == -1.0) ? Double.NaN : size;
                 double lightVal = (light == -1) ? Double.NaN : light / 15.0;
-                ParticleUtil.spawnParticle(effect, x + rx, y + ry, z + rz, x, y, z, sizeVal, red, green, blue, alpha, lightVal, vx, vy, vz, age, speedExpression, speedStep, group);
+                ParticleUtil.spawnParticle(effect, x + rx, y + ry, z + rz, x, y, z, size, red, green, blue, alpha, lightVal, vx, vy, vz, age, speedExpression, speedStep, group);
             }
         });
     }

@@ -154,9 +154,8 @@ public class ParameterPayload implements CustomPacketPayload {
                 if (rgba) {
                     ParticleUtil.spawnTickParticle(effect, x, y, z, vx, vy, vz, begin, end, expression, step, cpt, age, speedExpression, speedStep, group, polar);
                 } else {
-                    double sizeVal = (size == -1.0) ? Double.NaN : size;
                     double lightVal = (light == -1) ? Double.NaN : light / 15.0;
-                    ParticleUtil.spawnTickParticle(effect, x, y, z, sizeVal, red, green, blue, alpha, lightVal, vx, vy, vz, begin, end, expression, step, cpt, age, speedExpression, speedStep, group, polar);
+                    ParticleUtil.spawnTickParticle(effect, x, y, z, size, red, green, blue, alpha, lightVal, vx, vy, vz, begin, end, expression, step, cpt, age, speedExpression, speedStep, group, polar);
                 }
             } else {
                 var exe = ExpressionUtil.parse(expression);
@@ -179,9 +178,8 @@ public class ParameterPayload implements CustomPacketPayload {
                     if (rgba) {
                         ParticleUtil.spawnParticle(effect, x + dx, y + dy, z + dz, x, y, z, data.size, (float) data.cr, (float) data.cg, (float) data.cb, (float) data.alpha, data.light, vx, vy, vz, age, speedExpression, speedStep, group);
                     } else {
-                        double sizeVal = (size == -1.0) ? Double.NaN : size;
                         double lightVal = (light == -1) ? Double.NaN : light / 15.0;
-                        ParticleUtil.spawnParticle(effect, x + dx, y + dy, z + dz, x, y, z, sizeVal, red, green, blue, alpha, lightVal, vx, vy, vz, age, speedExpression, speedStep, group);
+                        ParticleUtil.spawnParticle(effect, x + dx, y + dy, z + dz, x, y, z, size, red, green, blue, alpha, lightVal, vx, vy, vz, age, speedExpression, speedStep, group);
                     }
                 }
             }

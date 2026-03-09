@@ -38,14 +38,14 @@ public class TextCommand {
                                 ComponentArgument.getComponent(context, "text"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
                                 -1.0,0, 0, 0, 0, 10.0, null, 0, null, 1.0, null)
-                ).then(Commands.argument("size", SuggestDoubleArgumentType.doubleArg(-1.0, Double.MAX_VALUE, -1.0)).executes(
+                ).then(Commands.argument("size", SizeArgumentType.size()).executes(
                         (context) -> execute(
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 0, 0, 0, 0, 10.0, null, 0, null, 1.0, null)
                 ).then(Commands.argument("xRotate", RotateArgumentType.rotate()).executes(
                         context -> execute(
@@ -54,7 +54,7 @@ public class TextCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 RotateArgumentType.getRotate(context, "xRotate"),
                                 0, 0, 0, 10.0, null, 0, null, 1.0, null)
                 ).then(Commands.argument("yRotate", RotateArgumentType.rotate()).executes(
@@ -64,7 +64,7 @@ public class TextCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 RotateArgumentType.getRotate(context, "xRotate"),
                                 RotateArgumentType.getRotate(context, "yRotate"),
                                 0, 0, 10.0, null, 0, null, 1.0, null)
@@ -75,7 +75,7 @@ public class TextCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 RotateArgumentType.getRotate(context, "xRotate"),
                                 RotateArgumentType.getRotate(context, "yRotate"),
                                 RotateArgumentType.getRotate(context, "zRotate"),
@@ -87,7 +87,7 @@ public class TextCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 RotateArgumentType.getRotate(context, "xRotate"),
                                 RotateArgumentType.getRotate(context, "yRotate"),
                                 RotateArgumentType.getRotate(context, "zRotate"),
@@ -100,7 +100,7 @@ public class TextCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 RotateArgumentType.getRotate(context, "xRotate"),
                                 RotateArgumentType.getRotate(context, "yRotate"),
                                 RotateArgumentType.getRotate(context, "zRotate"),
@@ -114,7 +114,7 @@ public class TextCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 RotateArgumentType.getRotate(context, "xRotate"),
                                 RotateArgumentType.getRotate(context, "yRotate"),
                                 RotateArgumentType.getRotate(context, "zRotate"),
@@ -129,7 +129,7 @@ public class TextCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 RotateArgumentType.getRotate(context, "xRotate"),
                                 RotateArgumentType.getRotate(context, "yRotate"),
                                 RotateArgumentType.getRotate(context, "zRotate"),
@@ -145,7 +145,7 @@ public class TextCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 RotateArgumentType.getRotate(context, "xRotate"),
                                 RotateArgumentType.getRotate(context, "yRotate"),
                                 RotateArgumentType.getRotate(context, "zRotate"),
@@ -162,7 +162,7 @@ public class TextCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 RotateArgumentType.getRotate(context, "xRotate"),
                                 RotateArgumentType.getRotate(context, "yRotate"),
                                 RotateArgumentType.getRotate(context, "zRotate"),
@@ -180,7 +180,7 @@ public class TextCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                DoubleArgumentType.getDouble(context, "size"),
+                                SizeArgumentType.getSize(context, "size"),
                                 RotateArgumentType.getRotate(context, "xRotate"),
                                 RotateArgumentType.getRotate(context, "yRotate"),
                                 RotateArgumentType.getRotate(context, "zRotate"),
