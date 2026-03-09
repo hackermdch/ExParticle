@@ -22,6 +22,7 @@ public class Networking {
         GroupRemovePayload.register(registrar);
         GroupChangePayload.register(registrar);
         GlobalVariablePayload.register(registrar);
+        UserFunctionPayload.register(registrar);
     }
 
     public static void register(IEventBus bus) {

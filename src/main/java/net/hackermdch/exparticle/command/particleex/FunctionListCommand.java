@@ -7,6 +7,7 @@ import net.hackermdch.exparticle.util.ExFunctions;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
+import org.joml.Quaterniond;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +22,7 @@ public class FunctionListCommand {
 
     static {
         var builder = ImmutableList.<Component>builder();
-        var allowTypes = List.of(int.class, double.class, int[][].class, double[][].class, long.class);
+        var allowTypes = List.of(int.class, double.class, int[][].class, double[][].class, long.class, Quaterniond.class);
         var map = Map.of("arg0", "a", "arg1", "b", "arg2", "c", "arg3", "d", "arg4", "e", "arg5", "f");
         Stream.concat(Arrays.stream(Math.class.getMethods()), Arrays.stream(ExFunctions.class.getMethods())).forEach(m -> {
             if ((m.getModifiers() & (PUBLIC | STATIC)) != (PUBLIC | STATIC) || !allowTypes.contains(m.getReturnType()))

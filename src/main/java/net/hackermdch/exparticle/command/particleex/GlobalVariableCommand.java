@@ -5,6 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.hackermdch.exparticle.command.argument.SuggestStringArgumentType;
 import net.hackermdch.exparticle.network.GlobalVariablePayload;
+import net.hackermdch.exparticle.util.ExpressionUtil;
 import net.hackermdch.exparticle.util.GlobalVariableUtil;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -12,7 +13,6 @@ import net.minecraft.network.chat.Component;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
-import org.joml.Quaterniond;
 
 public class GlobalVariableCommand {
     public static void register(LiteralArgumentBuilder<CommandSourceStack> parent) {
@@ -45,7 +45,7 @@ public class GlobalVariableCommand {
         }, name, switch (type) {
             case "int" -> Integer.parseInt(value);
             case "double" -> Double.parseDouble(value);
-            case "quat" -> new Quaterniond();
+            case "quat" -> ExpressionUtil.toQuaternion(value);
             default -> throw new IllegalArgumentException();
         }));
         return 1;

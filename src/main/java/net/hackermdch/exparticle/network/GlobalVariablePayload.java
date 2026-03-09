@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Quaterniond;
 
 import static net.hackermdch.exparticle.ExParticle.MOD_ID;
 
@@ -35,6 +36,7 @@ public class GlobalVariablePayload implements CustomPacketPayload {
             v = switch (type) {
                 case 1 -> buf.readInt();
                 case 2 -> buf.readDouble();
+                case 3 -> new Quaterniond(buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble());
                 default -> throw new IllegalArgumentException();
             };
         }
@@ -49,6 +51,13 @@ public class GlobalVariablePayload implements CustomPacketPayload {
             switch (type) {
                 case 1 -> buf.writeInt((int) value);
                 case 2 -> buf.writeDouble((double) value);
+                case 3 -> {
+                    var q = (Quaterniond) value;
+                    buf.writeDouble(q.x);
+                    buf.writeDouble(q.y);
+                    buf.writeDouble(q.z);
+                    buf.writeDouble(q.w);
+                }
             }
         }
     }

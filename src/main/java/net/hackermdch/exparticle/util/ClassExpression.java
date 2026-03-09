@@ -7,7 +7,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.util.Map;
 
-public class ClassExpression implements IExecutable {
+public class ClassExpression implements IExecutable, ICacheAble {
     private static final Map<String, ClassExpression> CACHE = Maps.newHashMap();
     private static int index = 0;
     private final ParticleStruct struct = new ParticleStruct();
@@ -22,6 +22,7 @@ public class ClassExpression implements IExecutable {
             var clazz = codeGen.codeGenBlock("EXP_" + index++);
             method = MethodHandles.lookup().findStatic(clazz, "invoke", MethodType.methodType(int.class, ParticleStruct.class));
             for (var r : codeGen.references()) GlobalVariableUtil.handle(r, this);
+            for (var r : codeGen.funcReferences()) UserFunctionUtil.handle(r, this);
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
@@ -32,6 +33,7 @@ public class ClassExpression implements IExecutable {
         invalid = other.invalid;
     }
 
+    @Override
     public void invalid() {
         invalid = true;
     }
@@ -50,10 +52,12 @@ public class ClassExpression implements IExecutable {
         } else return create(expression);
     }
 
+    @Override
     public ParticleStruct getData() {
         return struct;
     }
 
+    @Override
     public int invoke() {
         try {
             return (int) method.invokeExact(struct);
