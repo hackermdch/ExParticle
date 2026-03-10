@@ -122,7 +122,7 @@ public class TextCommand {
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
                                 0, null, 1.0, null)
-                ).then(Commands.argument("age", SuggestIntegerArgumentType.integer(-1, Integer.MAX_VALUE, 0)).executes(
+                ).then(Commands.argument("lifetime", SuggestIntegerArgumentType.integer(-1, Integer.MAX_VALUE, 0)).executes(
                         context -> execute(
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
@@ -136,7 +136,7 @@ public class TextCommand {
                                 FlipArgumentType.getFlip(context, "flip"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
-                                IntegerArgumentType.getInteger(context, "age"),
+                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 null, 1.0, null)
                 ).then(Commands.argument("speedExpression", SuggestStringArgumentType.argument("null", "\"vy=0.1\"", "\"(vx,vy,vz)=((random(),random(),random())-0.5)*t/100\"")).executes(
                         context -> execute(
@@ -152,7 +152,7 @@ public class TextCommand {
                                 FlipArgumentType.getFlip(context, "flip"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
-                                IntegerArgumentType.getInteger(context, "age"),
+                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 StringArgumentType.getString(context, "speedExpression"),
                                 1.0, null)
                 ).then(Commands.argument("speedStep", SuggestDoubleArgumentType.doubleArg(Math.ulp(0.0), Double.MAX_VALUE, 1.0)).executes(
@@ -169,7 +169,7 @@ public class TextCommand {
                                 FlipArgumentType.getFlip(context, "flip"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
-                                IntegerArgumentType.getInteger(context, "age"),
+                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 StringArgumentType.getString(context, "speedExpression"),
                                 DoubleArgumentType.getDouble(context, "speedStep"),
                                 null)
@@ -187,7 +187,7 @@ public class TextCommand {
                                 FlipArgumentType.getFlip(context, "flip"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
-                                IntegerArgumentType.getInteger(context, "age"),
+                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 StringArgumentType.getString(context, "speedExpression"),
                                 DoubleArgumentType.getDouble(context, "speedStep"),
                                 StringArgumentType.getString(context, "group")))

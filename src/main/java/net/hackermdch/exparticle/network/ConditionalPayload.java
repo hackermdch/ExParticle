@@ -38,7 +38,7 @@ public class ConditionalPayload implements CustomPacketPayload {
     private final double dx;
     private final double dy;
     private final double dz;
-    private final int age;
+    private final int lifetime;
     private final boolean hasExpression;
     private final String expression;
     private final double step;
@@ -48,7 +48,7 @@ public class ConditionalPayload implements CustomPacketPayload {
     private final String group;
     private final ParticleOptions effect;
 
-    public ConditionalPayload(ParticleOptions effect, Vec3 pos, double size, Vector4f color, double light, Vec3 speed, Vec3 range, String expression, double step, int age, String speedExpression, double speedStep, String group) {
+    public ConditionalPayload(ParticleOptions effect, Vec3 pos, double size, Vector4f color, double light, Vec3 speed, Vec3 range, String expression, double step, int lifetime, String speedExpression, double speedStep, String group) {
         this.x = pos.x;
         this.y = pos.y;
         this.z = pos.z;
@@ -64,7 +64,7 @@ public class ConditionalPayload implements CustomPacketPayload {
         this.dx = range.x;
         this.dy = range.y;
         this.dz = range.z;
-        this.age = age;
+        this.lifetime = lifetime;
         this.hasExpression = validString(expression);
         this.expression = expression;
         this.step = step;
@@ -92,7 +92,7 @@ public class ConditionalPayload implements CustomPacketPayload {
         dx = buf.readDouble();
         dy = buf.readDouble();
         dz = buf.readDouble();
-        age = buf.readInt();
+        lifetime = buf.readInt();
         hasExpression = buf.readBoolean();
         expression = readString(buf, hasExpression, null);
         step = readDouble(buf, hasExpression, 0.1);
@@ -122,7 +122,7 @@ public class ConditionalPayload implements CustomPacketPayload {
         buf.writeDouble(dx);
         buf.writeDouble(dy);
         buf.writeDouble(dz);
-        buf.writeInt(age);
+        buf.writeInt(lifetime);
         buf.writeBoolean(hasExpression);
         if (hasExpression) {
             buf.writeUtf(expression);
@@ -153,7 +153,7 @@ public class ConditionalPayload implements CustomPacketPayload {
                         data.s2 = Math.atan2(cy, Math.hypot(cx, cz));
                         data.dis = Math.sqrt(cx * cx + cy * cy + cz * cz);
                         if (exe.invoke() != 0)
-                            ParticleUtil.spawnParticle(effect, x + cx, y + cy, z + cz, x, y, z, size, red, green, blue, alpha, light, vx, vy, vz, age, expression, step, group);
+                            ParticleUtil.spawnParticle(effect, x + cx, y + cy, z + cz, x, y, z, size, red, green, blue, alpha, light, vx, vy, vz, lifetime, expression, step, group);
                     }
                 }
             }

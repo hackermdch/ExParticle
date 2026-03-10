@@ -52,7 +52,7 @@ public class ConditionalCommand {
                                 StringArgumentType.getString(context, "expression"),
                                 DoubleArgumentType.getDouble(context, "step"),
                                 0, null, 1.0, null)
-                ).then(Commands.argument("age", SuggestIntegerArgumentType.integer(-1, Integer.MAX_VALUE, 0)).executes(
+                ).then(Commands.argument("lifetime", SuggestIntegerArgumentType.integer(-1, Integer.MAX_VALUE, 0)).executes(
                         (context) -> execute(
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
@@ -64,7 +64,7 @@ public class ConditionalCommand {
                                 Range3ArgumentType.getRange3(context, "range"),
                                 StringArgumentType.getString(context, "expression"),
                                 DoubleArgumentType.getDouble(context, "step"),
-                                IntegerArgumentType.getInteger(context, "age"),
+                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 null, 1.0, null)
                 ).then(Commands.argument("speedExpression", SuggestStringArgumentType.argument("null", "\"vy=0.1\"", "\"(vx,vy,vz)=((random(),random(),random())-0.5)*t/100\"")).executes(
                         (context) -> execute(
@@ -78,7 +78,7 @@ public class ConditionalCommand {
                                 Range3ArgumentType.getRange3(context, "range"),
                                 StringArgumentType.getString(context, "expression"),
                                 DoubleArgumentType.getDouble(context, "step"),
-                                IntegerArgumentType.getInteger(context, "age"),
+                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 StringArgumentType.getString(context, "speedExpression"),
                                 1.0, null)
                 ).then(Commands.argument("speedStep", SuggestDoubleArgumentType.doubleArg(Math.ulp(0.0), Double.MAX_VALUE, 1.0)).executes(
@@ -93,7 +93,7 @@ public class ConditionalCommand {
                                 Range3ArgumentType.getRange3(context, "range"),
                                 StringArgumentType.getString(context, "expression"),
                                 DoubleArgumentType.getDouble(context, "step"),
-                                IntegerArgumentType.getInteger(context, "age"),
+                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 StringArgumentType.getString(context, "speedExpression"),
                                 DoubleArgumentType.getDouble(context, "speedStep"),
                                 null)
@@ -109,7 +109,7 @@ public class ConditionalCommand {
                                 Range3ArgumentType.getRange3(context, "range"),
                                 StringArgumentType.getString(context, "expression"),
                                 DoubleArgumentType.getDouble(context, "step"),
-                                IntegerArgumentType.getInteger(context, "age"),
+                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 StringArgumentType.getString(context, "speedExpression"),
                                 DoubleArgumentType.getDouble(context, "speedStep"),
                                 StringArgumentType.getString(context, "group"))
@@ -117,8 +117,8 @@ public class ConditionalCommand {
         );
     }
 
-    private static int execute(CommandContext<CommandSourceStack> context, ParticleOptions effect, Vec3 pos, double size, Vector4f color, double light, Vec3 speed, Vec3 range, String expression, double step, int age, String speedExpression, double speedStep, String group) {
-        PacketDistributor.sendToPlayersInDimension(context.getSource().getLevel(), new ConditionalPayload(effect, pos, size, color, light, speed, range, expression, step, age, speedExpression, speedStep, group));
+    private static int execute(CommandContext<CommandSourceStack> context, ParticleOptions effect, Vec3 pos, double size, Vector4f color, double light, Vec3 speed, Vec3 range, String expression, double step, int lifetime, String speedExpression, double speedStep, String group) {
+        PacketDistributor.sendToPlayersInDimension(context.getSource().getLevel(), new ConditionalPayload(effect, pos, size, color, light, speed, range, expression, step, lifetime, speedExpression, speedStep, group));
         return 1;
     }
 }

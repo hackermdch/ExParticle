@@ -65,7 +65,7 @@ public class ParameterCommand {
                                         StringArgumentType.getString(context, "expression"),
                                         DoubleArgumentType.getDouble(context, "step"),
                                         10,
-                                        IntegerArgumentType.getInteger(context, "age"),
+                                        IntegerArgumentType.getInteger(context, "lifetime"),
                                         null, 1.0, null),
                                 (context) -> execute(
                                         context,
@@ -81,7 +81,7 @@ public class ParameterCommand {
                                         StringArgumentType.getString(context, "expression"),
                                         DoubleArgumentType.getDouble(context, "step"),
                                         10,
-                                        IntegerArgumentType.getInteger(context, "age"),
+                                        IntegerArgumentType.getInteger(context, "lifetime"),
                                         StringArgumentType.getString(context, "speedExpression"),
                                         1.0, null),
                                 (context) -> execute(
@@ -98,7 +98,7 @@ public class ParameterCommand {
                                         StringArgumentType.getString(context, "expression"),
                                         DoubleArgumentType.getDouble(context, "step"),
                                         10,
-                                        IntegerArgumentType.getInteger(context, "age"),
+                                        IntegerArgumentType.getInteger(context, "lifetime"),
                                         StringArgumentType.getString(context, "speedExpression"),
                                         DoubleArgumentType.getDouble(context, "speedStep"),
                                         null),
@@ -116,7 +116,7 @@ public class ParameterCommand {
                                         StringArgumentType.getString(context, "expression"),
                                         DoubleArgumentType.getDouble(context, "step"),
                                         10,
-                                        IntegerArgumentType.getInteger(context, "age"),
+                                        IntegerArgumentType.getInteger(context, "lifetime"),
                                         StringArgumentType.getString(context, "speedExpression"),
                                         DoubleArgumentType.getDouble(context, "speedStep"),
                                         StringArgumentType.getString(context, "group"))
@@ -166,7 +166,7 @@ public class ParameterCommand {
                                         StringArgumentType.getString(context, "expression"),
                                         DoubleArgumentType.getDouble(context, "step"),
                                         10,
-                                        IntegerArgumentType.getInteger(context, "age"),
+                                        IntegerArgumentType.getInteger(context, "lifetime"),
                                         null, 1.0, null),
                                 (context) -> execute(
                                         context,
@@ -182,7 +182,7 @@ public class ParameterCommand {
                                         StringArgumentType.getString(context, "expression"),
                                         DoubleArgumentType.getDouble(context, "step"),
                                         10,
-                                        IntegerArgumentType.getInteger(context, "age"),
+                                        IntegerArgumentType.getInteger(context, "lifetime"),
                                         StringArgumentType.getString(context, "speedExpression"),
                                         1.0, null),
                                 (context) -> execute(
@@ -199,7 +199,7 @@ public class ParameterCommand {
                                         StringArgumentType.getString(context, "expression"),
                                         DoubleArgumentType.getDouble(context, "step"),
                                         10,
-                                        IntegerArgumentType.getInteger(context, "age"),
+                                        IntegerArgumentType.getInteger(context, "lifetime"),
                                         StringArgumentType.getString(context, "speedExpression"),
                                         DoubleArgumentType.getDouble(context, "speedStep"),
                                         null),
@@ -217,7 +217,7 @@ public class ParameterCommand {
                                         StringArgumentType.getString(context, "expression"),
                                         DoubleArgumentType.getDouble(context, "step"),
                                         10,
-                                        IntegerArgumentType.getInteger(context, "age"),
+                                        IntegerArgumentType.getInteger(context, "lifetime"),
                                         StringArgumentType.getString(context, "speedExpression"),
                                         DoubleArgumentType.getDouble(context, "speedStep"),
                                         StringArgumentType.getString(context, "group"))
@@ -283,7 +283,7 @@ public class ParameterCommand {
                                                 StringArgumentType.getString(context, "expression"),
                                                 DoubleArgumentType.getDouble(context, "step"),
                                                 IntegerArgumentType.getInteger(context, "cpt"),
-                                                IntegerArgumentType.getInteger(context, "age"),
+                                                IntegerArgumentType.getInteger(context, "lifetime"),
                                                 null, 1.0, null),
                                         (context) -> execute(
                                                 context,
@@ -299,7 +299,7 @@ public class ParameterCommand {
                                                 StringArgumentType.getString(context, "expression"),
                                                 DoubleArgumentType.getDouble(context, "step"),
                                                 IntegerArgumentType.getInteger(context, "cpt"),
-                                                IntegerArgumentType.getInteger(context, "age"),
+                                                IntegerArgumentType.getInteger(context, "lifetime"),
                                                 StringArgumentType.getString(context, "speedExpression"),
                                                 1.0, null),
                                         (context) -> execute(
@@ -316,7 +316,7 @@ public class ParameterCommand {
                                                 StringArgumentType.getString(context, "expression"),
                                                 DoubleArgumentType.getDouble(context, "step"),
                                                 IntegerArgumentType.getInteger(context, "cpt"),
-                                                IntegerArgumentType.getInteger(context, "age"),
+                                                IntegerArgumentType.getInteger(context, "lifetime"),
                                                 StringArgumentType.getString(context, "speedExpression"),
                                                 DoubleArgumentType.getDouble(context, "speedStep"),
                                                 null),
@@ -334,7 +334,7 @@ public class ParameterCommand {
                                                 StringArgumentType.getString(context, "expression"),
                                                 DoubleArgumentType.getDouble(context, "step"),
                                                 IntegerArgumentType.getInteger(context, "cpt"),
-                                                IntegerArgumentType.getInteger(context, "age"),
+                                                IntegerArgumentType.getInteger(context, "lifetime"),
                                                 StringArgumentType.getString(context, "speedExpression"),
                                                 DoubleArgumentType.getDouble(context, "speedStep"),
                                                 StringArgumentType.getString(context, "group"))
@@ -400,7 +400,7 @@ public class ParameterCommand {
                                                 StringArgumentType.getString(context, "expression"),
                                                 DoubleArgumentType.getDouble(context, "step"),
                                                 IntegerArgumentType.getInteger(context, "cpt"),
-                                                IntegerArgumentType.getInteger(context, "age"),
+                                                IntegerArgumentType.getInteger(context, "lifetime"),
                                                 null, 1.0, null),
                                         (context) -> execute(
                                                 context,
@@ -416,7 +416,7 @@ public class ParameterCommand {
                                                 StringArgumentType.getString(context, "expression"),
                                                 DoubleArgumentType.getDouble(context, "step"),
                                                 IntegerArgumentType.getInteger(context, "cpt"),
-                                                IntegerArgumentType.getInteger(context, "age"),
+                                                IntegerArgumentType.getInteger(context, "lifetime"),
                                                 StringArgumentType.getString(context, "speedExpression"),
                                                 1.0, null),
                                         (context) -> execute(
@@ -433,7 +433,7 @@ public class ParameterCommand {
                                                 StringArgumentType.getString(context, "expression"),
                                                 DoubleArgumentType.getDouble(context, "step"),
                                                 IntegerArgumentType.getInteger(context, "cpt"),
-                                                IntegerArgumentType.getInteger(context, "age"),
+                                                IntegerArgumentType.getInteger(context, "lifetime"),
                                                 StringArgumentType.getString(context, "speedExpression"),
                                                 DoubleArgumentType.getDouble(context, "speedStep"),
                                                 null),
@@ -451,7 +451,7 @@ public class ParameterCommand {
                                                 StringArgumentType.getString(context, "expression"),
                                                 DoubleArgumentType.getDouble(context, "step"),
                                                 IntegerArgumentType.getInteger(context, "cpt"),
-                                                IntegerArgumentType.getInteger(context, "age"),
+                                                IntegerArgumentType.getInteger(context, "lifetime"),
                                                 StringArgumentType.getString(context, "speedExpression"),
                                                 DoubleArgumentType.getDouble(context, "speedStep"),
                                                 StringArgumentType.getString(context, "group"))
@@ -495,7 +495,7 @@ public class ParameterCommand {
                                         StringArgumentType.getString(context, "expression"),
                                         DoubleArgumentType.getDouble(context, "step"),
                                         10,
-                                        IntegerArgumentType.getInteger(context, "age"),
+                                        IntegerArgumentType.getInteger(context, "lifetime"),
                                         null, 1.0, null),
                                 (context) -> execute(
                                         context,
@@ -509,7 +509,7 @@ public class ParameterCommand {
                                         StringArgumentType.getString(context, "expression"),
                                         DoubleArgumentType.getDouble(context, "step"),
                                         10,
-                                        IntegerArgumentType.getInteger(context, "age"),
+                                        IntegerArgumentType.getInteger(context, "lifetime"),
                                         StringArgumentType.getString(context, "speedExpression"),
                                         1.0, null),
                                 (context) -> execute(
@@ -524,7 +524,7 @@ public class ParameterCommand {
                                         StringArgumentType.getString(context, "expression"),
                                         DoubleArgumentType.getDouble(context, "step"),
                                         10,
-                                        IntegerArgumentType.getInteger(context, "age"),
+                                        IntegerArgumentType.getInteger(context, "lifetime"),
                                         StringArgumentType.getString(context, "speedExpression"),
                                         DoubleArgumentType.getDouble(context, "speedStep"),
                                         null),
@@ -539,7 +539,7 @@ public class ParameterCommand {
                                         DoubleArgumentType.getDouble(context, "end"),
                                         StringArgumentType.getString(context, "expression"),
                                         DoubleArgumentType.getDouble(context, "step"),
-                                        10, IntegerArgumentType.getInteger(context, "age"),
+                                        10, IntegerArgumentType.getInteger(context, "lifetime"),
                                         StringArgumentType.getString(context, "speedExpression"),
                                         DoubleArgumentType.getDouble(context, "speedStep"),
                                         StringArgumentType.getString(context, "group"))
@@ -583,7 +583,7 @@ public class ParameterCommand {
                                         StringArgumentType.getString(context, "expression"),
                                         DoubleArgumentType.getDouble(context, "step"),
                                         10,
-                                        IntegerArgumentType.getInteger(context, "age"),
+                                        IntegerArgumentType.getInteger(context, "lifetime"),
                                         null, 1.0, null),
                                 (context) -> execute(
                                         context,
@@ -597,7 +597,7 @@ public class ParameterCommand {
                                         StringArgumentType.getString(context, "expression"),
                                         DoubleArgumentType.getDouble(context, "step"),
                                         10,
-                                        IntegerArgumentType.getInteger(context, "age"),
+                                        IntegerArgumentType.getInteger(context, "lifetime"),
                                         StringArgumentType.getString(context, "speedExpression"),
                                         1.0, null),
                                 (context) -> execute(
@@ -612,7 +612,7 @@ public class ParameterCommand {
                                         StringArgumentType.getString(context, "expression"),
                                         DoubleArgumentType.getDouble(context, "step"),
                                         10,
-                                        IntegerArgumentType.getInteger(context, "age"),
+                                        IntegerArgumentType.getInteger(context, "lifetime"),
                                         StringArgumentType.getString(context, "speedExpression"),
                                         DoubleArgumentType.getDouble(context, "speedStep"),
                                         null),
@@ -628,7 +628,7 @@ public class ParameterCommand {
                                         StringArgumentType.getString(context, "expression"),
                                         DoubleArgumentType.getDouble(context, "step"),
                                         10,
-                                        IntegerArgumentType.getInteger(context, "age"),
+                                        IntegerArgumentType.getInteger(context, "lifetime"),
                                         StringArgumentType.getString(context, "speedExpression"),
                                         DoubleArgumentType.getDouble(context, "speedStep"),
                                         StringArgumentType.getString(context, "group"))
@@ -686,7 +686,7 @@ public class ParameterCommand {
                                                 StringArgumentType.getString(context, "expression"),
                                                 DoubleArgumentType.getDouble(context, "step"),
                                                 IntegerArgumentType.getInteger(context, "cpt"),
-                                                IntegerArgumentType.getInteger(context, "age"),
+                                                IntegerArgumentType.getInteger(context, "lifetime"),
                                                 null, 1.0, null),
                                         (context) -> execute(
                                                 context,
@@ -700,7 +700,7 @@ public class ParameterCommand {
                                                 StringArgumentType.getString(context, "expression"),
                                                 DoubleArgumentType.getDouble(context, "step"),
                                                 IntegerArgumentType.getInteger(context, "cpt"),
-                                                IntegerArgumentType.getInteger(context, "age"),
+                                                IntegerArgumentType.getInteger(context, "lifetime"),
                                                 StringArgumentType.getString(context, "speedExpression"),
                                                 1.0, null),
                                         (context) -> execute(
@@ -715,7 +715,7 @@ public class ParameterCommand {
                                                 StringArgumentType.getString(context, "expression"),
                                                 DoubleArgumentType.getDouble(context, "step"),
                                                 IntegerArgumentType.getInteger(context, "cpt"),
-                                                IntegerArgumentType.getInteger(context, "age"),
+                                                IntegerArgumentType.getInteger(context, "lifetime"),
                                                 StringArgumentType.getString(context, "speedExpression"),
                                                 DoubleArgumentType.getDouble(context, "speedStep"),
                                                 null),
@@ -731,7 +731,7 @@ public class ParameterCommand {
                                                 StringArgumentType.getString(context, "expression"),
                                                 DoubleArgumentType.getDouble(context, "step"),
                                                 IntegerArgumentType.getInteger(context, "cpt"),
-                                                IntegerArgumentType.getInteger(context, "age"),
+                                                IntegerArgumentType.getInteger(context, "lifetime"),
                                                 StringArgumentType.getString(context, "speedExpression"),
                                                 DoubleArgumentType.getDouble(context, "speedStep"),
                                                 StringArgumentType.getString(context, "group"))
@@ -789,7 +789,7 @@ public class ParameterCommand {
                                                 StringArgumentType.getString(context, "expression"),
                                                 DoubleArgumentType.getDouble(context, "step"),
                                                 IntegerArgumentType.getInteger(context, "cpt"),
-                                                IntegerArgumentType.getInteger(context, "age"),
+                                                IntegerArgumentType.getInteger(context, "lifetime"),
                                                 null, 1.0, null),
                                         (context) -> execute(
                                                 context,
@@ -803,7 +803,7 @@ public class ParameterCommand {
                                                 StringArgumentType.getString(context, "expression"),
                                                 DoubleArgumentType.getDouble(context, "step"),
                                                 IntegerArgumentType.getInteger(context, "cpt"),
-                                                IntegerArgumentType.getInteger(context, "age"),
+                                                IntegerArgumentType.getInteger(context, "lifetime"),
                                                 StringArgumentType.getString(context, "speedExpression"),
                                                 1.0, null),
                                         (context) -> execute(
@@ -818,7 +818,7 @@ public class ParameterCommand {
                                                 StringArgumentType.getString(context, "expression"),
                                                 DoubleArgumentType.getDouble(context, "step"),
                                                 IntegerArgumentType.getInteger(context, "cpt"),
-                                                IntegerArgumentType.getInteger(context, "age"),
+                                                IntegerArgumentType.getInteger(context, "lifetime"),
                                                 StringArgumentType.getString(context, "speedExpression"),
                                                 DoubleArgumentType.getDouble(context, "speedStep"),
                                                 null),
@@ -834,7 +834,7 @@ public class ParameterCommand {
                                                 StringArgumentType.getString(context, "expression"),
                                                 DoubleArgumentType.getDouble(context, "step"),
                                                 IntegerArgumentType.getInteger(context, "cpt"),
-                                                IntegerArgumentType.getInteger(context, "age"),
+                                                IntegerArgumentType.getInteger(context, "lifetime"),
                                                 StringArgumentType.getString(context, "speedExpression"),
                                                 DoubleArgumentType.getDouble(context, "speedStep"),
                                                 StringArgumentType.getString(context, "group"))
@@ -868,14 +868,14 @@ public class ParameterCommand {
     }
 
     private static ArgumentBuilder<CommandSourceStack, ?> getEnd(Command<CommandSourceStack> command1, Command<CommandSourceStack> command2, Command<CommandSourceStack> command3, Command<CommandSourceStack> command4) {
-        return Commands.argument("age", SuggestIntegerArgumentType.integer(-1, Integer.MAX_VALUE, 0)).executes(command1
+        return Commands.argument("lifetime", SuggestIntegerArgumentType.integer(-1, Integer.MAX_VALUE, 0)).executes(command1
         ).then(Commands.argument("speedExpression", SuggestStringArgumentType.argument("null", "\"vy=0.1\"", "\"(vx,vy,vz)=((random(),random(),random())-0.5)*t/100\"")).executes(command2
         ).then(Commands.argument("speedStep", SuggestDoubleArgumentType.doubleArg(Math.ulp(0.0), Double.MAX_VALUE, 1.0)).executes(command3
         ).then(Commands.argument("group", SuggestStringArgumentType.argument("null")).executes(command4))));
     }
 
-    private static int execute(CommandContext<CommandSourceStack> context, boolean polar, boolean tick, boolean rgba, ParticleOptions effect, Vec3 pos, double size, Vector4f color, int light, Vec3 speed, double begin, double end, String expression, double step, int cpt, int age, String speedExpression, double speedStep, String group) {
-        PacketDistributor.sendToPlayersInDimension(context.getSource().getLevel(), new ParameterPayload(polar, tick, rgba, effect, pos, size, color, light, speed, begin, end, expression, step, cpt, age, speedExpression, speedStep, group));
+    private static int execute(CommandContext<CommandSourceStack> context, boolean polar, boolean tick, boolean rgba, ParticleOptions effect, Vec3 pos, double size, Vector4f color, int light, Vec3 speed, double begin, double end, String expression, double step, int cpt, int lifetime, String speedExpression, double speedStep, String group) {
+        PacketDistributor.sendToPlayersInDimension(context.getSource().getLevel(), new ParameterPayload(polar, tick, rgba, effect, pos, size, color, light, speed, begin, end, expression, step, cpt, lifetime, speedExpression, speedStep, group));
         return 1;
     }
 }

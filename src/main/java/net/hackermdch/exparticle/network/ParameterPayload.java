@@ -43,7 +43,7 @@ public class ParameterPayload implements CustomPacketPayload {
     private final String expression;
     private final double step;
     private final int cpt;
-    private final int age;
+    private final int lifetime;
     private final boolean hasSpeedExpression;
     private final String speedExpression;
     private final double speedStep;
@@ -72,7 +72,7 @@ public class ParameterPayload implements CustomPacketPayload {
         this.expression = expression;
         this.step = step;
         this.cpt = cpt;
-        this.age = age;
+        this.lifetime = age;
         this.hasSpeedExpression = validString(speedExpression);
         this.speedExpression = speedExpression;
         this.speedStep = speedStep;
@@ -102,7 +102,7 @@ public class ParameterPayload implements CustomPacketPayload {
         expression = buf.readUtf();
         step = buf.readDouble();
         cpt = readInt(buf, tick, 0);
-        age = buf.readInt();
+        lifetime = buf.readInt();
         hasSpeedExpression = buf.readBoolean();
         speedExpression = readString(buf, hasSpeedExpression, null);
         speedStep = readDouble(buf, hasSpeedExpression, 1.0F);
@@ -136,7 +136,7 @@ public class ParameterPayload implements CustomPacketPayload {
         buf.writeUtf(expression);
         buf.writeDouble(step);
         if (tick) buf.writeInt(cpt);
-        buf.writeInt(age);
+        buf.writeInt(lifetime);
         buf.writeBoolean(hasSpeedExpression);
         if (hasSpeedExpression) {
             buf.writeUtf(speedExpression);
@@ -152,10 +152,10 @@ public class ParameterPayload implements CustomPacketPayload {
         context.enqueueWork(() -> {
             if (tick) {
                 if (rgba) {
-                    ParticleUtil.spawnTickParticle(effect, x, y, z, vx, vy, vz, begin, end, expression, step, cpt, age, speedExpression, speedStep, group, polar);
+                    ParticleUtil.spawnTickParticle(effect, x, y, z, vx, vy, vz, begin, end, expression, step, cpt, lifetime, speedExpression, speedStep, group, polar);
                 } else {
                     double lightVal = (light == -1) ? Double.NaN : light / 15.0;
-                    ParticleUtil.spawnTickParticle(effect, x, y, z, size, red, green, blue, alpha, lightVal, vx, vy, vz, begin, end, expression, step, cpt, age, speedExpression, speedStep, group, polar);
+                    ParticleUtil.spawnTickParticle(effect, x, y, z, size, red, green, blue, alpha, lightVal, vx, vy, vz, begin, end, expression, step, cpt, lifetime, speedExpression, speedStep, group, polar);
                 }
             } else {
                 var exe = ExpressionUtil.parse(expression);
@@ -176,10 +176,10 @@ public class ParameterPayload implements CustomPacketPayload {
                         dz = data.z;
                     }
                     if (rgba) {
-                        ParticleUtil.spawnParticle(effect, x + dx, y + dy, z + dz, x, y, z, data.size, (float) data.cr, (float) data.cg, (float) data.cb, (float) data.alpha, data.light, vx, vy, vz, age, speedExpression, speedStep, group);
+                        ParticleUtil.spawnParticle(effect, x + dx, y + dy, z + dz, x, y, z, data.size, (float) data.cr, (float) data.cg, (float) data.cb, (float) data.alpha, data.light, vx, vy, vz, lifetime, speedExpression, speedStep, group);
                     } else {
                         double lightVal = (light == -1) ? Double.NaN : light / 15.0;
-                        ParticleUtil.spawnParticle(effect, x + dx, y + dy, z + dz, x, y, z, size, red, green, blue, alpha, lightVal, vx, vy, vz, age, speedExpression, speedStep, group);
+                        ParticleUtil.spawnParticle(effect, x + dx, y + dy, z + dz, x, y, z, size, red, green, blue, alpha, lightVal, vx, vy, vz, lifetime, speedExpression, speedStep, group);
                     }
                 }
             }

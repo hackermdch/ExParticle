@@ -121,7 +121,7 @@ public class VideoCommand {
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
                                 0, null, 1.0, null)
-                ).then(Commands.argument("age", SuggestIntegerArgumentType.integer(-1, Integer.MAX_VALUE, 0)).executes(
+                ).then(Commands.argument("lifetime", SuggestIntegerArgumentType.integer(-1, Integer.MAX_VALUE, 0)).executes(
                         (context) -> execute(
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
@@ -135,7 +135,7 @@ public class VideoCommand {
                                 FlipArgumentType.getFlip(context, "flip"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
-                                IntegerArgumentType.getInteger(context, "age"),
+                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 null, 1.0, null)
                 ).then(Commands.argument("speedExpression", SuggestStringArgumentType.argument("null", "\"vy=0.1\"", "\"(vx,vy,vz)=((random(),random(),random())-0.5)*t/100\"")).executes(
                         (context) -> execute(
@@ -151,7 +151,7 @@ public class VideoCommand {
                                 FlipArgumentType.getFlip(context, "flip"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
-                                IntegerArgumentType.getInteger(context, "age"),
+                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 StringArgumentType.getString(context, "speedExpression"),
                                 1.0, null)
                 ).then(Commands.argument("speedStep", SuggestDoubleArgumentType.doubleArg(Math.ulp(0.0), Double.MAX_VALUE, 1.0)).executes(
@@ -168,7 +168,7 @@ public class VideoCommand {
                                 FlipArgumentType.getFlip(context, "flip"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
-                                IntegerArgumentType.getInteger(context, "age"),
+                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 StringArgumentType.getString(context, "speedExpression"),
                                 DoubleArgumentType.getDouble(context, "speedStep"),
                                 null)
@@ -186,7 +186,7 @@ public class VideoCommand {
                                 FlipArgumentType.getFlip(context, "flip"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
-                                IntegerArgumentType.getInteger(context, "age"),
+                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 StringArgumentType.getString(context, "speedExpression"),
                                 DoubleArgumentType.getDouble(context, "speedStep"),
                                 StringArgumentType.getString(context, "group"))
@@ -194,9 +194,9 @@ public class VideoCommand {
         );
     }
 
-    private static int execute(CommandContext<CommandSourceStack> context, ParticleOptions effect, Vec3 pos, String path, double scaling, double size, int xRotate, int yRotate, int zRotate, int flip, double dpb, Vec3 speed, int age, String speedExpression, double speedStep, String group) {
+    private static int execute(CommandContext<CommandSourceStack> context, ParticleOptions effect, Vec3 pos, String path, double scaling, double size, int xRotate, int yRotate, int zRotate, int flip, double dpb, Vec3 speed, int lifetime, String speedExpression, double speedStep, String group) {
         if (flip == 2) zRotate += 2;
-        PacketDistributor.sendToPlayersInDimension(context.getSource().getLevel(), new VideoPayload(effect, pos, path, scaling, size, xRotate, yRotate, zRotate, flip, dpb, speed, age, speedExpression, speedStep, group));
+        PacketDistributor.sendToPlayersInDimension(context.getSource().getLevel(), new VideoPayload(effect, pos, path, scaling, size, xRotate, yRotate, zRotate, flip, dpb, speed, lifetime, speedExpression, speedStep, group));
         return 1;
     }
 }

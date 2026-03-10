@@ -31,14 +31,14 @@ public class ImageMatrixPayload implements CustomPacketPayload {
     private final double vx;
     private final double vy;
     private final double vz;
-    private final int age;
+    private final int lifetime;
     private final boolean hasSpeedExpression;
     private final String speedExpression;
     private final double speedStep;
     private final String group;
     private final ParticleOptions effect;
 
-    public ImageMatrixPayload(ParticleOptions effect, Vec3 pos, String path, double scaling, double size, String matrixStr, double dpb, Vec3 speed, int age, String speedExpression, double speedStep, String group) {
+    public ImageMatrixPayload(ParticleOptions effect, Vec3 pos, String path, double scaling, double size, String matrixStr, double dpb, Vec3 speed, int lifetime, String speedExpression, double speedStep, String group) {
         this.x = pos.x;
         this.y = pos.y;
         this.z = pos.z;
@@ -51,7 +51,7 @@ public class ImageMatrixPayload implements CustomPacketPayload {
         this.vx = speed.x;
         this.vy = speed.y;
         this.vz = speed.z;
-        this.age = age;
+        this.lifetime = lifetime;
         this.hasSpeedExpression = NetworkUtils.validString(speedExpression);
         this.speedExpression = speedExpression;
         this.speedStep = speedStep;
@@ -79,7 +79,7 @@ public class ImageMatrixPayload implements CustomPacketPayload {
         vx = buf.readDouble();
         vy = buf.readDouble();
         vz = buf.readDouble();
-        age = buf.readInt();
+        lifetime = buf.readInt();
         hasSpeedExpression = buf.readBoolean();
         speedExpression = readString(buf, hasSpeedExpression, null);
         speedStep = readDouble(buf, hasSpeedExpression, 1.0);
@@ -108,7 +108,7 @@ public class ImageMatrixPayload implements CustomPacketPayload {
         buf.writeDouble(vx);
         buf.writeDouble(vy);
         buf.writeDouble(vz);
-        buf.writeInt(age);
+        buf.writeInt(lifetime);
         buf.writeBoolean(hasSpeedExpression);
         if (hasSpeedExpression) {
             buf.writeUtf(speedExpression);
@@ -121,7 +121,7 @@ public class ImageMatrixPayload implements CustomPacketPayload {
     }
 
     private void handle(IPayloadContext context) {
-        context.enqueueWork(() -> ParticleUtil.spawnImageParticle(effect, x, y, z, path, scaling, size, matrix, dpb, vx, vy, vz, age, speedExpression, speedStep, group));
+        context.enqueueWork(() -> ParticleUtil.spawnImageParticle(effect, x, y, z, path, scaling, size, matrix, dpb, vx, vy, vz, lifetime, speedExpression, speedStep, group));
     }
 
     @Override

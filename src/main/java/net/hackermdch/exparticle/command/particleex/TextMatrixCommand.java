@@ -80,7 +80,7 @@ public class TextMatrixCommand {
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
                                 0, null, 1.0, null)
-                ).then(Commands.argument("age", SuggestIntegerArgumentType.integer(-1, Integer.MAX_VALUE, 0)).executes(
+                ).then(Commands.argument("lifetime", SuggestIntegerArgumentType.integer(-1, Integer.MAX_VALUE, 0)).executes(
                         context -> execute(
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
@@ -91,7 +91,7 @@ public class TextMatrixCommand {
                                 StringArgumentType.getString(context, "matrix"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
-                                IntegerArgumentType.getInteger(context, "age"),
+                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 null, 1.0, null)
                 ).then(Commands.argument("speedExpression", SuggestStringArgumentType.argument("null", "\"vy=0.1\"", "\"(vx,vy,vz)=((random(),random(),random())-0.5)*t/100\"")).executes(
                         context -> execute(
@@ -104,7 +104,7 @@ public class TextMatrixCommand {
                                 StringArgumentType.getString(context, "matrix"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
-                                IntegerArgumentType.getInteger(context, "age"),
+                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 StringArgumentType.getString(context, "speedExpression"),
                                 1.0, null)
                 ).then(Commands.argument("speedStep", SuggestDoubleArgumentType.doubleArg(Math.ulp(0.0), Double.MAX_VALUE, 1.0)).executes(
@@ -118,7 +118,7 @@ public class TextMatrixCommand {
                                 StringArgumentType.getString(context, "matrix"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
-                                IntegerArgumentType.getInteger(context, "age"),
+                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 StringArgumentType.getString(context, "speedExpression"),
                                 DoubleArgumentType.getDouble(context, "speedStep"),
                                 null)
@@ -133,7 +133,7 @@ public class TextMatrixCommand {
                                 StringArgumentType.getString(context, "matrix"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
-                                IntegerArgumentType.getInteger(context, "age"),
+                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 StringArgumentType.getString(context, "speedExpression"),
                                 DoubleArgumentType.getDouble(context, "speedStep"),
                                 StringArgumentType.getString(context, "group")))
@@ -141,8 +141,8 @@ public class TextMatrixCommand {
         );
     }
 
-    private static int execute(CommandContext<CommandSourceStack> context, ParticleOptions effect, Vec3 pos, Component text, double scaling, double size, String matrixStr, double dpb, Vec3 speed, int age, String speedExpression, double speedStep, String group) {
-        PacketDistributor.sendToPlayersInDimension(context.getSource().getLevel(), new TextMatrixPayload(effect, pos, text, scaling, size, matrixStr, dpb, speed, age, speedExpression, speedStep, group));
+    private static int execute(CommandContext<CommandSourceStack> context, ParticleOptions effect, Vec3 pos, Component text, double scaling, double size, String matrixStr, double dpb, Vec3 speed, int lifetime, String speedExpression, double speedStep, String group) {
+        PacketDistributor.sendToPlayersInDimension(context.getSource().getLevel(), new TextMatrixPayload(effect, pos, text, scaling, size, matrixStr, dpb, speed, lifetime, speedExpression, speedStep, group));
         return 1;
     }
 }

@@ -39,7 +39,7 @@ public class NormalPayload implements CustomPacketPayload {
     private final double dy;
     private final double dz;
     private final int count;
-    private final int age;
+    private final int lifetime;
     private final boolean hasSpeedExpression;
     private final String speedExpression;
     private final double speedStep;
@@ -63,7 +63,7 @@ public class NormalPayload implements CustomPacketPayload {
         this.dy = range.y;
         this.dz = range.z;
         this.count = count;
-        this.age = age;
+        this.lifetime = age;
         this.hasSpeedExpression = validString(expression);
         this.speedExpression = expression;
         this.speedStep = step;
@@ -89,7 +89,7 @@ public class NormalPayload implements CustomPacketPayload {
         dy = buf.readDouble();
         dz = buf.readDouble();
         count = buf.readInt();
-        age = buf.readInt();
+        lifetime = buf.readInt();
         hasSpeedExpression = buf.readBoolean();
         speedExpression = readString(buf, hasSpeedExpression, null);
         speedStep = readDouble(buf, hasSpeedExpression, 1.0);
@@ -117,7 +117,7 @@ public class NormalPayload implements CustomPacketPayload {
         buf.writeDouble(dy);
         buf.writeDouble(dz);
         buf.writeInt(count);
-        buf.writeInt(age);
+        buf.writeInt(lifetime);
         buf.writeBoolean(hasSpeedExpression);
         if (hasSpeedExpression) {
             buf.writeUtf(speedExpression);
@@ -136,7 +136,7 @@ public class NormalPayload implements CustomPacketPayload {
                 double ry = RANDOM.nextGaussian() * dy;
                 double rz = RANDOM.nextGaussian() * dz;
                 double lightVal = (light == -1) ? Double.NaN : light / 15.0;
-                ParticleUtil.spawnParticle(effect, x + rx, y + ry, z + rz, x, y, z, size, red, green, blue, alpha, lightVal, vx, vy, vz, age, speedExpression, speedStep, group);
+                ParticleUtil.spawnParticle(effect, x + rx, y + ry, z + rz, x, y, z, size, red, green, blue, alpha, lightVal, vx, vy, vz, lifetime, speedExpression, speedStep, group);
             }
         });
     }

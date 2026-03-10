@@ -32,14 +32,14 @@ public class TextMatrixPayload implements CustomPacketPayload {
     private final double vx;
     private final double vy;
     private final double vz;
-    private final int age;
+    private final int lifetime;
     private final boolean hasSpeedExpression;
     private final String speedExpression;
     private final double speedStep;
     private final String group;
     private final ParticleOptions effect;
 
-    public TextMatrixPayload(ParticleOptions effect, Vec3 pos, Component text, double scaling, double size, String matrixStr, double dpb, Vec3 speed, int age, String speedExpression, double speedStep, String group) {
+    public TextMatrixPayload(ParticleOptions effect, Vec3 pos, Component text, double scaling, double size, String matrixStr, double dpb, Vec3 speed, int lifetime, String speedExpression, double speedStep, String group) {
         this.effect = effect;
         this.x = pos.x;
         this.y = pos.y;
@@ -53,7 +53,7 @@ public class TextMatrixPayload implements CustomPacketPayload {
         this.vx = speed.x;
         this.vy = speed.y;
         this.vz = speed.z;
-        this.age = age;
+        this.lifetime = lifetime;
         this.hasSpeedExpression = validString(speedExpression);
         this.speedExpression = speedExpression;
         this.speedStep = speedStep;
@@ -80,7 +80,7 @@ public class TextMatrixPayload implements CustomPacketPayload {
         vx = buf.readDouble();
         vy = buf.readDouble();
         vz = buf.readDouble();
-        age = buf.readInt();
+        lifetime = buf.readInt();
         hasSpeedExpression = buf.readBoolean();
         speedExpression = readString(buf, hasSpeedExpression, null);
         speedStep = readDouble(buf, hasSpeedExpression, 1.0);
@@ -109,7 +109,7 @@ public class TextMatrixPayload implements CustomPacketPayload {
         buf.writeDouble(vx);
         buf.writeDouble(vy);
         buf.writeDouble(vz);
-        buf.writeInt(age);
+        buf.writeInt(lifetime);
         buf.writeBoolean(hasSpeedExpression);
         if (hasSpeedExpression) {
             buf.writeUtf(speedExpression);
@@ -122,7 +122,7 @@ public class TextMatrixPayload implements CustomPacketPayload {
     }
 
     private void handle(IPayloadContext context) {
-        context.enqueueWork(() -> ParticleUtil.spawnTextParticle(effect, x, y, z, text, scaling, size, matrix, dpb, vx, vy, vz, age, speedExpression, speedStep, group));
+        context.enqueueWork(() -> ParticleUtil.spawnTextParticle(effect, x, y, z, text, scaling, size, matrix, dpb, vx, vy, vz, lifetime, speedExpression, speedStep, group));
     }
 
     @Override
