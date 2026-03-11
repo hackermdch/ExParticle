@@ -591,6 +591,8 @@ public class CodeGen {
                     ++j;
                 }
             }
+        } else {
+            maxSimilarityIndex = 0;
         }
         if (maxSimilarityIndex == T_UNKNOW) throw new RuntimeException("function not found: " + name);
         var method = methods.get(maxSimilarityIndex);
