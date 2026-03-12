@@ -34,4 +34,8 @@ public interface IParticle {
     double getCustomLight();
 
     void setCustomLight(double light);
+
+    void setGravity(float gravity);
+
+    void setFriction(float friction);
 }

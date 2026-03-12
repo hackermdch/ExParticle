@@ -25,9 +25,9 @@ public class ImageMatrixPayload implements CustomPacketPayload {
     private final double z;
     private final String path;
     private final double scaling;
-    private final double size;
     private final double[][] matrix;
     private final double dpb;
+    private final double size;
     private final double vx;
     private final double vy;
     private final double vz;
@@ -38,15 +38,15 @@ public class ImageMatrixPayload implements CustomPacketPayload {
     private final String group;
     private final ParticleOptions effect;
 
-    public ImageMatrixPayload(ParticleOptions effect, Vec3 pos, String path, double scaling, double size, String matrixStr, double dpb, Vec3 speed, int lifetime, String speedExpression, double speedStep, String group) {
+    public ImageMatrixPayload(ParticleOptions effect, Vec3 pos, String path, double scaling, String matrixStr, double dpb, double size, Vec3 speed, int lifetime, String speedExpression, double speedStep, String group) {
         this.x = pos.x;
         this.y = pos.y;
         this.z = pos.z;
         this.path = path;
         this.scaling = scaling;
-        this.size = size;
         this.matrix = MatrixUtil.toMat(matrixStr);
         this.dpb = dpb;
+        this.size = size;
         if (speed == null) speed = Vec3.ZERO;
         this.vx = speed.x;
         this.vy = speed.y;
@@ -66,7 +66,6 @@ public class ImageMatrixPayload implements CustomPacketPayload {
         z = buf.readDouble();
         path = buf.readUtf();
         scaling = buf.readDouble();
-        size = buf.readDouble();
         var rows = buf.readInt();
         var cols = buf.readInt();
         matrix = new double[rows][cols];
@@ -76,6 +75,7 @@ public class ImageMatrixPayload implements CustomPacketPayload {
             }
         }
         dpb = buf.readDouble();
+        size = buf.readDouble();
         vx = buf.readDouble();
         vy = buf.readDouble();
         vz = buf.readDouble();
@@ -96,7 +96,6 @@ public class ImageMatrixPayload implements CustomPacketPayload {
         buf.writeDouble(z);
         buf.writeUtf(path);
         buf.writeDouble(scaling);
-        buf.writeDouble(size);
         buf.writeInt(matrix.length);
         buf.writeInt(matrix[0].length);
         for (var row : matrix) {
@@ -105,6 +104,7 @@ public class ImageMatrixPayload implements CustomPacketPayload {
             }
         }
         buf.writeDouble(dpb);
+        buf.writeDouble(size);
         buf.writeDouble(vx);
         buf.writeDouble(vy);
         buf.writeDouble(vz);
@@ -121,7 +121,7 @@ public class ImageMatrixPayload implements CustomPacketPayload {
     }
 
     private void handle(IPayloadContext context) {
-        context.enqueueWork(() -> ParticleUtil.spawnImageParticle(effect, x, y, z, path, scaling, size, matrix, dpb, vx, vy, vz, lifetime, speedExpression, speedStep, group));
+        context.enqueueWork(() -> ParticleUtil.spawnImageParticle(effect, x, y, z, path, scaling, matrix, dpb, size, vx, vy, vz, lifetime, speedExpression, speedStep, group));
     }
 
     @Override

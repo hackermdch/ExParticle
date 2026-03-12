@@ -35,18 +35,18 @@ public class NormalPayload implements CustomPacketPayload {
     private final double vx;
     private final double vy;
     private final double vz;
+    private final int lifetime;
     private final double dx;
     private final double dy;
     private final double dz;
     private final int count;
-    private final int lifetime;
     private final boolean hasSpeedExpression;
     private final String speedExpression;
     private final double speedStep;
     private final String group;
     private final ParticleOptions effect;
 
-    public NormalPayload(ParticleOptions effect, Vec3 pos, double size, Vector4f color, int light, Vec3 speed, Vec3 range, int count, int age, String expression, double step, String group) {
+    public NormalPayload(ParticleOptions effect, Vec3 pos, double size, Vector4f color, int light, Vec3 speed, int lifetime, Vec3 range, int count, String expression, double step, String group) {
         this.x = pos.x;
         this.y = pos.y;
         this.z = pos.z;
@@ -59,11 +59,11 @@ public class NormalPayload implements CustomPacketPayload {
         this.vx = speed.x;
         this.vy = speed.y;
         this.vz = speed.z;
+        this.lifetime = lifetime;
         this.dx = range.x;
         this.dy = range.y;
         this.dz = range.z;
         this.count = count;
-        this.lifetime = age;
         this.hasSpeedExpression = validString(expression);
         this.speedExpression = expression;
         this.speedStep = step;
@@ -85,11 +85,11 @@ public class NormalPayload implements CustomPacketPayload {
         vx = buf.readDouble();
         vy = buf.readDouble();
         vz = buf.readDouble();
+        lifetime = buf.readInt();
         dx = buf.readDouble();
         dy = buf.readDouble();
         dz = buf.readDouble();
         count = buf.readInt();
-        lifetime = buf.readInt();
         hasSpeedExpression = buf.readBoolean();
         speedExpression = readString(buf, hasSpeedExpression, null);
         speedStep = readDouble(buf, hasSpeedExpression, 1.0);
@@ -113,11 +113,11 @@ public class NormalPayload implements CustomPacketPayload {
         buf.writeDouble(vx);
         buf.writeDouble(vy);
         buf.writeDouble(vz);
+        buf.writeInt(lifetime);
         buf.writeDouble(dx);
         buf.writeDouble(dy);
         buf.writeDouble(dz);
         buf.writeInt(count);
-        buf.writeInt(lifetime);
         buf.writeBoolean(hasSpeedExpression);
         if (hasSpeedExpression) {
             buf.writeUtf(speedExpression);

@@ -28,7 +28,7 @@ public class VideoMatrixCommand {
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
-                                0.1, -1.0, "E3", 10.0, null, 0, null, 1.0, null)
+                                0.1, "E3", 10.0, -1.0, null, 0, null, 1.0, null)
                 ).then(Commands.argument("scaling", SuggestDoubleArgumentType.doubleArg(0.0, Double.MAX_VALUE, 0.1)).executes(
                         (context) -> execute(
                                 context,
@@ -36,16 +36,7 @@ public class VideoMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                -1.0, "E3", 10.0, null, 0, null, 1.0, null)
-                ).then(Commands.argument("size", SizeArgumentType.size()).executes(
-                        (context) -> execute(
-                                context,
-                                ParticleArgument.getParticle(context, "name"),
-                                Vec3Argument.getVec3(context, "pos"),
-                                StringArgumentType.getString(context, "path"),
-                                DoubleArgumentType.getDouble(context, "scaling"),
-                                SizeArgumentType.getSize(context, "size"),
-                                "E3", 10.0, null, 0, null, 1.0, null)
+                                "E3", 10.0, -1.0, null, 0, null, 1.0, null)
                 ).then(Commands.argument("matrix", SuggestStringArgumentType.argument("E3", "E4", "\"(1,0,0,0,,0,1,0,0,,0,0,1,-100,,0,0,0,1)\"", "\"(0.5,-0.5,0.7071,-0.7071,,0.1464466,0.8535534,0.5,-5,,-0.8535534,-0.1464466,0.5,-5,,0,0,0,1)\"")).executes(
                         (context) -> execute(
                                 context,
@@ -53,9 +44,8 @@ public class VideoMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                SizeArgumentType.getSize(context, "size"),
                                 StringArgumentType.getString(context, "matrix"),
-                                10.0, null, 0, null, 1.0, null)
+                                10.0, -1.0, null, 0, null, 1.0, null)
                 ).then(Commands.argument("dpb", SuggestDoubleArgumentType.doubleArg(0.0, Double.MAX_VALUE, 10.0)).executes(
                         (context) -> execute(
                                 context,
@@ -63,9 +53,19 @@ public class VideoMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                SizeArgumentType.getSize(context, "size"),
                                 StringArgumentType.getString(context, "matrix"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
+                                -1.0,null, 0, null, 1.0, null)
+                ).then(Commands.argument("size", SizeArgumentType.size()).executes(
+                        (context) -> execute(
+                                context,
+                                ParticleArgument.getParticle(context, "name"),
+                                Vec3Argument.getVec3(context, "pos"),
+                                StringArgumentType.getString(context, "path"),
+                                DoubleArgumentType.getDouble(context, "scaling"),
+                                StringArgumentType.getString(context, "matrix"),
+                                DoubleArgumentType.getDouble(context, "dpb"),
+                                SizeArgumentType.getSize(context, "size"),
                                 null, 0, null, 1.0, null)
                 ).then(Commands.argument("speed", Speed3ArgumentType.speed3()).executes(
                         (context) -> execute(
@@ -74,9 +74,9 @@ public class VideoMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                SizeArgumentType.getSize(context, "size"),
                                 StringArgumentType.getString(context, "matrix"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
+                                SizeArgumentType.getSize(context, "size"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
                                 0, null, 1.0, null)
                 ).then(Commands.argument("lifetime", SuggestIntegerArgumentType.integer(-1, Integer.MAX_VALUE, 0)).executes(
@@ -86,9 +86,9 @@ public class VideoMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                SizeArgumentType.getSize(context, "size"),
                                 StringArgumentType.getString(context, "matrix"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
+                                SizeArgumentType.getSize(context, "size"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
                                 IntegerArgumentType.getInteger(context, "lifetime"),
                                 null, 1.0, null)
@@ -99,9 +99,9 @@ public class VideoMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                SizeArgumentType.getSize(context, "size"),
                                 StringArgumentType.getString(context, "matrix"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
+                                SizeArgumentType.getSize(context, "size"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
                                 IntegerArgumentType.getInteger(context, "lifetime"),
                                 StringArgumentType.getString(context, "speedExpression"),
@@ -113,9 +113,9 @@ public class VideoMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                SizeArgumentType.getSize(context, "size"),
                                 StringArgumentType.getString(context, "matrix"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
+                                SizeArgumentType.getSize(context, "size"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
                                 IntegerArgumentType.getInteger(context, "lifetime"),
                                 StringArgumentType.getString(context, "speedExpression"),
@@ -128,9 +128,9 @@ public class VideoMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                SizeArgumentType.getSize(context, "size"),
                                 StringArgumentType.getString(context, "matrix"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
+                                SizeArgumentType.getSize(context, "size"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
                                 IntegerArgumentType.getInteger(context, "lifetime"),
                                 StringArgumentType.getString(context, "speedExpression"),
@@ -140,8 +140,8 @@ public class VideoMatrixCommand {
         );
     }
 
-    private static int execute(CommandContext<CommandSourceStack> context, ParticleOptions effect, Vec3 pos, String path, double scaling, double size, String matrixStr, double dpb, Vec3 speed, int lifetime, String speedExpression, double speedStep, String group) {
-        PacketDistributor.sendToPlayersInDimension(context.getSource().getLevel(), new VideoMatrixPayload(effect, pos, path, scaling, size, matrixStr, dpb, speed, lifetime, speedExpression, speedStep, group));
+    private static int execute(CommandContext<CommandSourceStack> context, ParticleOptions effect, Vec3 pos, String path, double scaling, String matrixStr, double dpb, double size, Vec3 speed, int lifetime, String speedExpression, double speedStep, String group) {
+        PacketDistributor.sendToPlayersInDimension(context.getSource().getLevel(), new VideoMatrixPayload(effect, pos, path, scaling, matrixStr, dpb, size, speed, lifetime, speedExpression, speedStep, group));
         return 1;
     }
 }

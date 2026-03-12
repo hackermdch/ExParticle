@@ -27,6 +27,7 @@ public class NormalCommand {
                 ).then(Commands.argument("light", SuggestIntegerArgumentType.integer(-1, 15, 15)
                 ).then(Commands.argument("speed", Speed3ArgumentType.speed3()
                 ).then(Commands.argument("range", Range3ArgumentType.range3()
+                ).then(Commands.argument("lifetime", SuggestIntegerArgumentType.integer(-1, Integer.MAX_VALUE, 0)
                 ).then(Commands.argument("count", SuggestIntegerArgumentType.integer(0, Integer.MAX_VALUE, 1)).executes(
                         (context) -> execute(
                                 context,
@@ -36,21 +37,9 @@ public class NormalCommand {
                                 Color4ArgumentType.getColor4(context, "color"),
                                 IntegerArgumentType.getInteger(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
-                                Range3ArgumentType.getRange3(context, "range"),
-                                IntegerArgumentType.getInteger(context, "count"),
-                                0, null, 1.0F, null)
-                ).then(Commands.argument("lifetime", SuggestIntegerArgumentType.integer(-1, Integer.MAX_VALUE, 0)).executes(
-                        (context) -> execute(
-                                context,
-                                ParticleArgument.getParticle(context, "name"),
-                                Vec3Argument.getVec3(context, "pos"),
-                                SizeArgumentType.getSize(context, "size"),
-                                Color4ArgumentType.getColor4(context, "color"),
-                                IntegerArgumentType.getInteger(context, "light"),
-                                Speed3ArgumentType.getSpeed3(context, "speed"),
-                                Range3ArgumentType.getRange3(context, "range"),
-                                IntegerArgumentType.getInteger(context, "count"),
                                 IntegerArgumentType.getInteger(context, "lifetime"),
+                                Range3ArgumentType.getRange3(context, "range"),
+                                IntegerArgumentType.getInteger(context, "count"),
                                 null, 1.0F, null)
                 ).then(Commands.argument("speedExpression", SuggestStringArgumentType.argument("null", "\"vy=0.1\"", "\"(vx,vy,vz)=((random(),random(),random())-0.5)*t/100\"")).executes(
                         (context) -> execute(
@@ -61,9 +50,9 @@ public class NormalCommand {
                                 Color4ArgumentType.getColor4(context, "color"),
                                 IntegerArgumentType.getInteger(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
+                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 Range3ArgumentType.getRange3(context, "range"),
                                 IntegerArgumentType.getInteger(context, "count"),
-                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 StringArgumentType.getString(context, "speedExpression"),
                                 1.0F, null)
                 ).then(Commands.argument("speedStep", SuggestDoubleArgumentType.doubleArg(Math.ulp(0.0F), Double.MAX_VALUE, 1.0F)).executes(
@@ -75,9 +64,9 @@ public class NormalCommand {
                                 Color4ArgumentType.getColor4(context, "color"),
                                 IntegerArgumentType.getInteger(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
+                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 Range3ArgumentType.getRange3(context, "range"),
                                 IntegerArgumentType.getInteger(context, "count"),
-                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 StringArgumentType.getString(context, "speedExpression"),
                                 DoubleArgumentType.getDouble(context, "speedStep"), null)
                 ).then(Commands.argument("group", SuggestStringArgumentType.argument("null")).executes(
@@ -89,9 +78,9 @@ public class NormalCommand {
                                 Color4ArgumentType.getColor4(context, "color"),
                                 IntegerArgumentType.getInteger(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
+                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 Range3ArgumentType.getRange3(context, "range"),
                                 IntegerArgumentType.getInteger(context, "count"),
-                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 StringArgumentType.getString(context, "speedExpression"),
                                 DoubleArgumentType.getDouble(context, "speedStep"),
                                 StringArgumentType.getString(context, "group"))
@@ -99,8 +88,8 @@ public class NormalCommand {
         );
     }
 
-    private static int execute(CommandContext<CommandSourceStack> context, ParticleOptions effect, Vec3 pos, double size, Vector4f color, int light, Vec3 speed, Vec3 range, int count, int lifetime, String expression, double step, String group) {
-        PacketDistributor.sendToPlayersInDimension(context.getSource().getLevel(), new NormalPayload(effect, pos, size, color, light, speed, range, count, lifetime, expression, step, group));
+    private static int execute(CommandContext<CommandSourceStack> context, ParticleOptions effect, Vec3 pos, double size, Vector4f color, int light, Vec3 speed, int lifetime, Vec3 range, int count, String expression, double step, String group) {
+        PacketDistributor.sendToPlayersInDimension(context.getSource().getLevel(), new NormalPayload(effect, pos, size, color, light, speed, lifetime, range, count, expression, step, group));
         return 1;
     }
 }

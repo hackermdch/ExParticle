@@ -126,9 +126,9 @@ public abstract class ParticleMixin implements IParticle {
                 data.ds1 = Math.atan2(z - centerZ, x - centerX);
                 data.ds2 = Math.atan2(y - centerY, Math.hypot(x - centerX, z - centerZ));
             }
-            data.vx = Double.NaN;
-            data.vy = Double.NaN;
-            data.vz = Double.NaN;
+            data.vx = this.xd;
+            data.vy = this.yd;
+            data.vz = this.zd;
             data.x = x - centerX;
             data.y = y - centerY;
             data.z = z - centerZ;
@@ -194,6 +194,16 @@ public abstract class ParticleMixin implements IParticle {
         return managed;
     }
 
+    @Override
+    public void setGravity(float gravity) {
+        this.gravity = gravity;
+    }
+
+    @Override
+    public void setFriction(float friction) {
+        this.friction = friction;
+    }
+
     @Unique
     private double nanToZero(double num) {
         return !Double.isNaN(num) ? num : (double) 0.0F;
@@ -218,6 +228,12 @@ public abstract class ParticleMixin implements IParticle {
     @Shadow
     public double z;
     @Shadow
+    public double xd;
+    @Shadow
+    public double yd;
+    @Shadow
+    public double zd;
+    @Shadow
     public float rCol = 1.0F;
     @Shadow
     public float gCol = 1.0F;
@@ -225,4 +241,8 @@ public abstract class ParticleMixin implements IParticle {
     public float bCol = 1.0F;
     @Shadow
     public float alpha = 1.0F;
+    @Shadow
+    protected float gravity;
+    @Shadow
+    protected float friction;
 }

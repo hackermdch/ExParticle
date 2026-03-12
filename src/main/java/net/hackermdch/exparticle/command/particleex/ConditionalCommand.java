@@ -26,6 +26,7 @@ public class ConditionalCommand {
                 ).then(Commands.argument("color", Color4ArgumentType.color4()
                 ).then(Commands.argument("light", SuggestDoubleArgumentType.doubleArg(-1.0, 1.0, -1.0)
                 ).then(Commands.argument("speed", Speed3ArgumentType.speed3()
+                ).then(Commands.argument("lifetime", SuggestIntegerArgumentType.integer(-1, Integer.MAX_VALUE, 0)
                 ).then(Commands.argument("range", Range3ArgumentType.range3()
                 ).then(Commands.argument("expression", SuggestStringArgumentType.argument("null", "\"y>0.25|y<-0.25\"", "\"dis>0.5&dis<1\"", "\"s1>0&s1<0.5&s2>0&dis<1\"")).executes(
                         (context) -> execute(
@@ -36,9 +37,10 @@ public class ConditionalCommand {
                                 Color4ArgumentType.getColor4(context, "color"),
                                 DoubleArgumentType.getDouble(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
+                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 Range3ArgumentType.getRange3(context, "range"),
                                 StringArgumentType.getString(context, "expression"),
-                                0.1, 0, null, 1.0, null)
+                                0.1, null, 1.0, null)
                 ).then(Commands.argument("step", SuggestDoubleArgumentType.doubleArg(Math.ulp(0.0), Double.MAX_VALUE, 0.1)).executes(
                         (context) -> execute(
                                 context,
@@ -48,23 +50,10 @@ public class ConditionalCommand {
                                 Color4ArgumentType.getColor4(context, "color"),
                                 DoubleArgumentType.getDouble(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
-                                Range3ArgumentType.getRange3(context, "range"),
-                                StringArgumentType.getString(context, "expression"),
-                                DoubleArgumentType.getDouble(context, "step"),
-                                0, null, 1.0, null)
-                ).then(Commands.argument("lifetime", SuggestIntegerArgumentType.integer(-1, Integer.MAX_VALUE, 0)).executes(
-                        (context) -> execute(
-                                context,
-                                ParticleArgument.getParticle(context, "name"),
-                                Vec3Argument.getVec3(context, "pos"),
-                                SizeArgumentType.getSize(context, "size"),
-                                Color4ArgumentType.getColor4(context, "color"),
-                                DoubleArgumentType.getDouble(context, "light"),
-                                Speed3ArgumentType.getSpeed3(context, "speed"),
-                                Range3ArgumentType.getRange3(context, "range"),
-                                StringArgumentType.getString(context, "expression"),
-                                DoubleArgumentType.getDouble(context, "step"),
                                 IntegerArgumentType.getInteger(context, "lifetime"),
+                                Range3ArgumentType.getRange3(context, "range"),
+                                StringArgumentType.getString(context, "expression"),
+                                DoubleArgumentType.getDouble(context, "step"),
                                 null, 1.0, null)
                 ).then(Commands.argument("speedExpression", SuggestStringArgumentType.argument("null", "\"vy=0.1\"", "\"(vx,vy,vz)=((random(),random(),random())-0.5)*t/100\"")).executes(
                         (context) -> execute(
@@ -75,10 +64,10 @@ public class ConditionalCommand {
                                 Color4ArgumentType.getColor4(context, "color"),
                                 DoubleArgumentType.getDouble(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
+                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 Range3ArgumentType.getRange3(context, "range"),
                                 StringArgumentType.getString(context, "expression"),
                                 DoubleArgumentType.getDouble(context, "step"),
-                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 StringArgumentType.getString(context, "speedExpression"),
                                 1.0, null)
                 ).then(Commands.argument("speedStep", SuggestDoubleArgumentType.doubleArg(Math.ulp(0.0), Double.MAX_VALUE, 1.0)).executes(
@@ -90,10 +79,10 @@ public class ConditionalCommand {
                                 Color4ArgumentType.getColor4(context, "color"),
                                 DoubleArgumentType.getDouble(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
+                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 Range3ArgumentType.getRange3(context, "range"),
                                 StringArgumentType.getString(context, "expression"),
                                 DoubleArgumentType.getDouble(context, "step"),
-                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 StringArgumentType.getString(context, "speedExpression"),
                                 DoubleArgumentType.getDouble(context, "speedStep"),
                                 null)
@@ -106,10 +95,10 @@ public class ConditionalCommand {
                                 Color4ArgumentType.getColor4(context, "color"),
                                 DoubleArgumentType.getDouble(context, "light"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
+                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 Range3ArgumentType.getRange3(context, "range"),
                                 StringArgumentType.getString(context, "expression"),
                                 DoubleArgumentType.getDouble(context, "step"),
-                                IntegerArgumentType.getInteger(context, "lifetime"),
                                 StringArgumentType.getString(context, "speedExpression"),
                                 DoubleArgumentType.getDouble(context, "speedStep"),
                                 StringArgumentType.getString(context, "group"))
@@ -117,8 +106,8 @@ public class ConditionalCommand {
         );
     }
 
-    private static int execute(CommandContext<CommandSourceStack> context, ParticleOptions effect, Vec3 pos, double size, Vector4f color, double light, Vec3 speed, Vec3 range, String expression, double step, int lifetime, String speedExpression, double speedStep, String group) {
-        PacketDistributor.sendToPlayersInDimension(context.getSource().getLevel(), new ConditionalPayload(effect, pos, size, color, light, speed, range, expression, step, lifetime, speedExpression, speedStep, group));
+    private static int execute(CommandContext<CommandSourceStack> context, ParticleOptions effect, Vec3 pos, double size, Vector4f color, double light, Vec3 speed, int lifetime, Vec3 range, String expression, double step, String speedExpression, double speedStep, String group) {
+        PacketDistributor.sendToPlayersInDimension(context.getSource().getLevel(), new ConditionalPayload(effect, pos, size, color, light, speed, lifetime, range, expression, step, speedExpression, speedStep, group));
         return 1;
     }
 }

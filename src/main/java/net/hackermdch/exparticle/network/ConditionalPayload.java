@@ -35,10 +35,10 @@ public class ConditionalPayload implements CustomPacketPayload {
     private final double vx;
     private final double vy;
     private final double vz;
+    private final int lifetime;
     private final double dx;
     private final double dy;
     private final double dz;
-    private final int lifetime;
     private final boolean hasExpression;
     private final String expression;
     private final double step;
@@ -48,7 +48,7 @@ public class ConditionalPayload implements CustomPacketPayload {
     private final String group;
     private final ParticleOptions effect;
 
-    public ConditionalPayload(ParticleOptions effect, Vec3 pos, double size, Vector4f color, double light, Vec3 speed, Vec3 range, String expression, double step, int lifetime, String speedExpression, double speedStep, String group) {
+    public ConditionalPayload(ParticleOptions effect, Vec3 pos, double size, Vector4f color, double light, Vec3 speed, int lifetime, Vec3 range, String expression, double step, String speedExpression, double speedStep, String group) {
         this.x = pos.x;
         this.y = pos.y;
         this.z = pos.z;
@@ -61,10 +61,10 @@ public class ConditionalPayload implements CustomPacketPayload {
         this.vx = speed.x;
         this.vy = speed.y;
         this.vz = speed.z;
+        this.lifetime = lifetime;
         this.dx = range.x;
         this.dy = range.y;
         this.dz = range.z;
-        this.lifetime = lifetime;
         this.hasExpression = validString(expression);
         this.expression = expression;
         this.step = step;
@@ -89,10 +89,10 @@ public class ConditionalPayload implements CustomPacketPayload {
         vx = buf.readDouble();
         vy = buf.readDouble();
         vz = buf.readDouble();
+        lifetime = buf.readInt();
         dx = buf.readDouble();
         dy = buf.readDouble();
         dz = buf.readDouble();
-        lifetime = buf.readInt();
         hasExpression = buf.readBoolean();
         expression = readString(buf, hasExpression, null);
         step = readDouble(buf, hasExpression, 0.1);
@@ -119,10 +119,10 @@ public class ConditionalPayload implements CustomPacketPayload {
         buf.writeDouble(vx);
         buf.writeDouble(vy);
         buf.writeDouble(vz);
+        buf.writeInt(lifetime);
         buf.writeDouble(dx);
         buf.writeDouble(dy);
         buf.writeDouble(dz);
-        buf.writeInt(lifetime);
         buf.writeBoolean(hasExpression);
         if (hasExpression) {
             buf.writeUtf(expression);
