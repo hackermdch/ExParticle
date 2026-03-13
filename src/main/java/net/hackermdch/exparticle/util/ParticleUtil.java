@@ -31,6 +31,7 @@ public class ParticleUtil {
             var particle = CLIENT.particleEngine.createParticle(effect, x, y, z, vx, vy, vz);
             if (particle != null) {
                 particle.setManaged(true);
+                particle.setGravity(0.0F);
                 particle.setCustomSize(size);
                 particle.setColor(red, green, blue);
                 particle.alpha = alpha;
@@ -43,7 +44,6 @@ public class ParticleUtil {
                     particle.yd = vy;
                     particle.zd = vz;
                 }
-                particle.setGravity(0.0F);
                 particle.setCenterX(cx);
                 particle.setCenterY(cy);
                 particle.setCenterZ(cz);
@@ -71,7 +71,7 @@ public class ParticleUtil {
     }
 
     public static void spawnTickParticle(ParticleOptions effect, double x, double y, double z, double begin, double end, String expression, double step, int cpt, String speedExpression, double speedStep, String group, boolean polar) {
-        new TickParticleTask(effect, x, y, z, -1.0, 1.0F, 1.0F, 1.0F, 1.0F, -1.0, 0.0F, 0.0F, 0.0F, 0, begin, end, expression, step, cpt, speedExpression, speedStep, group, polar, true).run();
+        new TickParticleTask(effect, x, y, z, 1.0, 1.0F, 1.0F, 1.0F, 1.0F, 1.0, 0.0F, 0.0F, 0.0F, 0, begin, end, expression, step, cpt, speedExpression, speedStep, group, polar, true).run();
     }
 
     public static void spawnImageParticle(ParticleOptions effect, double x, double y, double z, String path, double scaling, int xRotate, int yRotate, int zRotate, boolean flip, double dpb, double size, double vx, double vy, double vz, int lifetime, String speedExpression, double speedStep, String group) {
@@ -435,13 +435,13 @@ public class ParticleUtil {
         private final double y;
         private final double z;
         private final double scaling;
-        private final double size;
         private final int xRotate;
         private final int yRotate;
         private final int zRotate;
         private final boolean flip;
         private final double[][] matrix;
         private final double dpb;
+        private final double size;
         private final double vx;
         private final double vy;
         private final double vz;

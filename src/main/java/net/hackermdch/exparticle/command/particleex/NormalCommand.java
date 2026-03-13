@@ -26,8 +26,8 @@ public class NormalCommand {
                 ).then(Commands.argument("color", Color4ArgumentType.color4()
                 ).then(Commands.argument("light", SuggestIntegerArgumentType.integer(-1, 15, 15)
                 ).then(Commands.argument("speed", Speed3ArgumentType.speed3()
-                ).then(Commands.argument("range", Range3ArgumentType.range3()
                 ).then(Commands.argument("lifetime", SuggestIntegerArgumentType.integer(-1, Integer.MAX_VALUE, 0)
+                ).then(Commands.argument("range", Range3ArgumentType.range3()
                 ).then(Commands.argument("count", SuggestIntegerArgumentType.integer(0, Integer.MAX_VALUE, 1)).executes(
                         (context) -> execute(
                                 context,

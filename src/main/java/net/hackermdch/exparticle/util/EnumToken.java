@@ -26,6 +26,8 @@ public enum EnumToken {
     GE(">="),
     EQ("=="),
     NEQ("!="),
+    QUESTION("?"),
+    COLON(":"),
     NUMBER,
     IDENTIFIER;
 

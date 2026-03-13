@@ -28,7 +28,7 @@ public class VideoCommand {
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
-                                0.1, 0, 0, 0, 0, 10.0, -1.0, null, 0, null, 1.0, null)
+                                0.1, 0, 0, 0, 0, 10.0, 1.0, null, 0, null, 1.0, null)
                 ).then(Commands.argument("scaling", SuggestDoubleArgumentType.doubleArg(0.0, Double.MAX_VALUE, 0.1)).executes(
                         (context) -> execute(
                                 context,
@@ -36,7 +36,7 @@ public class VideoCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                0, 0, 0, 0, 10.0, -1.0, null, 0, null, 1.0, null)
+                                0, 0, 0, 0, 10.0, 1.0, null, 0, null, 1.0, null)
                 ).then(Commands.argument("xRotate", RotateArgumentType.rotate()).executes(
                         (context) -> execute(
                                 context,
@@ -45,7 +45,7 @@ public class VideoCommand {
                                 StringArgumentType.getString(context, "path"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
                                 RotateArgumentType.getRotate(context, "xRotate"),
-                                0, 0, 0, 10.0, -1.0, null, 0, null, 1.0, null)
+                                0, 0, 0, 10.0, 1.0, null, 0, null, 1.0, null)
                 ).then(Commands.argument("yRotate", RotateArgumentType.rotate()).executes(
                         (context) -> execute(
                                 context,
@@ -55,7 +55,7 @@ public class VideoCommand {
                                 DoubleArgumentType.getDouble(context, "scaling"),
                                 RotateArgumentType.getRotate(context, "xRotate"),
                                 RotateArgumentType.getRotate(context, "yRotate"),
-                                0, 0, 10.0, -1.0, null, 0, null, 1.0, null)
+                                0, 0, 10.0, 1.0, null, 0, null, 1.0, null)
                 ).then(Commands.argument("zRotate", RotateArgumentType.rotate()).executes(
                         (context) -> execute(
                                 context,
@@ -66,7 +66,7 @@ public class VideoCommand {
                                 RotateArgumentType.getRotate(context, "xRotate"),
                                 RotateArgumentType.getRotate(context, "yRotate"),
                                 RotateArgumentType.getRotate(context, "zRotate"),
-                                0, 10.0, -1.0, null, 0, null, 1.0, null)
+                                0, 10.0, 1.0, null, 0, null, 1.0, null)
                 ).then(Commands.argument("flip", FlipArgumentType.flip()).executes(
                         (context) -> execute(
                                 context,
@@ -78,7 +78,7 @@ public class VideoCommand {
                                 RotateArgumentType.getRotate(context, "yRotate"),
                                 RotateArgumentType.getRotate(context, "zRotate"),
                                 FlipArgumentType.getFlip(context, "flip"),
-                                10.0, -1.0, null, 0, null, 1.0, null)
+                                10.0, 1.0, null, 0, null, 1.0, null)
                 ).then(Commands.argument("dpb", SuggestDoubleArgumentType.doubleArg(0.0, Double.MAX_VALUE, 10.0)).executes(
                         (context) -> execute(
                                 context,
@@ -91,7 +91,7 @@ public class VideoCommand {
                                 RotateArgumentType.getRotate(context, "zRotate"),
                                 FlipArgumentType.getFlip(context, "flip"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
-                                -1.0,null, 0, null, 1.0, null)
+                                1.0,null, 0, null, 1.0, null)
                 ).then(Commands.argument("size", SizeArgumentType.size()).executes(
                         (context) -> execute(
                                 context,

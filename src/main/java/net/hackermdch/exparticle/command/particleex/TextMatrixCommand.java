@@ -29,7 +29,7 @@ public class TextMatrixCommand {
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
-                                1.0, "E3", 10.0, -1.0, null, 0, null, 1.0, null)
+                                1.0, "E3", 10.0, 0.5, null, 0, null, 1.0, null)
                 ).then(Commands.argument("scaling", SuggestDoubleArgumentType.doubleArg(0.0, Double.MAX_VALUE, 1.0)).executes(
                         context -> execute(
                                 context,
@@ -37,7 +37,7 @@ public class TextMatrixCommand {
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
-                                "E3", 10.0, -1.0, null, 0, null, 1.0, null)
+                                "E3", 10.0, 0.5, null, 0, null, 1.0, null)
                 ).then(Commands.argument("matrix", SuggestStringArgumentType.argument("E3", "E4", "\"(1,0,0,0,,0,1,0,0,,0,0,1,-100,,0,0,0,1)\"", "\"(0.5,-0.5,0.7071,-0.7071,,0.1464466,0.8535534,0.5,-5,,-0.8535534,-0.1464466,0.5,-5,,0,0,0,1)\"")).executes(
                         context -> execute(
                                 context,
@@ -46,7 +46,7 @@ public class TextMatrixCommand {
                                 ComponentArgument.getComponent(context, "text"),
                                 DoubleArgumentType.getDouble(context, "scaling"),
                                 StringArgumentType.getString(context, "matrix"),
-                                10.0, -1.0, null, 0, null, 1.0, null)
+                                10.0, 0.5, null, 0, null, 1.0, null)
                 ).then(Commands.argument("dpb", SuggestDoubleArgumentType.doubleArg(0.0, Double.MAX_VALUE, 10.0)).executes(
                         context -> execute(
                                 context,
@@ -56,7 +56,7 @@ public class TextMatrixCommand {
                                 DoubleArgumentType.getDouble(context, "scaling"),
                                 StringArgumentType.getString(context, "matrix"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
-                                -1.0, null, 0, null, 1.0, null)
+                                0.5, null, 0, null, 1.0, null)
                 ).then(Commands.argument("size", SizeArgumentType.size()).executes(
                         (context) -> execute(
                                 context,
