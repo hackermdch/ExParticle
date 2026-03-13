@@ -72,4 +72,12 @@ public interface ParticleInj extends IParticle {
     default double getCustomLight() {
         throw new NotImplementedException();
     }
+
+    default void setGravity(float gravity) {
+        throw new NotImplementedException();
+    }
+
+    default void setFriction(float friction) {
+        throw new NotImplementedException();
+    }
 }

@@ -91,15 +91,19 @@ public abstract class ParticleMixin implements IParticle {
     }
 
     public void setCustomLight(double light) {
-        if (Double.isNaN(light)) {
-            this.customLight = Double.NaN;
-        } else {
-            this.customLight = (((int)(light * 255.0)) & 0xFF) / 255.0;
-        }
+        customLight = Double.isNaN(light) ? Double.NaN : ((int)(light * 255) & 0xFF) / 255.0;
     }
 
     public double getCustomLight() {
         return this.customLight;
+    }
+
+    public void setGravity(float gravity) {
+        this.gravity = gravity;
+    }
+
+    public void setFriction(float friction) {
+        this.friction = friction;
     }
 
     public void customTick() {
@@ -174,16 +178,6 @@ public abstract class ParticleMixin implements IParticle {
         }
     }
 
-    @Inject(method = "getLightColor", at = @At("HEAD"), cancellable = true)
-    protected void onGetLightColor(float partialTick, CallbackInfoReturnable<Integer> cir) {
-        double custom = this.getCustomLight();
-        if (!Double.isNaN(custom)) {
-            int block = (int) (custom * 15);
-            int sky = (int) (custom * 15);
-            cir.setReturnValue((sky << 20) | (block << 4));
-        }
-    }
-
     @Override
     public void setManaged(boolean val) {
         managed = val;
@@ -194,19 +188,19 @@ public abstract class ParticleMixin implements IParticle {
         return managed;
     }
 
-    @Override
-    public void setGravity(float gravity) {
-        this.gravity = gravity;
-    }
-
-    @Override
-    public void setFriction(float friction) {
-        this.friction = friction;
-    }
-
     @Unique
     private double nanToZero(double num) {
         return !Double.isNaN(num) ? num : (double) 0.0F;
+    }
+
+    @Inject(method = "getLightColor", at = @At("HEAD"), cancellable = true)
+    protected void onGetLightColor(float partialTick, CallbackInfoReturnable<Integer> cir) {
+        double custom = this.getCustomLight();
+        if (!Double.isNaN(custom)) {
+            int block = (int) (custom * 15);
+            int sky = (int) (custom * 15);
+            cir.setReturnValue((sky << 20) | (block << 4));
+        }
     }
 
     @Shadow

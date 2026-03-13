@@ -231,4 +231,22 @@ public class Expression {
             return sb.deleteCharAt(sb.length() - 1).toString();
         }
     }
+
+    // 三元表达式节点
+    public static class TernaryExp extends Expression {
+        public final Expression cond;     // 条件表达式
+        public final Expression trueExp;  // 真分支
+        public final Expression falseExp; // 假分支
+
+        public TernaryExp(int line, Expression cond, Expression trueExp, Expression falseExp) {
+            super(line, T_UNKNOW);         // 类型未知，延迟到代码生成时确定
+            this.cond = cond;
+            this.trueExp = trueExp;
+            this.falseExp = falseExp;
+        }
+
+        public String toString() {
+            return cond.toString() + "?" + trueExp.toString() + ":" + falseExp.toString();
+        }
+    }
 }

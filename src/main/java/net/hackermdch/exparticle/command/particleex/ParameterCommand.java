@@ -240,7 +240,7 @@ public class ParameterCommand {
             Vec3 pos = Vec3Argument.getVec3(context, "pos");
 
             // 根据 exp 模式决定是否读取固定属性
-            double size = config.exp() ? -1.0 : SizeArgumentType.getSize(context, "size");
+            double size = config.exp() ? 1.0 : SizeArgumentType.getSize(context, "size");
             Vector4f color = config.exp() ? new Vector4f() : Color4ArgumentType.getColor4(context, "color");
             int light = config.exp() ? 15 : IntegerArgumentType.getInteger(context, "light");
             Vec3 speed = config.exp() ? Vec3.ZERO : Speed3ArgumentType.getSpeed3(context, "speed");
