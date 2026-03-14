@@ -86,7 +86,7 @@ public class Parser {
     }
 
     private static Expression parseExp(Lexer lexer) {
-        return parseExp7(lexer);
+        return parseExp8(lexer);
     }
 
     private static Expression parseIdentifier(Lexer lexer) {
@@ -194,6 +194,18 @@ public class Parser {
             }
         }
         return false;
+    }
+
+    private static Expression parseExp8(Lexer lexer) {
+        Expression exp = parseExp7(lexer);
+        if (lexer.peekToken().enumToken == EnumToken.QUESTION) {
+            Token qToken = lexer.nextToken();
+            Expression trueExp = parseExp7(lexer);
+            lexer.nextToken(EnumToken.COLON);
+            Expression falseExp = parseExp8(lexer);
+            exp = Optimize.optimizeTernary(new Expression.TernaryExp(qToken.line, exp, trueExp, falseExp));
+        }
+        return exp;
     }
 
     private static Expression parseExp7(Lexer lexer) {

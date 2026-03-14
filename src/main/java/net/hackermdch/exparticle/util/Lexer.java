@@ -154,6 +154,12 @@ public class Lexer {
                     case '|':
                         this.skip(1);
                         return new Token(this.line, EnumToken.OR);
+                    case '?':
+                        this.skip(1);
+                        return new Token(this.line, EnumToken.QUESTION);
+                    case ':':
+                        this.skip(1);
+                        return new Token(this.line, EnumToken.COLON);
                     default:
                         if (ch != '.' && !this.isDigit(ch)) {
                             if (ch != '_' && !this.isLatter(ch)) {

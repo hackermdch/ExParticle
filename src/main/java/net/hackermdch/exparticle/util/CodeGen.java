@@ -115,6 +115,8 @@ public class CodeGen {
                     codeGenTypeTransform(codeGenFunctionCallExp(functionCallExp.name, functionCallExp.args), targetType);
             case Expression.AssignExp assignExp ->
                     codeGenTypeTransform(codeGenAssignExp(assignExp.varList, assignExp.expList, targetType != T_VOID), targetType);
+            case Expression.TernaryExp ternaryExp ->
+                    codeGenTypeTransform(codeGenTernaryExp(ternaryExp), targetType);
             case null, default -> T_VOID;
         };
     }
@@ -591,6 +593,8 @@ public class CodeGen {
                     ++j;
                 }
             }
+        } else {
+            maxSimilarityIndex = 0;
         }
         if (maxSimilarityIndex == T_UNKNOW) throw new RuntimeException("function not found: " + name);
         var method = methods.get(maxSimilarityIndex);
@@ -672,6 +676,66 @@ public class CodeGen {
         }
         if (needReturn) codeGenNameExp("__RETURN");
         return needReturn ? types[expList.length - 1] : T_VOID;
+    }
+
+    // 生成三元表达式的字节码
+    private int codeGenTernaryExp(Expression.TernaryExp exp) {
+        // 若尚未确定返回类型，通过模拟计算分支类型并统一
+        if (exp.returnType == T_UNKNOW) {
+            startSimulation();
+            int t1 = codeGenExp(exp.trueExp, T_UNKNOW);
+            int t2 = codeGenExp(exp.falseExp, T_UNKNOW);
+            stopSimulation();
+
+            // 类型提升规则：int + int = int，其他数值组合提升为 double
+            if (t1 == T_INT && t2 == T_INT) {
+                exp.returnType = T_INT;
+            } else if ((t1 == T_INT || t1 == T_DOUBLE) && (t2 == T_INT || t2 == T_DOUBLE)) {
+                exp.returnType = T_DOUBLE;
+            } else {
+                // 目前仅支持数值类型，遇到矩阵等类型时抛出明确异常
+                throw new RuntimeException("Ternary operator only supports numeric types (int/double), got: " + t1 + " and " + t2);
+            }
+        }
+
+        int targetType = exp.returnType;
+
+        // 生成条件表达式，强制转为 int（0/1）
+        int condType = codeGenExp(exp.cond, T_INT); // 条件强制转换为int
+        Label falseLabel = new Label();
+        Label endLabel = new Label();
+
+        mv.visitJumpInsn(IFEQ, falseLabel); // if (条件 == 0) 跳转到 falseLabel
+
+        // 真分支
+        int trueType = codeGenExp(exp.trueExp, targetType);
+        int resultVar = maxLocal;                 // 分配临时变量槽位
+        if (targetType == T_DOUBLE) {
+            mv.visitVarInsn(DSTORE, resultVar);   // 存储 double
+            maxLocal += 2;
+        } else {
+            mv.visitVarInsn(ISTORE, resultVar);   // 存储 int
+            maxLocal += 1;
+        }
+        mv.visitJumpInsn(GOTO, endLabel);         // 跳过假分支
+
+        // 假分支
+        mv.visitLabel(falseLabel);
+        int falseType = codeGenExp(exp.falseExp, targetType);
+        if (targetType == T_DOUBLE) {
+            mv.visitVarInsn(DSTORE, resultVar);
+        } else {
+            mv.visitVarInsn(ISTORE, resultVar);
+        }
+
+        // 合并
+        mv.visitLabel(endLabel);
+        if (targetType == T_DOUBLE) {
+            mv.visitVarInsn(DLOAD, resultVar);   // 加载结果（double）
+        } else {
+            mv.visitVarInsn(ILOAD, resultVar);   // 加载结果（int）
+        }
+        return targetType;
     }
 
     private int codeGenTypeTransform(int sourceType, int targetType) {

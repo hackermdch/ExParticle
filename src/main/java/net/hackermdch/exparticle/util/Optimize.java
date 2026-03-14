@@ -171,6 +171,24 @@ public class Optimize {
         }
     }
 
+    // 三元表达式的常量折叠优化
+    public static Expression optimizeTernary(Expression.TernaryExp exp) {
+        // 如果条件为常量，直接折叠
+        if (exp.cond instanceof Expression.IntegerExp) {          // 条件为整数常量
+            int condVal = ((Expression.IntegerExp) exp.cond).val;
+            return condVal != 0 ? exp.trueExp : exp.falseExp;
+        } else if (exp.cond instanceof Expression.FloatExp) {     // 条件为浮点常量
+            double condVal = ((Expression.FloatExp) exp.cond).val;
+            return condVal != 0.0 ? exp.trueExp : exp.falseExp;
+        }
+        // 如果真/假分支完全相同，返回其中一个
+        if (exp.trueExp == exp.falseExp) {
+            return exp.trueExp;
+        }
+        // 其他优化（如同类型常量计算）可以后续扩展
+        return exp;
+    }
+
     private static boolean trueOnly(Expression exp) {
         if (exp instanceof Expression.IntegerExp) {
             return ((Expression.IntegerExp) exp).val != 0;
