@@ -24,6 +24,9 @@ public class ParticleExCommand {
         GroupCommand.register(root);
         GlobalVariableCommand.register(root);
         UserFunctionCommand.register(root);
+        CustomNormalCommand.register(root, context);
+        CustomConditionalCommand.register(root, context);
+        CustomParameterCommand.register(root, context);
         dispatcher.register(root);
     }
 

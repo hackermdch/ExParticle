@@ -1,5 +1,6 @@
 package net.hackermdch.exparticle.network;
 
+import net.hackermdch.exparticle.command.particleex.*;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -21,6 +22,9 @@ public class Networking {
         GroupChangePayload.register(registrar);
         GlobalVariablePayload.register(registrar);
         UserFunctionPayload.register(registrar);
+        CustomNormalPayload.register(registrar);
+        CustomConditionalPayload.register(registrar);
+        CustomParameterPayload.register(registrar);
     }
 
     public static void register(IEventBus bus) {
