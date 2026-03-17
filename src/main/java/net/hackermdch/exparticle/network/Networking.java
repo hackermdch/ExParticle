@@ -25,6 +25,10 @@ public class Networking {
         CustomNormalPayload.register(registrar);
         CustomConditionalPayload.register(registrar);
         CustomParameterPayload.register(registrar);
+        CustomImagePayload.register(registrar);
+        CustomImageMatrixPayload.register(registrar);
+        CustomVideoPayload.register(registrar);
+        CustomVideoMatrixPayload.register(registrar);
     }
 
     public static void register(IEventBus bus) {

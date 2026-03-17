@@ -27,6 +27,10 @@ public class ParticleExCommand {
         CustomNormalCommand.register(root, context);
         CustomConditionalCommand.register(root, context);
         CustomParameterCommand.register(root, context);
+        CustomImageCommand.register(root, context);
+        CustomImageMatrixCommand.register(root, context);
+        CustomVideoCommand.register(root, context);
+        CustomVideoMatrixCommand.register(root, context);
         dispatcher.register(root);
     }
 
