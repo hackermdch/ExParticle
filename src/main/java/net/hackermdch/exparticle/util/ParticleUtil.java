@@ -17,7 +17,7 @@ import java.util.function.Predicate;
 public class ParticleUtil {
     private static final Queue<TimerTask> TICK_START_TASKS = Queues.newArrayDeque();
     private static final Queue<TimerTask> TICK_END_TASKS = Queues.newArrayDeque();
-    private static final Minecraft CLIENT = Minecraft.getInstance();
+    public static final Minecraft CLIENT = Minecraft.getInstance();
 
     public static Particle spawnParticle(ParticleOptions effect, double x, double y, double z, double cx, double cy, double cz, float red, float green, float blue, float alpha, double vx, double vy, double vz, int age, String expression, double step, String group) {
         try {
@@ -115,7 +115,7 @@ public class ParticleUtil {
         VideoUtil.decoder(path, new VideoConsumer(effect, x, y, z, scaling, xRotate, yRotate, zRotate, flip, matrix, dpb, vx, vy, vz, age, speedExpression, speedStep, group));
     }
 
-    private static int[][] getRotateFlipMat(int xRotate, int yRotate, int zRotate, boolean flip, int rows, int cols) {
+    public static int[][] getRotateFlipMat(int xRotate, int yRotate, int zRotate, boolean flip, int rows, int cols) {
         var flipMat = new int[][]{{flip ? -1 : 1, 0, 0, flip ? cols - 1 : 0}, {0, -1, 0, rows - 1}, {0, 0, 1, 0}, {0, 0, 0, 1}};
         var zMat = new int[][]{{dCos(zRotate), -dSin(zRotate), 0, xMove(zRotate, rows, cols)}, {dSin(zRotate), dCos(zRotate), 0, yMove(zRotate, rows, cols)}, {0, 0, 1, 0}, {0, 0, 0, 1}};
         var yMat = new int[][]{{dCos(yRotate), 0, dSin(yRotate), 0}, {0, 1, 0, 0}, {-dSin(yRotate), 0, dCos(yRotate), 0}, {0, 0, 0, 1}};
@@ -377,5 +377,70 @@ public class ParticleUtil {
                 return alive;
             }
         }
+    }
+
+    /**
+     * 自定义 tick 任务，每 tick 生成一批由表达式完全控制的粒子。
+     */
+    public static class TickCustomParticleTask extends TimerTask {
+        private final ParticleOptions particleType;
+        private final double x, y, z;
+        private final IExecutable exe;
+        private final double step;
+        private final int cpt;
+        private double t;
+        private final double end;
+        private final String speedExpression;
+        private final double speedStep;
+        private final String group;
+        private final boolean polar;
+
+        public TickCustomParticleTask(ParticleOptions particleType, double x, double y, double z, double begin, double end, String expression, double step, int cpt, String speedExpression, double speedStep, String group, boolean polar) {
+            this.particleType = particleType;
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.exe = ExpressionUtil.parse(expression);
+            this.step = step;
+            this.cpt = cpt;
+            this.t = begin;
+            this.end = end;
+            this.speedExpression = speedExpression;
+            this.speedStep = speedStep;
+            this.group = group;
+            this.polar = polar;
+        }
+
+        @Override
+        public void run() {
+            if (exe == null) return;
+            var data = exe.getData();
+            for (int i = 0; i < cpt && t <= end; t += step, i++) {
+                data.t = t;
+                exe.invoke();
+                double dx, dy, dz;
+                if (polar) {
+                    dx = data.dis * Math.cos(data.s2) * Math.cos(data.s1);
+                    dy = data.dis * Math.sin(data.s2);
+                    dz = data.dis * Math.cos(data.s2) * Math.sin(data.s1);
+                } else {
+                    dx = data.x;
+                    dy = data.y;
+                    dz = data.z;
+                }
+                // 使用构建器创建粒子（构建器需在 util 包中可用）
+                CustomParticleBuilder.buildParticle(particleType, x + dx, y + dy, z + dz, x, y, z, speedExpression, speedStep, group, data);
+            }
+            if (t <= end) {
+                addTask(new TickEndTask(this), false);
+            }
+        }
+    }
+
+    /**
+     * 启动一个自定义 tick 粒子任务。
+     */
+    public static void spawnCustomTickParticle(ParticleOptions effect, double x, double y, double z, double begin, double end, String expression, double step, int cpt, String speedExpression, double speedStep, String group, boolean polar) {
+        new TickCustomParticleTask(effect, x, y, z, begin, end, expression, step, cpt, speedExpression, speedStep, group, polar).run();
     }
 }
