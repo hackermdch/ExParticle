@@ -56,4 +56,28 @@ public interface ParticleInj extends IParticle {
     default boolean isManaged() {
         throw new NotImplementedException();
     }
+
+    default void setCustomSize(double size) {
+        throw new NotImplementedException();
+    }
+
+    default double getCustomSize() {
+        throw new NotImplementedException();
+    }
+
+    default void setCustomLight(double light) {
+        throw new NotImplementedException();
+    }
+
+    default double getCustomLight() {
+        throw new NotImplementedException();
+    }
+
+    default void setGravity(float gravity) {
+        throw new NotImplementedException();
+    }
+
+    default void setFriction(float friction) {
+        throw new NotImplementedException();
+    }
 }

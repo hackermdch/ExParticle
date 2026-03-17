@@ -34,6 +34,7 @@ public class ParticleUtil {
                     particle.yd = vy;
                     particle.zd = vz;
                 }
+                particle.setGravity(0.0f);
                 particle.setCenterX(cx);
                 particle.setCenterY(cy);
                 particle.setCenterZ(cz);

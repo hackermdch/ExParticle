@@ -4,6 +4,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.SimpleAnimatedParticle;
 import net.minecraft.client.particle.TextureSheetParticle;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -17,5 +18,10 @@ public abstract class SimpleAnimatedParticleMixin extends TextureSheetParticle {
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/SimpleAnimatedParticle;setAlpha(F)V"), cancellable = true)
     private void onSetAlpha(CallbackInfo ci) {
         if (isManaged()) ci.cancel();
+    }
+
+    @Overwrite
+    public int getLightColor(float partialTick) {
+        return super.getLightColor(partialTick);
     }
 }
