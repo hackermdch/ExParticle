@@ -29,7 +29,7 @@ public class CustomVideoCommand {
                 .then(Commands.argument("flip", FlipArgumentType.flip())
                 .then(Commands.argument("dpb", SuggestDoubleArgumentType.doubleArg(0.0, Double.MAX_VALUE, 10.0))
                 .executes(execute(false, false, false))
-                .then(Commands.argument("attr", SuggestStringArgumentType.argument("\"size=0.75; age=-1\""))
+                .then(Commands.argument("attr", SuggestStringArgumentType.argument("null", "\"size=0.75; age=-1\""))
                 .executes(execute(true, false, false))
                 .then(Commands.argument("speedExpression", SuggestStringArgumentType.argument("null", "\"vy=0.1\""))
                 .executes(execute(true, true, false))

@@ -42,7 +42,7 @@ public class CustomParameterCommand {
         // 基础参数：begin, end, expression, step(可选)
         return Commands.argument("begin", SuggestDoubleArgumentType.doubleArg(-Double.MAX_VALUE, Double.MAX_VALUE, -10.0))
                 .then(Commands.argument("end", SuggestDoubleArgumentType.doubleArg(-Double.MAX_VALUE, Double.MAX_VALUE, 10.0))
-                .then(Commands.argument("expression", SuggestStringArgumentType.argument("null", "\"size=sin(t)+1;light=0.5;cr=1;cg=0;cb=0;vx=0;vy=0.1;vz=0;lifetime=100\""))
+                .then(Commands.argument("expression", SuggestStringArgumentType.argument("null", "\"x,y=t,sin(t); size=cos(t)+1\"", "\"vx=sin(t); vy=cos(t)\""))
                 .executes(createExecuteCommand(polar, tick, false, false, false)) // 无step，无cpt，无speedExpression...
                 .then(Commands.argument("step", SuggestDoubleArgumentType.doubleArg(Math.ulp(0.0), Double.MAX_VALUE, 0.1))
                 .executes(createExecuteCommand(polar, tick, true, false, false)) // 有step
@@ -64,7 +64,7 @@ public class CustomParameterCommand {
 
     private static ArgumentBuilder<CommandSourceStack, ?> buildSpeedChain(boolean polar, boolean tick) {
         // 其他可选参数: speedExpression, speedStep, group
-        return Commands.argument("speedExpression", SuggestStringArgumentType.argument("null", "\"vy=0.1\"", "\"(vx,vy,vz)=((random(),random(),random())-0.5)*t/100\""))
+        return Commands.argument("speedExpression", SuggestStringArgumentType.argument("null", "\"(vx,vy,vz)=(x,y,z,1)*(rotateDeg(0,10,0)-identity(4))\""))
                 .executes(createExecuteCommand(polar, tick, true, tick, true, false)) // 有step，有cpt（如果tick），有speedExpression
                 .then(Commands.argument("speedStep", SuggestDoubleArgumentType.doubleArg(Math.ulp(0.0), Double.MAX_VALUE, 1.0))
                 .executes(createExecuteCommand(polar, tick, true, tick, true, true)) // 有step，有cpt（如果tick），有speedExpression，有speedStep

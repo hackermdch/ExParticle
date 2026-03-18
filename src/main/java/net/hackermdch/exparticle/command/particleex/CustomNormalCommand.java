@@ -21,7 +21,7 @@ public class CustomNormalCommand {
         parent.then(Commands.literal("custom-normal")
                 .then(Commands.argument("name", ParticleArgument.particle(ctx))
                 .then(Commands.argument("pos", Vec3Argument.vec3())
-                .then(Commands.argument("attr", SuggestStringArgumentType.argument("\"size=1; cr=1; cg=1; cb=1; alpha=1; light=15; vx=0; vy=0; vz=0; age=100\""))
+                .then(Commands.argument("attr", SuggestStringArgumentType.argument("null", "\"size=1; cr,cg,cb,alpha=1,1,1,1; age=100\""))
                 .then(Commands.argument("range", Range3ArgumentType.range3())
                 .then(Commands.argument("count", SuggestIntegerArgumentType.integer(0, Integer.MAX_VALUE, 1))
                 .executes(execute(false, false, false))

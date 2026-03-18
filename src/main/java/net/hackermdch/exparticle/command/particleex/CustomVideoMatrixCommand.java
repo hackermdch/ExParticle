@@ -26,7 +26,7 @@ public class CustomVideoMatrixCommand {
                 .then(Commands.argument("matrix", SuggestStringArgumentType.argument("E3", "E4", "\"(1,0,0,0,,0,1,0,0,,0,0,1,-100,,0,0,0,1)\""))
                 .then(Commands.argument("dpb", SuggestDoubleArgumentType.doubleArg(0.0, Double.MAX_VALUE, 10.0))
                 .executes(execute(false, false, false))
-                .then(Commands.argument("attr", SuggestStringArgumentType.argument("\"size=0.75; age=-1\""))
+                .then(Commands.argument("attr", SuggestStringArgumentType.argument("null", "\"size=0.75; age=-1\""))
                 .executes(execute(true, false, false))
                 .then(Commands.argument("speedExpression", SuggestStringArgumentType.argument("null", "\"vy=0.1\""))
                 .executes(execute(true, true, false))
