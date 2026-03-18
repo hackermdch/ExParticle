@@ -23,14 +23,15 @@ public class CustomConditionalCommand {
                 .then(Commands.argument("attr", SuggestStringArgumentType.argument("\"size=1; cr=1; cg=1; cb=1; alpha=1; light=15; vx=0; vy=0; vz=0; age=100\""))
                 .then(Commands.argument("range", Range3ArgumentType.range3())
                 .then(Commands.argument("condition", SuggestStringArgumentType.argument("null", "\"dis>0.5\""))
-                .then(Commands.argument("step", SuggestDoubleArgumentType.doubleArg(Math.ulp(0.0), Double.MAX_VALUE, 0.1))
                 .executes(execute(false, false, false))
-                .then(Commands.argument("speedExpression", SuggestStringArgumentType.argument("null", "\"vy=0.1\""))
+                .then(Commands.argument("step", SuggestDoubleArgumentType.doubleArg(Math.ulp(0.0), Double.MAX_VALUE, 0.1))
                 .executes(execute(true, false, false))
-                .then(Commands.argument("speedStep", SuggestDoubleArgumentType.doubleArg(Math.ulp(0.0), Double.MAX_VALUE, 1.0))
+                .then(Commands.argument("speedExpression", SuggestStringArgumentType.argument("null", "\"vy=0.1\""))
                 .executes(execute(true, true, false))
+                .then(Commands.argument("speedStep", SuggestDoubleArgumentType.doubleArg(Math.ulp(0.0), Double.MAX_VALUE, 1.0))
+                .executes(execute(true, true, true))
                 .then(Commands.argument("group", SuggestStringArgumentType.argument("null"))
-                .executes(execute(true, true, true))))))))))));
+                .executes(execute(true, true, true, true))))))))))));
     }
 
     private static Command<CommandSourceStack> execute(boolean... flags) {
