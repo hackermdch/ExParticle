@@ -29,15 +29,15 @@ public class UserFunctionPayload implements CustomPacketPayload {
 
     private UserFunctionPayload(RegistryFriendlyByteBuf buf) {
         define = buf.readBoolean();
-        name = define ? buf.readUtf() : "";
+        name = buf.readUtf();
         args = define ? buf.readUtf() : "";
         body = define ? buf.readUtf() : "";
     }
 
     private void write(RegistryFriendlyByteBuf buf) {
         buf.writeBoolean(define);
+        buf.writeUtf(name);
         if (define) {
-            buf.writeUtf(name);
             buf.writeUtf(args);
             buf.writeUtf(body);
         }

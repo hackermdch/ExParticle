@@ -32,7 +32,8 @@ public class UserFunctionCommand {
                         ))
                 .then(Commands.literal("undefine").then(Commands.argument("name", StringArgumentType.word()).executes(
                         (context) -> {
-                            PacketDistributor.sendToPlayersInDimension(context.getSource().getLevel(), new UserFunctionPayload(false, null, null, null));
+                            String name = StringArgumentType.getString(context, "name");
+                            PacketDistributor.sendToPlayersInDimension(context.getSource().getLevel(), new UserFunctionPayload(false, name, null, null));
                             return 1;
                         }
                 )))
