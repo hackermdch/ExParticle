@@ -765,7 +765,7 @@ public class CodeGen {
                             mv.visitMethodInsn(INVOKESTATIC, "net/hackermdch/exparticle/util/MatrixUtil", "toNumber", "([[I)I", false);
                             return targetType;
                         case T_DOUBLEMAT:
-                            mv.visitMethodInsn(INVOKESTATIC, "net/hackermdch/exparticle/util/MatrixUtil", "matToMat", "([[I)D[[", false);
+                            mv.visitMethodInsn(INVOKESTATIC, "net/hackermdch/exparticle/util/MatrixUtil", "matToMat", "([[I)[[D", false);
                             return targetType;
                         default:
                             throw new RuntimeException("bad type: " + targetType);
@@ -780,7 +780,7 @@ public class CodeGen {
                             mv.visitInsn(D2I);
                             return targetType;
                         case T_INTMAT:
-                            mv.visitMethodInsn(INVOKESTATIC, "net/hackermdch/exparticle/util/MatrixUtil", "matToMat", "([[D)I[[", false);
+                            mv.visitMethodInsn(INVOKESTATIC, "net/hackermdch/exparticle/util/MatrixUtil", "matToMat", "([[D)[[I", false);
                             return targetType;
                         default:
                             throw new RuntimeException("bad type: " + targetType);
