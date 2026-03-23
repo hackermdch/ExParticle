@@ -114,7 +114,7 @@ public class ParticleUtil {
         VideoUtil.decoder(path, new VideoConsumer(effect, x, y, z, scaling, xRotate, yRotate, zRotate, flip, matrix, dpb, vx, vy, vz, age, speedExpression, speedStep, group));
     }
 
-    public static void spawnTextParticle(ParticleOptions effect, double x, double y, double z, Component text,double scaling, String expression, double dpb, double vx, double vy, double vz, int age, String speedExpression, double speedStep, String group) {
+    public static void spawnTextParticle(ParticleOptions effect, double x, double y, double z, Component text, double scaling, String expression, double dpb, double vx, double vy, double vz, int age, String speedExpression, double speedStep, String group) {
         var exe = ExpressionUtil.parse(expression);
         var data = exe != null ? exe.getData() : new ParticleStruct();
         try (var img = TextUtil.toImage(text, (float) scaling)) {
