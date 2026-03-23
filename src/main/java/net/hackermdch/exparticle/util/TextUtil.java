@@ -18,10 +18,13 @@ import java.nio.ByteBuffer;
 public class TextUtil {
     private static final ByteBufferBuilder buffer = new ByteBufferBuilder(0x200000);
 
-    public static NativeImage toImage(Component text) {
+    public static NativeImage toImage(Component text, float scale) {
         var font = Minecraft.getInstance().font;
-        var width = font.width(text);
-        var height = font.lineHeight;
+        var width = (int) (font.width(text) * scale);
+        var height = (int) (font.lineHeight * scale);
+        if (scale == 0) {
+            return new NativeImage(NativeImage.Format.RGBA, 1, 1, false);
+        }
         var rt = new TextureTarget(width, height, false, false);
         var img = new NativeImage(NativeImage.Format.RGBA, width, height, false);
         var buff = ByteBuffer.allocateDirect(width * height * 4);
@@ -32,8 +35,18 @@ public class TextUtil {
         rt.clear(false);
         rt.bindWrite(true);
         RenderSystem.setProjectionMatrix(new Matrix4f().setOrtho(0, width, height, 0, 0, 1000), VertexSorting.ORTHOGRAPHIC_Z);
+        if (scale != 1.0f) {
+            var modelView = new Matrix4f().scale(scale, scale, 1);
+            RenderSystem.getModelViewStack().pushMatrix();
+            RenderSystem.getModelViewStack().mul(modelView);
+            RenderSystem.applyModelViewMatrix();
+        }
         font.drawInBatch(text, 0, 0, -1, false, new Matrix4f(), bufferSource, Font.DisplayMode.NORMAL, 0, 0xf000f0);
         bufferSource.endBatch();
+        if (scale != 1.0f) {
+            RenderSystem.getModelViewStack().popMatrix();
+            RenderSystem.applyModelViewMatrix();
+        }
         RenderSystem.setProjectionMatrix(pm, vs);
         GL32.glPixelStorei(GL32.GL_PACK_ALIGNMENT, 1);
         GL32.glReadPixels(0, 0, width, height, GL32.GL_RGBA, GL32.GL_UNSIGNED_BYTE, buff);

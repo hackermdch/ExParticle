@@ -114,10 +114,10 @@ public class ParticleUtil {
         VideoUtil.decoder(path, new VideoConsumer(effect, x, y, z, scaling, xRotate, yRotate, zRotate, flip, matrix, dpb, vx, vy, vz, age, speedExpression, speedStep, group));
     }
 
-    public static void spawnTextParticle(ParticleOptions effect, double x, double y, double z, Component text, String expression, double dpb, double vx, double vy, double vz, int age, String speedExpression, double speedStep, String group) {
+    public static void spawnTextParticle(ParticleOptions effect, double x, double y, double z, Component text,double scaling, String expression, double dpb, double vx, double vy, double vz, int age, String speedExpression, double speedStep, String group) {
         var exe = ExpressionUtil.parse(expression);
         var data = exe != null ? exe.getData() : new ParticleStruct();
-        try (var img = TextUtil.toImage(text)) {
+        try (var img = TextUtil.toImage(text, (float) scaling)) {
             int rows = img.getHeight();
             int cols = img.getWidth();
             for (int row = 0; row < rows; ++row) {
@@ -131,12 +131,17 @@ public class ParticleUtil {
                     data.x = pos[0][0];
                     data.y = pos[1][0];
                     data.z = pos[2][0];
+                    data.cr = red;
+                    data.cg = green;
+                    data.cb = blue;
+                    data.alpha = alpha;
+                    data.vx = vx;
+                    data.vy = vy;
+                    data.vz = vz;
+                    data.age = age;
                     if (exe != null) exe.invoke();
-                    double dx = data.x;
-                    double dy = data.y;
-                    double dz = data.z;
                     if (alpha != 0.0F)
-                        spawnParticle(effect, x + dx, y + dy, z + dz, x, y, z, red, green, blue, alpha, vx, vy, vz, age, speedExpression, speedStep, group);
+                        CustomParticleBuilder.buildParticle(effect, x + data.x, y + data.y, z + data.z, x, y, z, speedExpression, speedStep, group, data);
                 }
             }
         }

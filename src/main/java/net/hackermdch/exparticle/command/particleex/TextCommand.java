@@ -26,12 +26,14 @@ public class TextCommand {
         parent.then(Commands.literal("text")
                 .then(Commands.argument("name", ParticleArgument.particle(ctx)
                 ).then(Commands.argument("pos", Vec3Argument.vec3()
-                ).then(Commands.argument("text", ComponentArgument.textComponent(ctx)).executes(
+                ).then(Commands.argument("text", ComponentArgument.textComponent(ctx)
+                ).then(Commands.argument("scaling", SuggestDoubleArgumentType.doubleArg(0.0, Double.MAX_VALUE, 1.0)).executes(
                         (context) -> execute(
                                 context,
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
+                                DoubleArgumentType.getDouble(context, "scaling"),
                                 "null", 10.0, null, 0, null, 1.0, null)
                 ).then(Commands.argument("expression", SuggestStringArgumentType.argument("null", "\"(x,y,z)=(x,y,z,1)*rotate(PI/4,0,0)\"", "\"(x,y,z)=(x,y,z,1)*scale(2,3,1)*rotate(PI/4,0,0)\"")).executes(
                         (context) -> execute(
@@ -39,6 +41,7 @@ public class TextCommand {
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
+                                DoubleArgumentType.getDouble(context, "scaling"),
                                 StringArgumentType.getString(context, "expression"),
                                 10.0, null, 0, null, 1.0, null)
                 ).then(Commands.argument("dpb", SuggestDoubleArgumentType.doubleArg(0.0, Double.MAX_VALUE, 10.0)).executes(
@@ -47,6 +50,7 @@ public class TextCommand {
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
+                                DoubleArgumentType.getDouble(context, "scaling"),
                                 StringArgumentType.getString(context, "expression"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 null, 0, null, 1.0, null)
@@ -56,6 +60,7 @@ public class TextCommand {
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
+                                DoubleArgumentType.getDouble(context, "scaling"),
                                 StringArgumentType.getString(context, "expression"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
@@ -66,6 +71,7 @@ public class TextCommand {
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
+                                DoubleArgumentType.getDouble(context, "scaling"),
                                 StringArgumentType.getString(context, "expression"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
@@ -77,6 +83,7 @@ public class TextCommand {
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
+                                DoubleArgumentType.getDouble(context, "scaling"),
                                 StringArgumentType.getString(context, "expression"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
@@ -89,6 +96,7 @@ public class TextCommand {
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
+                                DoubleArgumentType.getDouble(context, "scaling"),
                                 StringArgumentType.getString(context, "expression"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
@@ -102,6 +110,7 @@ public class TextCommand {
                                 ParticleArgument.getParticle(context, "name"),
                                 Vec3Argument.getVec3(context, "pos"),
                                 ComponentArgument.getComponent(context, "text"),
+                                DoubleArgumentType.getDouble(context, "scaling"),
                                 StringArgumentType.getString(context, "expression"),
                                 DoubleArgumentType.getDouble(context, "dpb"),
                                 Speed3ArgumentType.getSpeed3(context, "speed"),
@@ -109,12 +118,12 @@ public class TextCommand {
                                 StringArgumentType.getString(context, "speedExpression"),
                                 DoubleArgumentType.getDouble(context, "speedStep"),
                                 StringArgumentType.getString(context, "group"))
-                )))))))))))
+                ))))))))))))
         );
     }
 
-    private static int execute(CommandContext<CommandSourceStack> context, ParticleOptions effect, Vec3 pos, Component path, String expression, double dpb, Vec3 speed, int age, String speedExpression, double speedStep, String group) {
-        PacketDistributor.sendToPlayersInDimension(context.getSource().getLevel(), new TextPayload(effect, pos, path, expression, dpb, speed, age, speedExpression, speedStep, group));
+    private static int execute(CommandContext<CommandSourceStack> context, ParticleOptions effect, Vec3 pos, Component text, double scaling, String expression, double dpb, Vec3 speed, int age, String speedExpression, double speedStep, String group) {
+        PacketDistributor.sendToPlayersInDimension(context.getSource().getLevel(), new TextPayload(effect, pos, text, scaling, expression, dpb, speed, age, speedExpression, speedStep, group));
         return 1;
     }
 }

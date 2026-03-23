@@ -25,6 +25,7 @@ public class TextPayload implements CustomPacketPayload {
     private final double y;
     private final double z;
     private final Component text;
+    private final double scaling;
     private final String expression;
     private final double dpb;
     private final double vx;
@@ -37,12 +38,13 @@ public class TextPayload implements CustomPacketPayload {
     private final String group;
     private final ParticleOptions effect;
 
-    public TextPayload(ParticleOptions effect, Vec3 pos, Component text, String expression, double dpb, Vec3 speed, int age, String speedExpression, double speedStep, String group) {
+    public TextPayload(ParticleOptions effect, Vec3 pos, Component text, double scaling, String expression, double dpb, Vec3 speed, int age, String speedExpression, double speedStep, String group) {
         if (speed == null) speed = Vec3.ZERO;
         this.x = pos.x;
         this.y = pos.y;
         this.z = pos.z;
         this.text = text;
+        this.scaling = scaling;
         this.expression = expression;
         this.dpb = dpb;
         this.vx = speed.x;
@@ -62,6 +64,7 @@ public class TextPayload implements CustomPacketPayload {
         y = buf.readDouble();
         z = buf.readDouble();
         text = ComponentSerialization.TRUSTED_STREAM_CODEC.decode(buf);
+        scaling = buf.readDouble();
         expression = buf.readUtf();
         dpb = buf.readDouble();
         vx = buf.readDouble();
@@ -83,6 +86,7 @@ public class TextPayload implements CustomPacketPayload {
         buf.writeDouble(y);
         buf.writeDouble(z);
         ComponentSerialization.TRUSTED_STREAM_CODEC.encode(buf, text);
+        buf.writeDouble(scaling);
         buf.writeUtf(expression);
         buf.writeDouble(dpb);
         buf.writeDouble(vx);
@@ -101,7 +105,7 @@ public class TextPayload implements CustomPacketPayload {
     }
 
     private void handle(IPayloadContext context) {
-        context.enqueueWork(() -> ParticleUtil.spawnTextParticle(effect, x, y, z, text, expression, dpb, vx, vy, vz, age, speedExpression, speedStep, group));
+        context.enqueueWork(() -> ParticleUtil.spawnTextParticle(effect, x, y, z, text, scaling, expression, dpb, vx, vy, vz, age, speedExpression, speedStep, group));
     }
 
     @Override
