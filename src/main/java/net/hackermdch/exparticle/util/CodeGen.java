@@ -685,8 +685,11 @@ public class CodeGen {
             stopSimulation();
             if (t1 == T_INT && t2 == T_INT) exp.returnType = T_INT;
             else if ((t1 == T_INT || t1 == T_DOUBLE) && (t2 == T_INT || t2 == T_DOUBLE)) exp.returnType = T_DOUBLE;
+            else if (t1 == T_INTMAT && t2 == T_INTMAT) exp.returnType = T_INTMAT;
+            else if (t1 == T_DOUBLEMAT && t2 == T_DOUBLEMAT) exp.returnType = T_DOUBLEMAT;
+            else if ((t1 == T_INTMAT || t1 == T_DOUBLEMAT) && (t2 == T_INTMAT || t2 == T_DOUBLEMAT)) exp.returnType = T_DOUBLEMAT;
             else
-                throw new RuntimeException("Ternary operator only supports numeric types (int/double), got: " + t1 + " and " + t2);
+                throw new RuntimeException("Ternary operator only supports numeric or matrix types, got: " + t1 + " and " + t2);
         }
         var targetType = exp.returnType;
         var falseLabel = new Label();
@@ -698,6 +701,9 @@ public class CodeGen {
         if (targetType == T_DOUBLE) {
             mv.visitVarInsn(DSTORE, resultVar);
             maxLocal += 2;
+        } else if (targetType == T_INTMAT || targetType == T_DOUBLEMAT) {
+            mv.visitVarInsn(ASTORE, resultVar);
+            maxLocal += 1;
         } else {
             mv.visitVarInsn(ISTORE, resultVar);
             maxLocal += 1;
@@ -706,9 +712,11 @@ public class CodeGen {
         mv.visitLabel(falseLabel);
         codeGenExp(exp.falseExp, targetType);
         if (targetType == T_DOUBLE) mv.visitVarInsn(DSTORE, resultVar);
+        else if (targetType == T_INTMAT || targetType == T_DOUBLEMAT) mv.visitVarInsn(ASTORE, resultVar);
         else mv.visitVarInsn(ISTORE, resultVar);
         mv.visitLabel(endLabel);
         if (targetType == T_DOUBLE) mv.visitVarInsn(DLOAD, resultVar);
+        else if (targetType == T_INTMAT || targetType == T_DOUBLEMAT) mv.visitVarInsn(ALOAD, resultVar);
         else mv.visitVarInsn(ILOAD, resultVar);
         return targetType;
     }
