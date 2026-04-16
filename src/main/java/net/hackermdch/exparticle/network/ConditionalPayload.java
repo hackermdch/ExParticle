@@ -145,7 +145,7 @@ public class ConditionalPayload implements CustomPacketPayload {
                         data.s2 = Math.atan2(cy, Math.hypot(cx, cz));
                         data.dis = Math.sqrt(cx * cx + cy * cy + cz * cz);
                         if (exe.invoke() != 0)
-                            ParticleUtil.spawnParticle(effect, x + cx, y + cy, z + cz, x, y, z, red, green, blue, alpha, vx, vy, vz, age, expression, step, group);
+                            ParticleUtil.spawnParticle(effect, x + cx, y + cy, z + cz, x, y, z, red, green, blue, alpha, vx, vy, vz, age, speedExpression, speedStep, group);
                     }
                 }
             }
