@@ -9,7 +9,6 @@ import java.util.Map;
 
 public class ClassExpression implements IExecutable, ICacheAble {
     private static final Map<String, ClassExpression> CACHE = Maps.newHashMap();
-    private static int index = 0;
     private final ParticleStruct struct = new ParticleStruct();
     private final MethodHandle method;
     private boolean invalid;
@@ -19,7 +18,7 @@ public class ClassExpression implements IExecutable, ICacheAble {
         var es = Parser.parseBlock(lexer);
         var codeGen = new CodeGen(es);
         try {
-            var clazz = codeGen.codeGenBlock("EXP_" + index++);
+            var clazz = codeGen.codeGenBlock();
             method = MethodHandles.lookup().findStatic(clazz, "invoke", MethodType.methodType(int.class, ParticleStruct.class));
             for (var r : codeGen.references()) GlobalVariableUtil.handle(r, this);
             for (var r : codeGen.funcReferences()) UserFunctionUtil.handle(r, this);
@@ -31,6 +30,10 @@ public class ClassExpression implements IExecutable, ICacheAble {
     private ClassExpression(ClassExpression other) {
         method = other.method;
         invalid = other.invalid;
+    }
+
+    public static void clear() {
+        CACHE.clear();
     }
 
     @Override

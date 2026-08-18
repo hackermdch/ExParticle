@@ -1,5 +1,6 @@
 package net.hackermdch.exparticle.network;
 
+import net.hackermdch.exparticle.util.ClassExpression;
 import net.hackermdch.exparticle.util.ImageUtil;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -25,7 +26,10 @@ public class ClearCachePayload implements CustomPacketPayload {
     }
 
     private void handle(IPayloadContext context) {
-        context.enqueueWork(ImageUtil::clear);
+        context.enqueueWork(() -> {
+            ImageUtil.clear();
+            ClassExpression.clear();
+        });
     }
 
     @Override

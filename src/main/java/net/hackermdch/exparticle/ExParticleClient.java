@@ -23,7 +23,7 @@ import java.util.Map;
 
 import static net.hackermdch.exparticle.ExParticle.*;
 
-@EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT)
 public class ExParticleClient {
     private static boolean hasJavaCV = true;
 

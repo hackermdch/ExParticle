@@ -16,7 +16,7 @@ config = "exparticle.mixins.json"
 [[dependencies.exparticle]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.1.90,)"
+versionRange = "[21.1.200,)"
 ordering = "NONE"
 side = "BOTH"
 

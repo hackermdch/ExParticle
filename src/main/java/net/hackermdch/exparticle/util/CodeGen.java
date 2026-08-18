@@ -9,9 +9,7 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
-import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -38,21 +36,15 @@ public class CodeGen {
     private int simulationCount;
     private int maxLocal;
     private final Map<String, LocalVarInfo> localVars = new HashMap<>();
-    private static MethodHandle defineClass;
     private final Set<String> references = new HashSet<>();
     private final Set<String> funcReferences = new HashSet<>();
-
-    public static void init(MethodHandles.Lookup lookup) throws Throwable {
-        defineClass = lookup.findSpecial(ClassLoader.class, "defineClass", MethodType.methodType(Class.class, String.class, byte[].class, int.class, int.class), ClassLoader.class);
-    }
 
     public CodeGen(Expression[] block) {
         this.block = Arrays.copyOf(block, block.length);
     }
 
-    public Class<?> codeGenBlock(String name) throws Throwable {
-        cw.visit(V21, ACC_PUBLIC | ACC_SUPER, "net/hackermdch/exparticle/util/CodeGen$" + name, null, "java/lang/Object", null);
-        cw.visitInnerClass("net/hackermdch/exparticle/util/CodeGen$" + name, "net/hackermdch/exparticle/util/CodeGen", name, ACC_PUBLIC | ACC_STATIC);
+    public Class<?> codeGenBlock() throws Throwable {
+        cw.visit(V21, ACC_PUBLIC | ACC_SUPER, "net/hackermdch/exparticle/util/CodeGen$EXP", null, "java/lang/Object", null);
         mv = cw.visitMethod(ACC_PUBLIC | ACC_STATIC, "invoke", "(Lnet/hackermdch/exparticle/util/ParticleStruct;)I", null, null);
         addLocalVar("this", T_UNKNOW);
         mv.visitCode();
@@ -62,13 +54,11 @@ public class CodeGen {
         mv.visitMaxs(0, 0);
         mv.visitEnd();
         cw.visitEnd();
-        var bytes = cw.toByteArray();
-        return (Class<?>) defineClass.invokeExact(Thread.currentThread().getContextClassLoader(), "net.hackermdch.exparticle.util.CodeGen$" + name, bytes, 0, bytes.length);
+        return MethodHandles.lookup().defineHiddenClass(cw.toByteArray(), true).lookupClass();
     }
 
-    public Class<?> codeGenFunction(String name, String signature, int retType, String... args) throws Throwable {
-        cw.visit(V21, ACC_PUBLIC | ACC_SUPER, "net/hackermdch/exparticle/util/CodeGen$" + name, null, "java/lang/Object", null);
-        cw.visitInnerClass("net/hackermdch/exparticle/util/CodeGen$" + name, "net/hackermdch/exparticle/util/CodeGen", name, ACC_PUBLIC | ACC_STATIC);
+    public Class<?> codeGenFunction(String signature, int retType, String... args) throws Throwable {
+        cw.visit(V21, ACC_PUBLIC | ACC_SUPER, "net/hackermdch/exparticle/util/CodeGen$FUNC", null, "java/lang/Object", null);
         mv = cw.visitMethod(ACC_PUBLIC | ACC_STATIC, "invoke", signature, null, null);
         for (var a : args) addLocalVar(a, T_DOUBLE);
         mv.visitCode();
@@ -83,8 +73,7 @@ public class CodeGen {
         mv.visitMaxs(0, 0);
         mv.visitEnd();
         cw.visitEnd();
-        var bytes = cw.toByteArray();
-        return (Class<?>) defineClass.invokeExact(Thread.currentThread().getContextClassLoader(), "net.hackermdch.exparticle.util.CodeGen$" + name, bytes, 0, bytes.length);
+        return MethodHandles.lookup().defineHiddenClass(cw.toByteArray(), true).lookupClass();
     }
 
     public List<String> references() {
@@ -687,7 +676,8 @@ public class CodeGen {
             else if ((t1 == T_INT || t1 == T_DOUBLE) && (t2 == T_INT || t2 == T_DOUBLE)) exp.returnType = T_DOUBLE;
             else if (t1 == T_INTMAT && t2 == T_INTMAT) exp.returnType = T_INTMAT;
             else if (t1 == T_DOUBLEMAT && t2 == T_DOUBLEMAT) exp.returnType = T_DOUBLEMAT;
-            else if ((t1 == T_INTMAT || t1 == T_DOUBLEMAT) && (t2 == T_INTMAT || t2 == T_DOUBLEMAT)) exp.returnType = T_DOUBLEMAT;
+            else if ((t1 == T_INTMAT || t1 == T_DOUBLEMAT) && (t2 == T_INTMAT || t2 == T_DOUBLEMAT))
+                exp.returnType = T_DOUBLEMAT;
             else
                 throw new RuntimeException("Ternary operator only supports numeric or matrix types, got: " + t1 + " and " + t2);
         }

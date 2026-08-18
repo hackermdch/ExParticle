@@ -11,7 +11,6 @@ public class UserFunction implements ICacheAble {
         Int, Double, IntMatrix, DoubleMatrix
     }
 
-    private static int index = 0;
     private final String name;
     final String[] args;
     final Type retType;
@@ -39,7 +38,7 @@ public class UserFunction implements ICacheAble {
         var es = Parser.parseBlock(lexer);
         var codeGen = new CodeGen(es);
         try {
-            var clazz = codeGen.codeGenFunction("FUNC_" + index++, signature, switch (retType) {
+            var clazz = codeGen.codeGenFunction(signature, switch (retType) {
                 case Int -> Opcodes.T_INT;
                 case Double -> Opcodes.T_DOUBLE;
                 case IntMatrix -> CodeGen.T_INTMAT;
