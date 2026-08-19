@@ -17,11 +17,14 @@ public class ImageUtil {
     private static final Map<File, Double2ObjectOpenHashMap<BufferedImage>> IMAGE_BUF = Maps.newHashMap();
 
     public static BufferedImage readImage(String path, double scaling, boolean buffered) throws IOException {
-        File imageFile = new File(IMAGE_DIR, path);
+        return readImage(new File(IMAGE_DIR, path), scaling, buffered);
+    }
+
+    public static BufferedImage readImage(File file, double scaling, boolean buffered) throws IOException {
         BufferedImage resultImage;
         if (buffered) {
-            if (IMAGE_BUF.containsKey(imageFile)) {
-                var buf = IMAGE_BUF.get(imageFile);
+            if (IMAGE_BUF.containsKey(file)) {
+                var buf = IMAGE_BUF.get(file);
                 if (buf.containsKey(scaling)) {
                     resultImage = buf.get(scaling);
                 } else {
@@ -39,7 +42,7 @@ public class ImageUtil {
                 }
             } else {
                 var buf = new Double2ObjectOpenHashMap<BufferedImage>();
-                BufferedImage image = ImageIO.read(imageFile);
+                BufferedImage image = ImageIO.read(file);
                 if (scaling == 1.0) {
                     resultImage = image;
                     buf.put(1.0, image);
@@ -56,10 +59,10 @@ public class ImageUtil {
                     buf.put(1.0F, image);
                     buf.put(scaling, resultImage);
                 }
-                IMAGE_BUF.put(imageFile, buf);
+                IMAGE_BUF.put(file, buf);
             }
         } else {
-            BufferedImage bi = ImageIO.read(imageFile);
+            BufferedImage bi = ImageIO.read(file);
             int width = bi.getWidth();
             int height = bi.getHeight();
             int dw = (int) ((double) width * scaling);
@@ -70,7 +73,6 @@ public class ImageUtil {
             g.drawImage(bi, 0, 0, dw, dh, 0, 0, width, height, null);
             g.dispose();
         }
-
         return resultImage;
     }
 

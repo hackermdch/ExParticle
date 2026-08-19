@@ -80,3 +80,7 @@ processResources {
 jar {
     exclude "net/hackermdch/exparticle/inject/**"
 }
+
+java {
+    withSourcesJar()
+}

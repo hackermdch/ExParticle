@@ -4,12 +4,15 @@ import net.hackermdch.exparticle.util.ClientMessageUtil;
 import net.hackermdch.exparticle.util.IExecutable;
 import net.hackermdch.exparticle.util.IParticle;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.function.Supplier;
 
 @Mixin(Particle.class)
 public abstract class ParticleMixin implements IParticle {
@@ -41,71 +44,85 @@ public abstract class ParticleMixin implements IParticle {
     private double customSize = Double.NaN;
     @Unique
     private double customLight = Double.NaN;
+    @Unique
+    private Supplier<Vec3> bindCenter;
 
+    @Override
     public void setExe(IExecutable exe) {
         this.exe = exe;
     }
 
+    @Override
     public void setStep(double step) {
         this.step = step;
     }
 
+    @Override
     public double getCenterX() {
         return this.centerX;
     }
 
+    @Override
     public void setCenterX(double centerX) {
         this.centerX = centerX;
     }
 
+    @Override
     public double getCenterY() {
         return this.centerY;
     }
 
+    @Override
     public void setCenterY(double centerY) {
         this.centerY = centerY;
     }
 
+    @Override
     public double getCenterZ() {
         return this.centerZ;
     }
 
+    @Override
     public void setCenterZ(double centerZ) {
         this.centerZ = centerZ;
     }
 
+    @Override
     public void setCustomMove(boolean customMove) {
         this.customMove = customMove;
     }
 
+    @Override
     public void setStop(boolean stop) {
         this.stop = stop;
     }
 
+    @Override
     public void setCustomSize(double size) {
         this.customSize = size * 0.125;
     }
 
+    @Override
     public double getCustomSize() {
         return this.customSize;
     }
 
+    @Override
     public void setCustomLight(double light) {
         customLight = Double.isNaN(light) ? Double.NaN : ((int) (light * 255) & 0xFF) / 255.0;
     }
 
-    public double getCustomLight() {
-        return this.customLight;
-    }
-
+    @Override
     public void setGravity(float gravity) {
         this.gravity = gravity;
     }
 
+    @Override
     public void setFriction(float friction) {
         this.friction = friction;
     }
 
+    @Override
     public void customTick() {
         preX = x;
         preY = y;
@@ -160,6 +177,19 @@ public abstract class ParticleMixin implements IParticle {
             }
             if (!Double.isNaN(data.size) && data.size != customSize) setCustomSize(data.size);
             if (!Double.isNaN(data.light) && data.light != customLight) setCustomLight(data.light);
+            if (bindCenter != null) {
+                var nc = bindCenter.get();
+                var dis = nc.subtract(centerX, centerY, centerZ);
+                data.vx = nanToZero(data.vx) + dis.x;
+                data.vy = nanToZero(data.vy) + dis.y;
+                data.vz = nanToZero(data.vz) + dis.z;
+                centerX = nc.x;
+                centerY = nc.y;
+                centerZ = nc.z;
+                data.cx = centerX;
+                data.cy = centerY;
+                data.cz = centerZ;
+            }
             if (!Double.isNaN(data.vx) || !Double.isNaN(data.vy) || !Double.isNaN(data.vz)) {
                 setPos(preX, preY, preZ);
                 data.vx = nanToZero(data.vx);
@@ -184,6 +214,11 @@ public abstract class ParticleMixin implements IParticle {
         return managed;
     }
 
+    @Override
+    public void setBind(Supplier<Vec3> provider) {
+        bindCenter = provider;
+    }
+
     @Unique
     private double nanToZero(double num) {
         return !Double.isNaN(num) ? num : (double) 0.0F;
@@ -191,7 +226,7 @@ public abstract class ParticleMixin implements IParticle {
 
     @Inject(method = "getLightColor", at = @At("HEAD"), cancellable = true)
     protected void onGetLightColor(float partialTick, CallbackInfoReturnable<Integer> cir) {
-        double custom = this.getCustomLight();
+        double custom = customLight;
         if (!Double.isNaN(custom)) {
             int block = (int) (custom * 15);
             int sky = (int) (custom * 15);

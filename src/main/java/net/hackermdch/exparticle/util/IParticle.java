@@ -1,5 +1,9 @@
 package net.hackermdch.exparticle.util;
 
+import net.minecraft.world.phys.Vec3;
+
+import java.util.function.Supplier;
+
 public interface IParticle {
     void setExe(IExecutable var1);
 
@@ -31,11 +35,11 @@ public interface IParticle {
 
     void setCustomSize(double size);
 
-    double getCustomLight();
-
     void setCustomLight(double light);
 
     void setGravity(float gravity);
 
     void setFriction(float friction);
+
+    void setBind(Supplier<Vec3> provider);
 }

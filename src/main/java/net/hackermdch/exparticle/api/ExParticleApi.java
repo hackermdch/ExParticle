@@ -12,11 +12,15 @@ import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Vector4f;
 
 import javax.annotation.Nullable;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 import static net.hackermdch.exparticle.util.ParticleUtil.CLIENT;
+import static net.hackermdch.exparticle.util.ParticleUtil.getRotateFlipMat;
 
 @OnlyIn(Dist.CLIENT)
 public class ExParticleApi {
@@ -129,6 +133,31 @@ public class ExParticleApi {
         return ps.stream().filter(Objects::nonNull).toList();
     }
 
+    public static List<Particle> genImage(ParticleOptions effect, double x, double y, double z, File file, double scaling, int xRotate, int yRotate, int zRotate, boolean flip, double[][] matrix, double dpb, double vx, double vy, double vz, int age, IExecutable speedExpression, double speedStep) throws IOException {
+        var ps = new ArrayList<Particle>();
+        var image = ImageUtil.readImage(file, scaling, true);
+        int rows = image.getHeight();
+        int cols = image.getWidth();
+        var rotateFlipMat = getRotateFlipMat(xRotate, yRotate, zRotate, flip, rows, cols);
+        for (int row = 0; row < rows; ++row) {
+            for (int col = 0; col < cols; ++col) {
+                int pixel = image.getRGB(col, row);
+                float alpha = (float) ((pixel & 0xff000000) >>> 24) / 255.0F;
+                float red = (float) ((pixel & 0xff0000) >>> 16) / 255.0F;
+                float green = (float) ((pixel & 0xff00) >>> 8) / 255.0F;
+                float blue = (float) (pixel & 0xff) / 255.0F;
+                double[][] pos = MatrixUtil.matDiv(MatrixUtil.matMul(rotateFlipMat, new int[][]{{col}, {row}, {0}, {1}}), dpb);
+                if (matrix != null) pos = MatrixUtil.matMul(matrix, pos);
+                double dx = pos[0][0];
+                double dy = pos[1][0];
+                double dz = pos[2][0];
+                if (alpha != 0.0F)
+                    ps.add(createParticle(effect, x + dx, y + dy, z + dz, x, y, z, red, green, blue, alpha, vx, vy, vz, age, speedExpression, speedStep));
+            }
+        }
+        return ps.stream().filter(Objects::nonNull).toList();
+    }
+
     public static List<Particle> genText(ParticleOptions effect, Vec3 startPos, Component text, double scaling, @Nullable IExecutable expression, double dpb, Vec3 speed, int age, @Nullable IExecutable speedExpression, double speedStep) {
         var ps = new ArrayList<Particle>();
         double x = startPos.x, y = startPos.y, z = startPos.z;
@@ -163,5 +192,9 @@ public class ExParticleApi {
             }
         }
         return ps.stream().filter(Objects::nonNull).toList();
+    }
+
+    public static void bind(Particle particle, Supplier<Vec3> provider) {
+        particle.setBind(provider);
     }
 }
