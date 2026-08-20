@@ -39,6 +39,18 @@ public abstract class ParticleMixin implements IParticle {
     @Unique
     private double preZ;
     @Unique
+    private double initialX;
+    @Unique
+    private double initialY;
+    @Unique
+    private double initialZ;
+    @Unique
+    private double initialDis;
+    @Unique
+    private double initialS1;
+    @Unique
+    private double initialS2;
+    @Unique
     private boolean managed;
     @Unique
     private double customSize = Double.NaN;
@@ -140,12 +152,12 @@ public abstract class ParticleMixin implements IParticle {
                 data.cx = centerX;
                 data.cy = centerY;
                 data.cz = centerZ;
-                data.dx = x - centerX;
-                data.dy = y - centerY;
-                data.dz = z - centerZ;
-                data.ddis = Math.sqrt((x - centerX) * (x - centerX) + (y - centerY) * (y - centerY) + (z - centerZ) * (z - centerZ));
-                data.ds1 = Math.atan2(z - centerZ, x - centerX);
-                data.ds2 = Math.atan2(y - centerY, Math.hypot(x - centerX, z - centerZ));
+                initialX = x - centerX;
+                initialY = y - centerY;
+                initialZ = z - centerZ;
+                initialDis = Math.sqrt((x - centerX) * (x - centerX) + (y - centerY) * (y - centerY) + (z - centerZ) * (z - centerZ));
+                initialS1 = Math.atan2(z - centerZ, x - centerX);
+                initialS2 = Math.atan2(y - centerY, Math.hypot(x - centerX, z - centerZ));
             }
             data.vx = xd;
             data.vy = yd;
@@ -153,6 +165,12 @@ public abstract class ParticleMixin implements IParticle {
             data.x = x - centerX;
             data.y = y - centerY;
             data.z = z - centerZ;
+            data.dx = initialX;
+            data.dy = initialY;
+            data.dz = initialZ;
+            data.ddis = initialDis;
+            data.ds1 = initialS1;
+            data.ds2 = initialS2;
             data.size = customSize;
             data.cr = rCol;
             data.cg = gCol;
